@@ -47,7 +47,7 @@ export const load = (async ({ url }) => {
             id: el.id,
             nome: el.nome,
             cognome: el.cognome,
-            isee: el.isee?.toNumber() || null,
+            isee: el.isee || null,
             componenti: el.componenti,
             bambini: el.bambini,
             cellulare: el.cellulare,

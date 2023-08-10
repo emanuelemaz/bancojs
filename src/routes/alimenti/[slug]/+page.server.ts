@@ -3,7 +3,7 @@ import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
-    const response = await prisma.alimento.findUniqueOrThrow({ where: { id: parseInt(params.slug) } })
+    const response = await prisma.alimento.findUniqueOrThrow({ where: { id: params.slug } })
     let response_fix: alimento_fix = {
         id: response.id,
         nome: response.nome,
@@ -20,7 +20,7 @@ export const actions: Actions = {
     modifica: async ({ request, params }) => {
         const newData = await request.formData()
 
-        const id = parseInt(params.slug);
+        const id = params.slug;
         const nome = newData.get("nome") as string;
         const unita = newData.get("unita") as string;
         const scadenza = new Date((newData.get("scadenza") as string));
@@ -55,7 +55,7 @@ export const actions: Actions = {
         try {
             await prisma.alimento.delete({
                 where: {
-                    id: parseInt(params.slug)
+                    id: params.slug
                 }
             })
         } catch (error) {

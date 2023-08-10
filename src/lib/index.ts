@@ -1,6 +1,6 @@
 // place files you want to import through the `$lib` alias in this folder.
 type nucleo_fix = {
-    id: number;
+    id: string;
     nome: string;
     cognome: string;
     isee: number | null;
@@ -14,10 +14,10 @@ type nucleo_fix = {
 };
 
 type bolla_fix = {
-    id: number;
+    id: string;
     data: Date;
     note: string | null;
-    nucleoId: number;
+    nucleoId: string;
     nomeN: string;
     cognomeN: string;
     componentiN: number;
@@ -25,17 +25,17 @@ type bolla_fix = {
 }
 
 type bollaalimento_fix = {
-    id: number,
+    id: string,
     nome: string,
     unita: string,
     quantita: number,
-    alimentoId: number,
-    bollaId: number,
+    alimentoId: string,
+    bollaId: string,
     note: string | null
 }
 
 type alimento_fix = {
-    id: number,
+    id: string,
     nome: string,
     unita: string,
     scadenza: Date | null,

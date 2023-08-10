@@ -10,7 +10,7 @@ const getUTCDate = (date: Date) => {
 }
 
 export const load = (async ({ params }) => {
-    const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: parseInt(params.slug) } })
+    const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: params.slug } })
     let nucleo: Nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: bolla.nucleoId } });
     let response_fix: bolla_fix = {
         id: bolla.id,
@@ -35,7 +35,7 @@ export const load = (async ({ params }) => {
             id: el.id,
             nome: el.nome,
             cognome: el.cognome,
-            isee: el.isee?.toNumber() || null,
+            isee: el.isee || null,
             componenti: el.componenti,
             bambini: el.bambini,
             cellulare: el.cellulare,
@@ -55,7 +55,7 @@ export const load = (async ({ params }) => {
     })
     for (let al of alimenti) {
         let alimento = await prisma.alimento.findUniqueOrThrow({ where: { id: al.alimentoId } })
-        alimenti_fix.push({ id: al.id, nome: alimento.nome, unita: alimento.unita, bollaId: al.bollaId, alimentoId: al.alimentoId, note: al.note, quantita: al.quantita.toNumber() });
+        alimenti_fix.push({ id: al.id, nome: alimento.nome, unita: alimento.unita, bollaId: al.bollaId, alimentoId: al.alimentoId, note: al.note, quantita: al.quantita });
     }
     let allAlimenti_fix: alimento_fix[] = [];
     const allAlimenti = await prisma.alimento.findMany({ orderBy: { nome: 'asc' } })
@@ -70,10 +70,10 @@ export const actions: Actions = {
     modifica: async ({ request }) => {
         const newData = await request.formData()
 
-        let id = parseInt(newData.get("id") as string);
+        let id = newData.get("id") as string;
         const data = getUTCDate(new Date(newData.get("data") as string));
         const note = newData.get("note") as string | null;
-        const nucleoId = parseInt(newData.get("nucleoId") as string);
+        const nucleoId = newData.get("nucleoId") as string;
 
         try {
             await prisma.bolla.update({
@@ -95,7 +95,7 @@ export const actions: Actions = {
         try {
             await prisma.bolla.delete({
                 where: {
-                    id: parseInt(params.slug)
+                    id: params.slug
                 }
             })
         } catch (error) {
@@ -106,14 +106,14 @@ export const actions: Actions = {
     aggiungiAlimento: async ({ request, params }) => {
         const newData = await request.formData()
 
-        const alimentoId = parseInt(newData.get("alimentoId") as string)
+        const alimentoId = newData.get("alimentoId") as string
         const quantita = parseFloat(newData.get("quantita") as string)
         const note = newData.get("note") as string
 
         try {
             await prisma.bollaAlimento.create({
                 data: {
-                    bollaId: parseInt(params.slug),
+                    bollaId: params.slug,
                     alimentoId: alimentoId,
                     quantita: quantita,
                     note: note
@@ -125,7 +125,7 @@ export const actions: Actions = {
         } throw redirect(302, `/bolle/${params.slug}`);
     },
     eliminaAlimento: async ({ request, params }) => {
-        const alimentoId = parseInt((await request.formData()).get("alimentoId") as string)
+        const alimentoId = (await request.formData()).get("alimentoId") as string
 
         try {
             await prisma.bollaAlimento.delete({

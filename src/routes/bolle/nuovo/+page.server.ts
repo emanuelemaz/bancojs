@@ -21,7 +21,7 @@ export const load = (async ({ }) => {
             id: el.id,
             nome: el.nome,
             cognome: el.cognome,
-            isee: el.isee?.toNumber() || null,
+            isee: el.isee || null,
             componenti: el.componenti,
             bambini: el.bambini,
             cellulare: el.cellulare,
@@ -41,7 +41,7 @@ export const actions: Actions = {
 
         const data = getUTCDate(new Date(newData.get("data") as string));
         const note = newData.get("note") as string | null;
-        const nucleoId = parseInt(newData.get("nucleoId") as string);
+        const nucleoId = newData.get("nucleoId") as string;
 
         try {
             await prisma.bolla.create({

@@ -4,12 +4,12 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
     // 1.
-    const response = await prisma.nucleo.findUniqueOrThrow({ where: { id: parseInt(params.slug) } })
+    const response = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug } })
     let response_fix: nucleo_fix = {
         id: response.id,
         nome: response.nome,
         cognome: response.cognome,
-        isee: response.isee?.toNumber() || null,
+        isee: response.isee || null,
         componenti: response.componenti,
         bambini: response.bambini,
         cellulare: response.cellulare,
@@ -26,7 +26,7 @@ export const actions: Actions = {
     modifica: async ({ request }) => {
         const newData = await request.formData()
 
-        let id = parseInt(newData.get("id") as string);
+        let id = newData.get("id") as string;
         const nome = newData.get("nome") as string;
         const cognome = newData.get("cognome") as string;
         const isee = parseFloat(newData.get("isee") as string);
@@ -70,7 +70,7 @@ export const actions: Actions = {
         try {
             await prisma.nucleo.delete({
                 where: {
-                    id: parseInt(params.slug)
+                    id: params.slug
                 }
             })
         } catch (error) {

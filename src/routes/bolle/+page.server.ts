@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 
 export const load = (async ({ url }) => {
 
-    let id = parseInt(url.searchParams.get("nucleoId") as string);
+    let id = url.searchParams.get("nucleoId") as string;
     let dataInizio = new Date(Date.parse(url.searchParams.get("dataInizio") as string));
     let dataFine = new Date(Date.parse(url.searchParams.get("dataFine") as string));
 
@@ -58,7 +58,7 @@ export const load = (async ({ url }) => {
             id: el.id,
             nome: el.nome,
             cognome: el.cognome,
-            isee: el.isee?.toNumber() || null,
+            isee: el.isee || null,
             componenti: el.componenti,
             bambini: el.bambini,
             cellulare: el.cellulare,
