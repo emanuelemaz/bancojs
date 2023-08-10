@@ -35,6 +35,7 @@
 	"dependencies": {
 		"@prisma/client": "^5.1.1",
 		"@skeletonlabs/skeleton": "^1.11.0",
+		"@sveltejs/adapter-node": "^1.0.0-next.106",
 		"iconify-icon": "^1.0.8",
 		"prisma": "^5.1.1"
 	}
