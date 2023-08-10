@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
+import type { Bolla } from '@prisma/client';
 
 const getUTCDate = (date: Date) => {
     const d = new Date(date);
@@ -8,7 +9,7 @@ const getUTCDate = (date: Date) => {
     return new Date(utcDate);
 }
 
-export const load = (async ({ }) => {
+export const load = (async ({ url }) => {
     let nuclei = (await prisma.nucleo.findMany({
         orderBy: {
             nome: 'asc'
@@ -32,7 +33,9 @@ export const load = (async ({ }) => {
         };
         nuclei_fix.push(el_fix)
     });
-    return { nuclei: nuclei_fix }
+
+    let fromNucleo = url.searchParams.get("nucleoId")
+    return { nuclei: nuclei_fix, fromNucleo: fromNucleo }
 })
 
 export const actions: Actions = {
@@ -43,17 +46,18 @@ export const actions: Actions = {
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
+        var newBolla : Bolla | null = null;
         try {
-            await prisma.bolla.create({
+            newBolla = await prisma.bolla.create({
                 data: {
                     data: data,
                     note: note,
                     nucleoId: nucleoId
                 }
-            });
+            }) || null;
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile creare la bolla.")
-        } throw redirect(302, "/bolle");
+        } throw redirect(302, `/bolle/${newBolla ? newBolla.id:""}`);
     }
 }

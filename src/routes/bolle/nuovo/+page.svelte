@@ -21,9 +21,15 @@
 				<span>Beneficiario</span>
 				<select name="nucleoId" class="select" required>
 					{#each data.nuclei as nucleo}
-						<option value={nucleo.id}
-							>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
-						>
+						{#if nucleo.id == data.fromNucleo}
+							<option value={nucleo.id} selected
+								>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
+							>
+						{:else}
+							<option value={nucleo.id}
+								>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
+							>
+						{/if}
 					{/each}
 				</select>
 			</label>

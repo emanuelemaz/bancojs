@@ -88,12 +88,18 @@
 			<span>Note</span>
 			<textarea class="input textarea p-2" name="note" value={data.feed.note} />
 		</label>
-		<div class="mt-4">
-			<div class="float-left">
+		<div class="mt-4 flex justify-between">
+			<div>
 				<input type="submit" class="btn variant-filled-primary" value="Modifica nucleo" />
 				<a class="ml-2 btn variant-filled-primary" href="/nuclei">Annulla</a>
 			</div>
-			<div class="float-right">
+			<div>
+				<form class="form" method="get" action="/bolle/nuovo">
+					<input type="hidden" name="nucleoId" value={data.feed.id}>
+					<input type="submit" class="btn variant-filled-secondary" value="Emetti bolla" />
+				</form>
+			</div>
+			<div>
 				<form class="form" method="POST" action="/nuclei/{data.feed.id}?/elimina">
 					<input type="submit" class="btn variant-filled-error" value="Elimina nucleo" />
 				</form>
