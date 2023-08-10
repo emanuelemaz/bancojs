@@ -34,7 +34,7 @@ model Nucleo {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   nome       String
   cognome    String
-  isee       Float
+  isee       Float?
   componenti Int
   bambini    Int
   cellulare  String?
