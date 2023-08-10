@@ -11,7 +11,6 @@ export const load = (async ({ url }) => {
     let dataFine = new Date(Date.parse(url.searchParams.get("dataFine") as string));
     let distribuibile = url.searchParams.get("distribuibile") === "true" || url.searchParams.get("distribuibile") === null ? true : false;
 
-    console.log(distribuibile)
     let response = (await prisma.alimento.findMany({
         orderBy: {
             nome: 'desc'
