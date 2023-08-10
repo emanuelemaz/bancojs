@@ -7,12 +7,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Bolla {
-  id       Int             @id @default(autoincrement())
+  id       Int             @id  @map("_id")
   nucleo   Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
   data     DateTime
   note     String?
@@ -21,20 +21,20 @@ model Bolla {
 }
 
 model BollaAlimento {
-  id         Int      @id @default(autoincrement())
+  id         Int      @id  @map("_id")
   alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
   bolla      Bolla    @relation(fields: [bollaId], references: [id], onDelete: Cascade)
-  quantita   Decimal
+  quantita   Float
   alimentoId Int
   bollaId    Int
   note       String?
 }
 
 model Nucleo {
-  id         Int      @id @default(autoincrement())
+  id         Int      @id  @map("_id")
   nome       String
   cognome    String
-  isee       Decimal?
+  isee       Float
   componenti Int
   bambini    Int
   cellulare  String?
@@ -46,7 +46,7 @@ model Nucleo {
 }
 
 model Alimento {
-  id            Int             @id @default(autoincrement())
+  id            Int             @id  @map("_id")
   nome          String
   unita         String          @default("pz")
   scadenza      DateTime?
