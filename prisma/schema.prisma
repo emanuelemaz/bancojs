@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Bolla {
+  id       Int             @id @default(autoincrement())
+  nucleo   Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
+  data     DateTime
+  note     String?
+  alimenti BollaAlimento[]
+  nucleoId Int
+}
+
+model BollaAlimento {
+  id         Int      @id @default(autoincrement())
+  alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
+  bolla      Bolla    @relation(fields: [bollaId], references: [id], onDelete: Cascade)
+  quantita   Decimal
+  alimentoId Int
+  bollaId    Int
+  note       String?
+}
+
+model Nucleo {
+  id         Int      @id @default(autoincrement())
+  nome       String
+  cognome    String
+  isee       Decimal?
+  componenti Int
+  bambini    Int
+  cellulare  String?
+  indirizzo  String?
+  citta      String?
+  servibile  Boolean  @default(true)
+  note       String?
+  bolle      Bolla[]
+}
+
+model Alimento {
+  id            Int             @id @default(autoincrement())
+  nome          String
+  unita         String          @default("pz")
+  scadenza      DateTime?
+  distribuibile Boolean         @default(true)
+  note          String?
+  bolle         BollaAlimento[]
+}

@@ -1,0 +1,54 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+	import 'iconify-icon';
+	export let data: PageData;
+
+	onMount(() => {
+		(<HTMLInputElement>document.getElementById('dataInput')).value = new Date(
+			Date.now() - new Date().getTimezoneOffset() * 60 * 1000
+		)
+			.toISOString()
+			.slice(0, -8);
+	});
+</script>
+
+<div class="container mx-auto p-8 space-y-8">
+	<h1 class="h1">Nuova bolla</h1>
+	<form class="form" method="POST" action="/bolle/nuovo?/aggiungi">
+		<div class="grid grid-cols-2 gap-4 my-4">
+			<label class="label">
+				<span>Beneficiario</span>
+				<select name="nucleoId" class="select" required>
+					{#each data.nuclei as nucleo}
+						<option value={nucleo.id}
+							>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
+						>
+					{/each}
+				</select>
+			</label>
+			<label class="label">
+				<span>Data</span>
+				<input class="input p-2" type="datetime-local" name="data" id="dataInput" required />
+			</label>
+		</div>
+		<label class="mt-4 label">
+			<span>Note</span>
+			<textarea class="input textarea p-2" name="note" />
+		</label>
+		<div class="mt-4">
+			<div class="float-left">
+				<button type="submit" class="mt-4 btn variant-filled-primary">Emetti bolla</button>
+				<a class="ml-2 btn variant-filled-primary" href="/bolle">Annulla</a>
+			</div>
+		</div>
+	</form>
+</div>
+
+<style>
+	@media print {
+		.btn {
+			display: none;
+		}
+	}
+</style>
