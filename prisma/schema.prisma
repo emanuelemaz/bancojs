@@ -12,26 +12,26 @@ datasource db {
 }
 
 model Bolla {
-  id       Int             @id  @map("_id")
+  id       String          @id @default(auto()) @map("_id") @db.ObjectId
   nucleo   Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
   data     DateTime
   note     String?
   alimenti BollaAlimento[]
-  nucleoId Int
+  nucleoId String          @db.ObjectId
 }
 
 model BollaAlimento {
-  id         Int      @id  @map("_id")
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
   bolla      Bolla    @relation(fields: [bollaId], references: [id], onDelete: Cascade)
   quantita   Float
-  alimentoId Int
-  bollaId    Int
+  alimentoId String   @db.ObjectId
+  bollaId    String   @db.ObjectId
   note       String?
 }
 
 model Nucleo {
-  id         Int      @id  @map("_id")
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   nome       String
   cognome    String
   isee       Float
@@ -40,13 +40,13 @@ model Nucleo {
   cellulare  String?
   indirizzo  String?
   citta      String?
-  servibile  Boolean  @default(true)
+  servibile  Boolean @default(true)
   note       String?
   bolle      Bolla[]
 }
 
 model Alimento {
-  id            Int             @id  @map("_id")
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
   nome          String
   unita         String          @default("pz")
   scadenza      DateTime?
