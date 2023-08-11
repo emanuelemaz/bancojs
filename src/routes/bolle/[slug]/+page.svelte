@@ -121,8 +121,8 @@
 				<button type="submit" class="btn variant-filled-primary"
 					><iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
 				</button>
-				<a class="m-0 btn variant-filled-primary" href="/bolle"
-					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</a
+				<button type="button" class="m-0 btn variant-filled-primary" on:click={() => history.back()}
+					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
 			<div>
