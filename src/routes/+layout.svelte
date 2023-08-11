@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppShell, AppBar, Drawer, drawerStore } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Drawer, drawerStore, LightSwitch } from '@skeletonlabs/skeleton';
 	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import Navigation from '$lib/Navigation.svelte';
@@ -8,8 +8,13 @@
 	function drawerOpen(): void {
 		drawerStore.open({});
 	}
+
+	import { autoModeWatcher } from '@skeletonlabs/skeleton';
 </script>
 
+<svelte:head
+	>{@html `<script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}</svelte:head
+>
 <Drawer class="g:w-0 w-64 "><Navigation /></Drawer>
 <AppShell slotSidebarLeft="bg-surface-500/5 w-0 lg:w-64 p-0 lg:p-4">
 	<svelte:fragment slot="sidebarLeft">
@@ -28,6 +33,9 @@
 					</span>
 				</button>
 			</div>
+		</svelte:fragment>
+		<svelte:fragment slot="trail">
+			<LightSwitch class="self-right" />
 		</svelte:fragment>
 	</AppBar>
 	<body data-theme="gold-nouveau">
