@@ -41,7 +41,12 @@
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
-	<h1 class="h1">Nucleo #{data.feed.id}</h1>
+	<div class="flex w-full justify-between">
+		<h1 class="h1">Nucleo <span class="font-mono">#{data.feed.id}</span></h1>
+		<div class="qr">
+			{@html data.qrID}
+		</div>
+	</div>
 	<form
 		class="form"
 		method="POST"
@@ -168,5 +173,8 @@
 		.btn {
 			display: none;
 		}
+	}
+	.qr {
+		width: 16rem;
 	}
 </style>

@@ -2,7 +2,9 @@ import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ params }) => {
+import QRCode from 'qrcode'
+
+export const load = (async ({ params, url }) => {
     // 1.
     const response = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug } })
     let response_fix: nucleo_fix = {
@@ -18,8 +20,13 @@ export const load = (async ({ params }) => {
         servibile: response.servibile,
         note: response.note
     };
-    // 2.
-    return { feed: response_fix };
+    
+    const qrID = (await QRCode.toString(`nuclei/${response.id}`, {type: 'svg', color: {
+        dark: '#FFFF',
+        light: '#0000'
+      }, margin: 0}))
+
+    return { feed: response_fix, qrID: qrID };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

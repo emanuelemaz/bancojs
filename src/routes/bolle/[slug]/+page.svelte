@@ -48,11 +48,15 @@
 			}
 		};
 	};
-	
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
-	<h1 class="h1">Bolla #{data.bolle.id}</h1>
+	<div class="flex w-full justify-between">
+		<h1 class="h1">Bolla <span class="font-mono">#{data.bolle.id}</span></h1>
+		<div class="qr">
+			{@html data.qrID}
+		</div>
+	</div>
 	<form
 		class="form"
 		method="POST"
@@ -205,5 +209,8 @@
 		.btn {
 			display: none;
 		}
+	}
+	.qr {
+		width: 16rem;
 	}
 </style>
