@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { modalStore, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
+	import Bolla from '$lib/Bolla.svelte';
 	export let data: PageData;
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
@@ -189,6 +190,12 @@
 			</div>
 		</div>
 	</form>
+	<div>
+		<h2 class="h2">Bolle emesse</h2>
+		{#each data.bolleNucleo as row}
+			<Bolla row={row}/>
+		{/each}
+	</div>
 </div>
 
 <style>

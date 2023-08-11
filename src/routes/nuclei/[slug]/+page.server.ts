@@ -20,20 +20,43 @@ export const load = (async ({ params, url }) => {
         servibile: response.servibile,
         note: response.note
     };
-    
-    const qrID = (await QRCode.toString(`nuclei/${response.id}`, {type: 'svg', color: {
-        dark: '#FFFF',
-        light: '#0000'
-      }, margin: 0}))
 
-    return { feed: response_fix, qrID: qrID };
+    const qrID = (await QRCode.toString(`nuclei/${response.id}`, {
+        type: 'svg', color: {
+            dark: '#FFFF',
+            light: '#0000'
+        }, margin: 0
+    }));
+
+    const bolleNucleo = (await prisma.bolla.findMany({
+        where: {
+            nucleoId: response.id
+        }
+    }))
+
+    let bolleNucleo_fix: bolla_fix[] = [];
+    for (let el of bolleNucleo) {
+        bolleNucleo_fix.push({
+            id: el.id,
+            data: el.data,
+            note: el.note,
+            nucleoId: el.nucleoId,
+            nomeN: response.nome,
+            cognomeN: response.cognome,
+            componentiN: response.componenti,
+            bambiniN: response.bambini
+        })
+    }
+
+
+    return { feed: response_fix, qrID: qrID, bolleNucleo: bolleNucleo_fix };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
     modifica: async ({ request }) => {
         const newData = await request.formData()
 
-        
+
         let id = newData.get("id") as string;
         const nome = newData.get("nome") as string;
         const cognome = newData.get("cognome") as string;
@@ -44,7 +67,7 @@ export const actions: Actions = {
         const indirizzo = newData.get("indirizzo") as string | null;
         const citta = newData.get("citta") as string | null;
         const note = newData.get("note") as string | null;
-                
+
         function servibile() {
             if ((newData.get("servibile") !== null || newData.get("servibile") !== undefined) && newData.get("servibile") == "on") {
                 return true;
