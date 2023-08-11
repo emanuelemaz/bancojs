@@ -42,7 +42,24 @@
 
 <div class="container mx-auto p-8 space-y-8">
 	<div class="flex w-full justify-between">
-		<h1 class="h1">Nucleo <span class="font-mono">#{data.feed.id}</span></h1>
+		<div>
+			<h1 class="h1">Nucleo <span class="font-mono">#{data.feed.id}</span></h1>
+			<div>
+				<i
+					>Creato in data {new Date(parseInt(data.feed.id.slice(0, 8), 16) * 1000).toLocaleDateString(
+						'it-IT',
+						{
+							day: '2-digit',
+							month: '2-digit',
+							year: 'numeric',
+							hour: '2-digit',
+							minute: '2-digit',
+							second: '2-digit'
+						}
+					)}</i
+				>
+			</div>
+		</div>
 		<div class="qr">
 			{@html data.qrID}
 		</div>
