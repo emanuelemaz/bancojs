@@ -4,21 +4,37 @@
 	import 'iconify-icon';
 	export let data: PageData;
 
-	const confirmDeleteBolla = (form: HTMLFormElement) : ModalSettings => {
+	const confirmDeleteBolla = (form: HTMLFormElement): ModalSettings => {
 		return {
-		type: 'confirm',
-		title: 'Elimina',
-		body: `Sicuro di voler eliminare la bolla #${data.bolle.id} del nucleo <strong>${data.bolle.nomeN} ${data.bolle.cognomeN}</strong> (#${data.bolle.nucleoId})?`,
-		buttonTextConfirm: 'Elimina',
-		buttonTextCancel: 'Annulla',
-		response: (r: boolean) => {
-			if (r) {
-				form.submit();
+			type: 'confirm',
+			title: 'Elimina',
+			body: `Sicuro di voler eliminare la bolla #${data.bolle.id} del nucleo <strong>${data.bolle.nomeN} ${data.bolle.cognomeN}</strong> (#${data.bolle.nucleoId})?`,
+			buttonTextConfirm: 'Elimina',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
 			}
-		}}
+		};
 	};
 
-	const confirmDeleteBollaAlimento = (form: HTMLFormElement) : ModalSettings =>  {
+	const confirmUpdateBolla = (form: HTMLFormElement): ModalSettings => {
+		return {
+			type: 'confirm',
+			title: 'Modifica',
+			body: `Sicuro di voler applicare le modifiche?`,
+			buttonTextConfirm: 'Modifica',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
+			}
+		};
+	};
+
+	const confirmDeleteBollaAlimento = (form: HTMLFormElement): ModalSettings => {
 		return {
 			type: 'confirm',
 			title: 'Elimina',
@@ -30,13 +46,22 @@
 					form.submit();
 				}
 			}
-		}
+		};
 	};
+	
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Bolla #{data.bolle.id}</h1>
-	<form class="form" method="POST" action="/bolle/{data.bolle.id}?/modifica">
+	<form
+		class="form"
+		method="POST"
+		action="/bolle/{data.bolle.id}?/modifica"
+		on:submit|preventDefault={(e) => {
+			modalStore.clear();
+			modalStore.trigger(confirmUpdateBolla(e.currentTarget));
+		}}
+	>
 		<h2 class="h2">Beneficiario</h2>
 		<input type="hidden" name="id" value={data.bolle.id} />
 		<div class="grid grid-cols-2 gap-4 my-4">

@@ -21,8 +21,8 @@
 		}
 		return getUTCDate(x).toISOString().slice(0, -14);
 	}
-	
-	const confirmDelete = (form: HTMLFormElement) : ModalSettings =>  {
+
+	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
 		return {
 			type: 'confirm',
 			title: 'Elimina',
@@ -34,13 +34,36 @@
 					form.submit();
 				}
 			}
-		}
+		};
+	};
+
+	const confirmUpdate = (form: HTMLFormElement): ModalSettings => {
+		return {
+			type: 'confirm',
+			title: 'Modifica',
+			body: `Sicuro di voler applicare le modifiche?`,
+			buttonTextConfirm: 'Modifica',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
+			}
+		};
 	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Alimento: {data.alimento.nome} (#{data.alimento.id})</h1>
-	<form class="form" method="POST" action="/alimenti/{data.alimento.id}?/modifica">
+	<form
+		class="form"
+		method="POST"
+		action="/alimenti/{data.alimento.id}?/modifica"
+		on:submit|preventDefault={(e) => {
+			modalStore.clear();
+			modalStore.trigger(confirmUpdate(e.currentTarget));
+		}}
+	>
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">
 				<span>Nome</span>
@@ -77,8 +100,12 @@
 		</label>
 		<div class="mt-4">
 			<div class="float-left">
-				<input type="submit" class="btn variant-filled-primary" value="Modifica alimento" />
-				<a class="ml-2 btn variant-filled-primary" href="/alimenti">Annulla</a>
+				<button type="submit" class="btn variant-filled-primary"
+					><iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
+				</button>
+				<a class="m-0 btn variant-filled-primary" href="/alimenti"
+					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</a
+				>
 			</div>
 			<div class="float-right">
 				<form
@@ -90,7 +117,9 @@
 						modalStore.trigger(confirmDelete(e.currentTarget));
 					}}
 				>
-					<input type="submit" class="btn variant-filled-error" value="Elimina alimento" />
+					<button type="submit" class="btn variant-filled-error">
+						<iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
+					</button>
 				</form>
 			</div>
 		</div>
@@ -98,9 +127,6 @@
 </div>
 
 <style>
-	input[type='submit'] {
-		cursor: pointer;
-	}
 	@media print {
 		.btn {
 			display: none;

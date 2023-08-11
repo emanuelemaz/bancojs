@@ -23,11 +23,34 @@
 			}
 		};
 	};
+
+	const confirmUpdate = (form: HTMLFormElement): ModalSettings => {
+		return {
+			type: 'confirm',
+			title: 'Modifica',
+			body: `Sicuro di voler applicare le modifiche?`,
+			buttonTextConfirm: 'Modifica',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
+			}
+		};
+	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nucleo #{data.feed.id}</h1>
-	<form class="form" method="POST" action="/nuclei/{data.feed.id}?/modifica">
+	<form
+		class="form"
+		method="POST"
+		action="/nuclei/{data.feed.id}?/modifica"
+		on:submit|preventDefault={(e) => {
+			modalStore.clear();
+			modalStore.trigger(confirmUpdate(e.currentTarget));
+		}}
+	>
 		<input type="hidden" name="id" value={data.feed.id} />
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
@@ -106,13 +129,19 @@
 		</label>
 		<div class="mt-4 flex justify-between">
 			<div>
-				<input type="submit" class="btn variant-filled-primary" value="Modifica nucleo" />
-				<a class="ml-2 btn variant-filled-primary" href="/nuclei">Annulla</a>
+				<button type="submit" class="btn variant-filled-primary"
+					><iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
+				</button>
+				<a class="m-0 btn variant-filled-primary" href="/nuclei"
+					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</a
+				>
 			</div>
 			<div>
 				<form class="form" method="get" action="/bolle/nuovo">
 					<input type="hidden" name="nucleoId" value={data.feed.id} />
-					<input type="submit" class="btn variant-filled-secondary" value="Emetti bolla" />
+					<button type="submit" class="btn variant-filled-tertiary"
+						><iconify-icon icon="mdi:add" class="text-xl" /> Emetti bolla
+					</button>
 				</form>
 			</div>
 			<div>
@@ -125,7 +154,9 @@
 						modalStore.trigger(confirmDelete(e.currentTarget));
 					}}
 				>
-					<input type="submit" class="btn variant-filled-error" value="Elimina nucleo" />
+					<button type="submit" class="btn variant-filled-error"
+						><iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
+					</button>
 				</form>
 			</div>
 		</div>
@@ -133,9 +164,6 @@
 </div>
 
 <style>
-	input[type='submit'] {
-		cursor: pointer;
-	}
 	@media print {
 		.btn {
 			display: none;
