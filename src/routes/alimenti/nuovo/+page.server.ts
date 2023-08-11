@@ -12,7 +12,7 @@ export const actions: Actions = {
         const note = newData.get("note") as string;
 
         function distribuibile() {
-            if ((newData.get("distribuibile") !== null || newData.get("distribuibile") !== undefined) && newData.get("distribuibile") == "on") {
+            if (newData.get("distribuibile") && newData.get("distribuibile") == "on") {
                 return true;
             } else {
                 return false;
@@ -25,7 +25,8 @@ export const actions: Actions = {
                     nome: nome,
                     unita: unita,
                     scadenza: newData.get("scadenza") ? scadenza : null,
-                    note: newData.get("note") ? note : null
+                    note: newData.get("note") ? note : null,
+                    distribuibile: distribuibile()
                 }
             });
         } catch (error) {

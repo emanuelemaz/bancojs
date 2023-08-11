@@ -9,7 +9,7 @@ export const load = (async ({ params }) => {
         id: response.id,
         nome: response.nome,
         cognome: response.cognome,
-        isee: response.isee || null,
+        isee: (response.isee || response.isee == 0) ? response.isee : null,
         componenti: response.componenti,
         bambini: response.bambini,
         cellulare: response.cellulare,
@@ -26,6 +26,7 @@ export const actions: Actions = {
     modifica: async ({ request }) => {
         const newData = await request.formData()
 
+        
         let id = newData.get("id") as string;
         const nome = newData.get("nome") as string;
         const cognome = newData.get("cognome") as string;
@@ -36,6 +37,7 @@ export const actions: Actions = {
         const indirizzo = newData.get("indirizzo") as string | null;
         const citta = newData.get("citta") as string | null;
         const note = newData.get("note") as string | null;
+                
         function servibile() {
             if ((newData.get("servibile") !== null || newData.get("servibile") !== undefined) && newData.get("servibile") == "on") {
                 return true;

@@ -2,11 +2,11 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	function valuta(x: number | undefined) {
-		if (x === undefined) {
-			return '-';
+	function valuta(x: number | undefined | null) {
+		if (x || x == 0) {
+			return Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(x);
 		}
-		return Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(x);
+		return '-';
 	}
 
 	function bambini(x: number, y: number) {
@@ -128,7 +128,7 @@
 					</div>
 					<div>
 						<p>ISEE</p>
-						<p class="text-xl">{valuta(row.isee || undefined)}</p>
+						<p class="text-xl">{valuta(row.isee)}</p>
 					</div>
 					<div>
 						<p>Componenti</p>
