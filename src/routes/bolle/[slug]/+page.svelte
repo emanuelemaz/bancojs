@@ -41,7 +41,7 @@
 					><iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
 				</button>
 				<a class="m-0 btn variant-filled-primary" href="/bolle"
-					><iconify-icon icon="mdi:cancel" class="text-xl" />Annulla</a
+					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</a
 				>
 			</div>
 			<div>
