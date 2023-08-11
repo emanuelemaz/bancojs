@@ -9,19 +9,19 @@
 		bambini.max = componenti.value;
 	}
 
-	let deleteForm: HTMLFormElement;
-
-	const confirmDelete: ModalSettings = {
-		type: 'confirm',
-		title: 'Elimina',
-		body: `Sicuro di voler eliminare il nucleo ${data.feed.nome} ${data.feed.cognome} (#${data.feed.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
-		buttonTextConfirm: 'Elimina',
-		buttonTextCancel: 'Annulla',
-		response: (r: boolean) => {
-			if (r) {
-				deleteForm.submit();
+	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
+		return {
+			type: 'confirm',
+			title: 'Elimina',
+			body: `Sicuro di voler eliminare il nucleo ${data.feed.nome} ${data.feed.cognome} (#${data.feed.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
+			buttonTextConfirm: 'Elimina',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
 			}
-		}
+		};
 	};
 </script>
 
@@ -120,9 +120,10 @@
 					class="form"
 					method="POST"
 					action="/nuclei/{data.feed.id}?/elimina"
-					bind:this={deleteForm}
-					on:submit|preventDefault={() => {modalStore.clear();
-						modalStore.trigger(confirmDelete)}}
+					on:submit|preventDefault={(e) => {
+						modalStore.clear();
+						modalStore.trigger(confirmDelete(e.currentTarget));
+					}}
 				>
 					<input type="submit" class="btn variant-filled-error" value="Elimina nucleo" />
 				</form>
