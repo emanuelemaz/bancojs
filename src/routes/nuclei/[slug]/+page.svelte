@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
@@ -38,12 +38,18 @@
 			}
 		};
 	};
+
+	const qrPopup: PopupSettings = {
+		event: 'click',
+		target: 'qrPopup',
+		placement: 'right'
+	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<div class="flex w-full justify-between">
 		<div>
-			<h1 class="h1">Nucleo <span class="font-mono">#{data.feed.id}</span></h1>
+			<h1 class="h1">Nucleo <span class="font-mono btn variant-filled p-2 text-xl align-middle" use:popup={qrPopup}>#{data.feed.id}</span></h1>
 			<div>
 				<i
 					>Creato in data {new Date(parseInt(data.feed.id.slice(0, 8), 16) * 1000).toLocaleDateString(
@@ -60,7 +66,7 @@
 				>
 			</div>
 		</div>
-		<div class="qr">
+		<div class="card qr p-6" data-popup="qrPopup">
 			{@html data.qrID}
 		</div>
 	</div>

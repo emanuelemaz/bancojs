@@ -54,20 +54,22 @@
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
-	<h1 class="h1 mb-0">Alimento: {data.alimento.nome} <span class="font-mono">#{data.alimento.id}</span></h1>
+	<h1 class="h1 mb-0">
+		Alimento: {data.alimento.nome}
+		<span class="font-mono">#{data.alimento.id}</span>
+	</h1>
 	<div class="!mt-0">
 		<i
-			>Creato in data {new Date(parseInt(data.alimento.id.slice(0, 8), 16) * 1000).toLocaleDateString(
-				'it-IT',
-				{
-					day: '2-digit',
-					month: '2-digit',
-					year: 'numeric',
-					hour: '2-digit',
-					minute: '2-digit',
-					second: '2-digit'
-				}
-			)}</i
+			>Creato in data {new Date(
+				parseInt(data.alimento.id.slice(0, 8), 16) * 1000
+			).toLocaleDateString('it-IT', {
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit'
+			})}</i
 		>
 	</div>
 	<form
