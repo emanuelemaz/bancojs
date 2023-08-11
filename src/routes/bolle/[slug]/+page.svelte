@@ -1,7 +1,37 @@
 <script lang="ts">
+	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import 'iconify-icon';
 	export let data: PageData;
+
+	const confirmDeleteBolla = (form: HTMLFormElement) : ModalSettings => {
+		return {
+		type: 'confirm',
+		title: 'Elimina',
+		body: `Sicuro di voler eliminare la bolla #${data.bolle.id} del nucleo <strong>${data.bolle.nomeN} ${data.bolle.cognomeN}</strong> (#${data.bolle.nucleoId})?`,
+		buttonTextConfirm: 'Elimina',
+		buttonTextCancel: 'Annulla',
+		response: (r: boolean) => {
+			if (r) {
+				form.submit();
+			}
+		}}
+	};
+
+	const confirmDeleteBollaAlimento = (form: HTMLFormElement) : ModalSettings =>  {
+		return {
+			type: 'confirm',
+			title: 'Elimina',
+			body: `Sicuro di voler eliminare l'alimento dalla bolla?`,
+			buttonTextConfirm: 'Elimina',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
+			}
+		}
+	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -45,7 +75,15 @@
 				>
 			</div>
 			<div>
-				<form class="form" method="POST" action="/bolle/{data.bolle.id}?/elimina">
+				<form
+					class="form"
+					method="POST"
+					action="/bolle/{data.bolle.id}?/elimina"
+					on:submit|preventDefault={(e) => {
+						modalStore.clear();
+						modalStore.trigger(confirmDeleteBolla(e.currentTarget));
+					}}
+				>
 					<button type="submit" class="btn variant-filled-error">
 						<iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
 					</button>
@@ -107,7 +145,14 @@
 									<p>Quantità</p>
 									<p class="text-xl">{alimento.quantita} {alimento.unita}</p>
 								</div>
-								<form action="/bolle/{data.bolle.id}?/eliminaAlimento" method="POST">
+								<form
+									action="/bolle/{data.bolle.id}?/eliminaAlimento"
+									method="POST"
+									on:submit|preventDefault={(e) => {
+										modalStore.clear();
+										modalStore.trigger(confirmDeleteBollaAlimento(e.currentTarget));
+									}}
+								>
 									<div>
 										<input type="hidden" value={alimento.id} name="alimentoId" />
 										<button type="submit" class="btn variant-filled-error w-full">

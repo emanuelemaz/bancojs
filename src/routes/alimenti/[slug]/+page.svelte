@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
@@ -20,6 +21,21 @@
 		}
 		return getUTCDate(x).toISOString().slice(0, -14);
 	}
+	
+	const confirmDelete = (form: HTMLFormElement) : ModalSettings =>  {
+		return {
+			type: 'confirm',
+			title: 'Elimina',
+			body: `Sicuro di voler eliminare l'alimento?`,
+			buttonTextConfirm: 'Elimina',
+			buttonTextCancel: 'Annulla',
+			response: (r: boolean) => {
+				if (r) {
+					form.submit();
+				}
+			}
+		}
+	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -65,7 +81,15 @@
 				<a class="ml-2 btn variant-filled-primary" href="/alimenti">Annulla</a>
 			</div>
 			<div class="float-right">
-				<form class="form" method="POST" action="/alimenti/{data.alimento.id}?/elimina">
+				<form
+					class="form"
+					method="POST"
+					action="/alimenti/{data.alimento.id}?/elimina"
+					on:submit|preventDefault={(e) => {
+						modalStore.clear();
+						modalStore.trigger(confirmDelete(e.currentTarget));
+					}}
+				>
 					<input type="submit" class="btn variant-filled-error" value="Elimina alimento" />
 				</form>
 			</div>

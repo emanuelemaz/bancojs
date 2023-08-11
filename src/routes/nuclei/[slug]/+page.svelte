@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
@@ -7,6 +8,21 @@
 	function maxBambini() {
 		bambini.max = componenti.value;
 	}
+
+	let deleteForm: HTMLFormElement;
+
+	const confirmDelete: ModalSettings = {
+		type: 'confirm',
+		title: 'Elimina',
+		body: `Sicuro di voler eliminare il nucleo ${data.feed.nome} ${data.feed.cognome} (#${data.feed.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
+		buttonTextConfirm: 'Elimina',
+		buttonTextCancel: 'Annulla',
+		response: (r: boolean) => {
+			if (r) {
+				deleteForm.submit();
+			}
+		}
+	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -95,12 +111,19 @@
 			</div>
 			<div>
 				<form class="form" method="get" action="/bolle/nuovo">
-					<input type="hidden" name="nucleoId" value={data.feed.id}>
+					<input type="hidden" name="nucleoId" value={data.feed.id} />
 					<input type="submit" class="btn variant-filled-secondary" value="Emetti bolla" />
 				</form>
 			</div>
 			<div>
-				<form class="form" method="POST" action="/nuclei/{data.feed.id}?/elimina">
+				<form
+					class="form"
+					method="POST"
+					action="/nuclei/{data.feed.id}?/elimina"
+					bind:this={deleteForm}
+					on:submit|preventDefault={() => {modalStore.clear();
+						modalStore.trigger(confirmDelete)}}
+				>
 					<input type="submit" class="btn variant-filled-error" value="Elimina nucleo" />
 				</form>
 			</div>
