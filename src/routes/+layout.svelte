@@ -1,8 +1,8 @@
 <script>
+	import '../app.postcss';
 	import { AppShell } from '@skeletonlabs/skeleton';
 	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
-	import '../app.postcss';
 </script>
 
 <AppShell slotSidebarLeft="bg-surface-500/5 w-0 md:w-52 p-4">

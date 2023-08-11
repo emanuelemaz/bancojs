@@ -1,7 +1,7 @@
 <script>
-	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
+	import '../../app.postcss';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
-	import '../../../app.postcss';
+	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
 </script>
 
 <slot/>
