@@ -30,7 +30,7 @@
 	<a class="btn variant-filled-primary" href="/alimenti/nuovo"
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi alimento</a
 	>
-	<a class="btn variant-filled-tertiary" href="/alimenti/print"
+	<a class="btn variant-filled-tertiary" href="/alimenti/pdf"
 		><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
 	>
 	<form action="/alimenti" method="get" bind:this={searchForm}>
