@@ -113,7 +113,7 @@ export async function GET({ params }) {
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        [{svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 340, margin: [0,0,2,0]}, {text: `${currentPage}/${pageCount}`, alignment: 'right'}],
+                        [{svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 240, margin: [0,0,2,0]}, {text: `${currentPage}/${pageCount}`, alignment: 'right'}],
                     ],
                 },
                 margin: [15, 15, 15, 0]
