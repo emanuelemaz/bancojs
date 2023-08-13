@@ -20,7 +20,7 @@ export const load = (async ({ url }) => {
     citta === null ? citta = "" : citta = citta
     let note = url.searchParams.get("note") as string;
     note === null ? note = "" : note = note
-    let servibile = url.searchParams.get("servibile") === "true" || url.searchParams.get("servibile") === null ? true : false;
+    let servibile = !url.searchParams.has("servibile") ? true : false;
 
     let response = (await prisma.nucleo.findMany({
         orderBy: {

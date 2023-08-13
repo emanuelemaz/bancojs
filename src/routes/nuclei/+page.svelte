@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Nucleo from '$lib/Nucleo.svelte';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLInputElement;
+	let servSlide: boolean;
 
 	function resetAllInputs() {
 		var inputs = <HTMLCollectionOf<HTMLInputElement>>(
@@ -13,18 +15,7 @@
 		for (let i of inputs) {
 			i.value = '';
 		}
-		servibileCheckbox.checked = true;
-	}
-
-	let servibileBoolInput: HTMLInputElement;
-	let servibileCheckbox: HTMLInputElement;
-	function fixServBool() {
-		if (servibileCheckbox.checked) {
-			servibileBoolInput.value = 'true';
-		} else {
-			servibileBoolInput.value = 'false';
-		}
-		searchBtn.click();
+		servSlide = false;
 	}
 
 	
@@ -86,15 +77,7 @@
 			<input type="text" name="citta" class="search-input input p-3" placeholder="Cerca citta..." />
 			<input type="text" name="note" class="search-input input p-3" placeholder="Cerca note..." />
 			<div class="space-y-2">
-				<label class="flex items-center space-x-2" for="servibile">Escludi non servibili</label>
-				<input type="hidden" name="servibile" value="true" bind:this={servibileBoolInput} />
-				<input
-					type="checkbox"
-					bind:this={servibileCheckbox}
-					on:click={() => fixServBool()}
-					checked
-					class="search-input checkbox input p-3"
-				/>
+				<SlideToggle name="servibile" bind:checked={servSlide} on:click={() => searchBtn.click()}>Includi non servibili</SlideToggle>
 			</div>
 		</div>
 		<input type="submit" class="btn variant-filled-secondary" bind:this={searchBtn} />

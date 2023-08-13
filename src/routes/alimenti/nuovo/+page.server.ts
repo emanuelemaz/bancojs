@@ -10,14 +10,7 @@ export const actions: Actions = {
         const unita = newData.get("unita") as string;
         const scadenza = new Date(Date.parse(newData.get("scadenza") as string));
         const note = newData.get("note") as string;
-
-        function distribuibile() {
-            if (newData.get("distribuibile") && newData.get("distribuibile") == "on") {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        const distribuibile = newData.has("distribuibile") ? true : false;
 
         try {
             await prisma.alimento.create({
@@ -26,7 +19,7 @@ export const actions: Actions = {
                     unita: unita,
                     scadenza: newData.get("scadenza") ? scadenza : null,
                     note: newData.get("note") ? note : null,
-                    distribuibile: distribuibile()
+                    distribuibile: distribuibile
                 }
             });
         } catch (error) {

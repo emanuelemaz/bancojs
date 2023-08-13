@@ -1,5 +1,7 @@
 <script lang="ts">
-	let componenti: HTMLInputElement, bambini: HTMLInputElement;
+	import { SlideToggle } from "@skeletonlabs/skeleton";
+
+	let servSlide: boolean = true;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -20,10 +22,7 @@
 			</label>
 		</div>
 		<div class="grid grid-cols-3 gap-4 my-4">
-			<label class="label">
-				<span>Distribuibile</span>
-				<input class="checkbox input p-2" type="checkbox" name="distribuibile" checked />
-			</label>
+			<SlideToggle bind:checked={servSlide} name="distribuibile">Distribuibile</SlideToggle>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>

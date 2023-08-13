@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment';
 	export let data: PageData;
@@ -84,14 +84,7 @@
 			</label>
 		</div>
 		<div class="grid grid-cols-3 gap-4 my-4">
-			<label class="label">
-				<span>Distribuibile</span>
-				{#if data.alimento.distribuibile === true}
-					<input class="checkbox input p-2" type="checkbox" name="distribuibile" checked />
-				{:else}
-					<input class="checkbox input p-2" type="checkbox" name="distribuibile" />
-				{/if}
-			</label>
+			<SlideToggle checked={data.alimento.distribuibile} name="distribuibile">Distribuibile</SlideToggle>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>

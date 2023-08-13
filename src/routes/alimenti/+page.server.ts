@@ -10,7 +10,7 @@ export const load = (async ({ url }) => {
     let unita = url.searchParams.get("unita") as string;
     let dataInizio = moment(url.searchParams.get("dataInizio") as string).set({'hours': 0, 'minutes': 0, 'seconds': 0});
     let dataFine = moment(url.searchParams.get("dataFine") as string).set({'hours': 23, 'minutes': 59, 'seconds': 59});
-    let distribuibile = url.searchParams.get("distribuibile") === "true" || url.searchParams.get("distribuibile") === null ? true : false;
+    let distribuibile = !url.searchParams.has("distribuibile") ? true : false;
 
     let response = (await prisma.alimento.findMany({
         orderBy: {

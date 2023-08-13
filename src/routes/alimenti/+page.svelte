@@ -1,13 +1,12 @@
 <script lang="ts">
 	import Alimento from '$lib/Alimento.svelte';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
 
-	let distribuibileBoolInput: HTMLInputElement;
-	let distribuibileCheckbox: HTMLInputElement;
 	function resetAllInputs() {
 		var inputs = <HTMLCollectionOf<HTMLInputElement>>(
 			document.getElementsByClassName('search-input')
@@ -15,17 +14,11 @@
 		for (let i of inputs) {
 			i.value = '';
 		}
-		distribuibileCheckbox.checked = true;
+		servSlide = true;
 	}
 
-	function fixDistBool() {
-		if (distribuibileCheckbox.checked) {
-			distribuibileBoolInput.value = 'true';
-		} else {
-			distribuibileBoolInput.value = 'false';
-		}
-		searchBtn.click();
-	}
+	let servSlide: boolean;
+	$: servSlide
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -64,16 +57,8 @@
 				<span>Scadenza al</span>
 				<input class="input p-2 search-input" type="date" name="dataFine" id="dataInput" />
 			</label>
-			<div class="space-y-2">
-				<label class="flex items-center space-x-2" for="distribuibile">Escludi non distribuibili</label>
-				<input type="hidden" name="distribuibile" value="true" bind:this={distribuibileBoolInput} />
-				<input
-					type="checkbox"
-					bind:this={distribuibileCheckbox}
-					on:click={() => fixDistBool()}
-					checked
-					class="search-input checkbox input p-3"
-				/>
+			<div class="space-y-2 flex items-center">
+				<SlideToggle bind:checked={servSlide} name="distribuibile" on:click={() => searchBtn.click()}>Includi non distribuibili</SlideToggle>
 			</div>
 		</div>
 		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>Invia</button>

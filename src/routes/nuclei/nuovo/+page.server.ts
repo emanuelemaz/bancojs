@@ -14,14 +14,8 @@ export const actions: Actions = {
         const indirizzo = newData.get("indirizzo") as string | null;
         const citta = newData.get("citta") as string | null;
         const note = newData.get("note") as string | null;
+        let servibile = newData.has("servibile") ? true : false;
 
-        function servibile() {
-            if ((newData.get("servibile") !== null || newData.get("servibile") !== undefined) && newData.get("servibile") == "on") {
-                return true;
-            } else {
-                return false;
-            }
-        }
         try {
             await prisma.nucleo.create({
                 data: {
@@ -33,7 +27,7 @@ export const actions: Actions = {
                     cellulare: cellulare,
                     indirizzo: indirizzo,
                     citta: citta,
-                    servibile: servibile(),
+                    servibile: servibile,
                     note: note
                 }
             });

@@ -26,13 +26,7 @@ export const actions: Actions = {
         const unita = newData.get("unita") as string;
         const scadenza = moment(newData.get("scadenza") as string).toDate();
         const note = newData.get("note") as string;
-        function distribuibile() {
-            if ((newData.get("distribuibile") !== null || newData.get("distribuibile") !== undefined) && newData.get("distribuibile") == "on") {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        let distribuibile = newData.has("distribuibile") ? true : false;
 
         try {
             await prisma.alimento.update({
@@ -43,7 +37,7 @@ export const actions: Actions = {
                     nome: nome,
                     unita: unita,
                     scadenza: newData.get("scadenza") ? scadenza : null,
-                    distribuibile: distribuibile(),
+                    distribuibile: distribuibile,
                     note: newData.get("note") ? note : null
                 }
             });

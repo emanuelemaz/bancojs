@@ -3,12 +3,13 @@
 		modalStore,
 		type ModalSettings,
 		type PopupSettings,
-		popup
+		popup,
+
+		SlideToggle
+
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
-	import { goto } from '$app/navigation';
-	import { enhance } from '$app/forms';
 	export let data: PageData;
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
@@ -154,14 +155,7 @@
 				<span>Comune</span>
 				<input class="input p-2" type="text" name="citta" value={data.feed.citta} />
 			</label>
-			<label class="label">
-				<span>Servibile</span>
-				{#if data.feed.servibile === true}
-					<input class="checkbox input p-2" type="checkbox" name="servibile" checked />
-				{:else}
-					<input class="checkbox input p-2" type="checkbox" name="servibile" />
-				{/if}
-			</label>
+			<SlideToggle name="servibile" checked={data.feed.servibile}>Servibile</SlideToggle>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+	import { SlideToggle } from '@skeletonlabs/skeleton';
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
@@ -76,10 +77,7 @@
 				<span>Comune</span>
 				<input class="input p-2" type="text" name="citta" />
 			</label>
-			<label class="label">
-				<span>Servibile</span>
-				<input class="checkbox input p-2" type="checkbox" name="servibile" checked />
-			</label>
+			<SlideToggle name="servibile" checked>Servibile</SlideToggle>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>
