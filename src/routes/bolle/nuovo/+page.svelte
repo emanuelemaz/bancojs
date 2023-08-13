@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import 'iconify-icon';
 	export let data: PageData;
 
 	onMount(() => {
@@ -45,7 +44,9 @@
 		<div class="mt-4">
 			<div class="float-left">
 				<button type="submit" class="mt-4 btn variant-filled-primary">Emetti bolla</button>
-				<a class="ml-2 btn variant-filled-primary" href="/bolle">Annulla</a>
+				<button type="button" class="m-0 btn variant-filled-primary" on:click={() => history.back()}
+					>Indietro</button
+				>
 			</div>
 		</div>
 	</form>

@@ -38,9 +38,11 @@ export const actions: Actions = {
                     note: note
                 }
             });
+            throw redirect(302, "/nuclei");
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile creare il nucleo.")
         } throw redirect(302, "/nuclei");
+
     },
 }

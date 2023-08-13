@@ -14,6 +14,8 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@types/base64-stream": "^1.0.2",
+		"@types/pdfkit": "^0.12.10",
 		"@types/qrcode": "^1.5.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
@@ -39,7 +41,10 @@
 		"@prisma/client": "^5.1.1",
 		"@skeletonlabs/skeleton": "^1.11.0",
 		"@sveltejs/adapter-node": "^1.0.0-next.106",
+		"@types/blob-stream": "^0.1.30",
+		"@types/pdfmake": "^0.2.2",
 		"iconify-icon": "^1.0.8",
+		"pdfmake": "^0.2.7",
 		"prisma": "^5.1.1"
 	}
 }

@@ -115,8 +115,8 @@
 			<span>Note</span>
 			<textarea class="input textarea p-2" name="note" value={data.alimento.note} />
 		</label>
-		<div class="mt-4">
-			<div class="float-left">
+		<div class="mt-4 flex justify-between">
+			<div >
 				<button type="submit" class="btn variant-filled-primary"
 					><iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
 				</button>
@@ -124,7 +124,7 @@
 					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
-			<div class="float-right">
+			<div>
 				<form
 					class="form"
 					method="POST"

@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { modalStore, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
+	import {
+		modalStore,
+		type ModalSettings,
+		type PopupSettings,
+		popup
+	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
 	export let data: PageData;
@@ -50,20 +55,24 @@
 <div class="container mx-auto p-8 space-y-8">
 	<div class="flex w-full justify-between">
 		<div>
-			<h1 class="h1">Nucleo <span class="font-mono btn variant-filled p-2 text-xl align-middle" use:popup={qrPopup}>#{data.feed.id}</span></h1>
+			<h1 class="h1">
+				Nucleo <span
+					class="font-mono btn variant-filled p-2 text-xl align-middle"
+					use:popup={qrPopup}>#{data.feed.id}</span
+				>
+			</h1>
 			<div>
 				<i
-					>Creato in data {new Date(parseInt(data.feed.id.slice(0, 8), 16) * 1000).toLocaleDateString(
-						'it-IT',
-						{
-							day: '2-digit',
-							month: '2-digit',
-							year: 'numeric',
-							hour: '2-digit',
-							minute: '2-digit',
-							second: '2-digit'
-						}
-					)}</i
+					>Creato in data {new Date(
+						parseInt(data.feed.id.slice(0, 8), 16) * 1000
+					).toLocaleDateString('it-IT', {
+						day: '2-digit',
+						month: '2-digit',
+						year: 'numeric',
+						hour: '2-digit',
+						minute: '2-digit',
+						second: '2-digit'
+					})}</i
 				>
 			</div>
 		</div>
@@ -166,12 +175,15 @@
 				>
 			</div>
 			<div>
-				<form class="form" method="get" action="/bolle/nuovo">
+				<form method="get" action="/bolle/nuovo" class="inline">
 					<input type="hidden" name="nucleoId" value={data.feed.id} />
 					<button type="submit" class="btn variant-filled-tertiary"
-						><iconify-icon icon="mdi:add" class="text-xl" /> Emetti bolla
+						><iconify-icon icon="mdi:add" class="text-xl inline" /> Emetti bolla
 					</button>
 				</form>
+				<a href="/nuclei/{data.feed.id}/pdf" class="btn variant-filled-tertiary">
+					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
+				>
 			</div>
 			<div>
 				<form
@@ -193,7 +205,7 @@
 	<div class="space-y-4">
 		<h2 class="h2">Bolle emesse</h2>
 		{#each data.bolleNucleo as row}
-			<Bolla row={row}/>
+			<Bolla {row} />
 		{/each}
 	</div>
 </div>

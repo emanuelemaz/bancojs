@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { modalStore, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
-	import 'iconify-icon';
 	export let data: PageData;
 
 	const confirmDeleteBolla = (form: HTMLFormElement): ModalSettings => {

@@ -2,7 +2,6 @@
 	import Alimento from '$lib/Alimento.svelte';
 	import type { PageData } from './$types';
 	export let data: PageData;
-	import 'iconify-icon';
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;

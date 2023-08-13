@@ -73,7 +73,9 @@
 		</label>
 		<div class="mt-4">
 			<input type="submit" class="btn variant-filled-primary" value="Aggiungi nucleo" />
-			<a class="ml-2 btn variant-filled-primary" href="/nuclei">Annulla</a>
+			<button type="button" class="m-0 btn variant-filled-primary" on:click={() => history.back()}
+				>Indietro</button
+			>
 		</div>
 	</form>
 </div>
