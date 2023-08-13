@@ -1,10 +1,9 @@
-import prisma from '../../../../prisma/prisma.js';
-import PdfPrinter from 'pdfmake'
-import fs from 'fs'
+import PdfPrinter from 'pdfmake';
+import prisma from '../../../../../prisma/prisma';
 import moment from 'moment';
+import fs from 'fs'
 
-export async function GET({ params }) {
-
+export async function GET({ }) {
     const alimenti = await prisma.alimento.findMany();
 
     function cCell(text: string, isBold: boolean = false): Object {
@@ -71,10 +70,5 @@ export async function GET({ params }) {
 
     pdfDoc.end();
 
-    return new Response(pdfDoc, {
-        headers: {
-            'Content-Type': 'application/pdf',
-        }
-    })
-
+    return new Response(pdfDoc);
 }

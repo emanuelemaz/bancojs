@@ -62,7 +62,7 @@ export async function GET({ params }) {
         } else {
             if (i % 2 == 0) {
                 tblBody.push(
-                    [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), "", ""]
+                    [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), cCell("/"), cCell("/")]
                 )
             }
         }
