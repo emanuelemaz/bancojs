@@ -41,7 +41,7 @@
 	<svelte:fragment slot="sidebarLeft">
 		<Navigation />
 	</svelte:fragment>
-	<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
+	<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end" slot="header">
 		<svelte:fragment slot="lead">
 			<div class="flex items-center">
 				<button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
