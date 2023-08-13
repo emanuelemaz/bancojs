@@ -7,12 +7,12 @@
 		SlideToggle
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
-	import moment from 'moment';
+	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
 	export let data: PageData;
 
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).tz('Europe/Rome').format(
 			'YYYY-MM-DDTHH:mm:ss'
 		);
 	});

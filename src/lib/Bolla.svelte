@@ -1,4 +1,5 @@
 <script lang="ts">
+		import moment from 'moment-timezone'
 	export let row: bolla_fix;
 </script>
 
@@ -19,14 +20,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{row.data.toLocaleDateString('it-IT', {
-						day: '2-digit',
-						month: '2-digit',
-						hour: '2-digit',
-						minute: '2-digit',
-						second: '2-digit',
-						year: 'numeric'
-					})}
+					{moment(row.data).format("DD/MM/YYYY, HH:mm:ss")}
 				</p>
 			</div>
 		</div>

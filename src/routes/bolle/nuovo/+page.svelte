@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import moment from 'moment';
-	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import moment from 'moment-timezone';
 	export let data: PageData;
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
-			moment().format('YYYY-MM-DDTHH:mm:ss');
+			moment().tz('Europe/Rome').format('YYYY-MM-DDTHH:mm:ss');
 	});
 </script>
 

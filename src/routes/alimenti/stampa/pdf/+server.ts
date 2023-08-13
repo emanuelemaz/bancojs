@@ -1,6 +1,6 @@
 import PdfPrinter from 'pdfmake';
 import prisma from '../../../../../prisma/prisma';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import fs from 'fs'
 
 export async function GET({ }) {
@@ -33,7 +33,7 @@ export async function GET({ }) {
         content: [
             { text: "LISTA DEGLI ALIMENTI\n", fontSize: 18, bold: true, alignment: 'center', margin: [0, 0, 0, 4] },
             {
-                text: "Aggiornata al " + moment().format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16, margin: [0, 0, 0, 8]
+                text: "Aggiornata al " + moment().tz('Europe/Rome').format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16, margin: [0, 0, 0, 8]
             },
             {
                 table: {

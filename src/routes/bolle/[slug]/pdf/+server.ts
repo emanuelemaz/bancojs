@@ -17,17 +17,6 @@ export async function GET({ params }) {
         }
     })
 
-    let response_fix: bolla_fix = {
-        id: bolla.id,
-        data: bolla.data,
-        note: bolla.note,
-        nucleoId: bolla.nucleoId,
-        nomeN: nucleo.nome,
-        cognomeN: nucleo.cognome,
-        componentiN: nucleo.componenti,
-        bambiniN: nucleo.bambini
-    };
-
     let alimenti_fix: bollaalimento_fix[] = [];
     const alimenti = await prisma.bollaAlimento.findMany({
         where: {
