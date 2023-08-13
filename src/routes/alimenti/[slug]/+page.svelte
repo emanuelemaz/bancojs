@@ -2,6 +2,7 @@
 	import { modalStore, type ModalSettings, SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment';
+	import { onMount } from 'svelte';
 	export let data: PageData;
 
 	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
@@ -33,6 +34,12 @@
 			}
 		};
 	};
+
+	onMount(() => {
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.alimento.scadenza).format(
+			'YYYY-MM-DD'
+		);
+	});
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -78,7 +85,6 @@
 					class="input p-2"
 					type="date"
 					name="scadenza"
-					value={moment(data.alimento.scadenza)}
 					id="dataInput"
 				/>
 			</label>

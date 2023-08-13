@@ -48,6 +48,10 @@ export const load = (async ({ params }) => {
     const alimenti = await prisma.bollaAlimento.findMany({
         where: {
             bollaId: bolla.id
+        }, orderBy: {
+            alimento: {
+                nome: 'asc'
+            }
         }
     })
     for (let al of alimenti) {

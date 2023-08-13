@@ -70,7 +70,7 @@
 		placement: 'right'
 	};
 
-	$: showNoDist
+	$: showNoDist;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -172,7 +172,9 @@
 			<p class="h4">Le modifiche vengono salvate automaticamente.</p>
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<div class="my-4">
-					<SlideToggle name="distSlide" bind:checked={showNoDist}>Mosta alimenti non distribuibili</SlideToggle>
+				<SlideToggle name="distSlide" bind:checked={showNoDist}
+					>Mosta alimenti non distribuibili</SlideToggle
+				>
 			</div>
 			<div class="my-4">
 				<form action="/bolle/{data.bolla.id}?/aggiungiAlimento" method="POST">
@@ -181,15 +183,22 @@
 							<span>Alimento</span>
 							<select name="alimentoId" class="select" required>
 								{#each data.allAlimenti as alimento}
-								{#if alimento.distribuibile || showNoDist}
-									<option value={alimento.id}>
-										{alimento.nome} ({alimento.unita})
-										{!alimento.distribuibile ? '❌ Non servibile ❌' : ''}
-										{alimento.scadenza
-											? ' || Scadenza: ' + alimento.scadenza.toLocaleDateString()
-											: ''}
-										{alimento.note ? ' || Note: ' + alimento.note : ''}
-									</option>
+									{#if alimento.distribuibile || showNoDist}
+										<option value={alimento.id}>
+											{alimento.nome} ({alimento.unita})
+											{!alimento.distribuibile ? '❌ Non servibile ❌' : ''}
+											{alimento.scadenza
+												? moment().isAfter(alimento.scadenza, 'day')
+													? '⚠️ Scaduto ⚠️'
+													: ''
+												: ''}
+											{alimento.scadenza
+													? moment().isSame(alimento.scadenza, 'day')
+														? '⚠️ Scade oggi ⚠️'
+														: ''
+													: ''}
+											{alimento.note ? ' || Note: ' + alimento.note : ''}
+										</option>
 									{/if}
 								{/each}
 							</select>
