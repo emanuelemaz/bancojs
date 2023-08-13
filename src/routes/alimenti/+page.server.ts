@@ -1,4 +1,3 @@
-import type { Nucleo } from '@prisma/client';
 import prisma from '../../../prisma/prisma';
 import type { PageServerLoad } from './$types';
 import moment from 'moment';
