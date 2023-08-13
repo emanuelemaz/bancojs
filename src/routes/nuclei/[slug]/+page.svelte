@@ -181,9 +181,14 @@
 						><iconify-icon icon="mdi:add" class="text-xl inline" /> Emetti bolla
 					</button>
 				</form>
-				<a href="/nuclei/{data.feed.id}/pdf" class="btn variant-filled-tertiary">
-					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
-				>
+				<div class="btn-group variant-filled-tertiary">
+					<a href="/nuclei/{data.feed.id}/pdf" class="btn">
+						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
+					>
+					<a href="/nuclei/{data.feed.id}/pdf?bolle=true" class="btn">
+						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con bolle)</a
+					>
+				</div>
 			</div>
 			<div>
 				<form

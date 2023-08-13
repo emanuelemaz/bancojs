@@ -2,13 +2,21 @@ import prisma from '../../../../../prisma/prisma';
 
 import PdfPrinter from 'pdfmake'
 import fs from 'fs'
-import stream from 'stream'
+import { BASE_URL } from '$env/static/private';
 
-export async function GET({ request, params }) {
+export async function GET({ url, params }) {
+
+    const displayBolle: boolean = (url.searchParams.get("bolle") as string) === "true" ? true : false;
 
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {
             id: params.slug
+        }
+    })
+
+    const bolle = await prisma.bolla.findMany({
+        where: {
+            nucleoId: nucleo.id
         }
     })
 
@@ -23,13 +31,42 @@ export async function GET({ request, params }) {
     }
     const pdfPrinter = new PdfPrinter(fonts)
 
+    let bolleDoc = [];
+
+    for (let bolla of bolle) {
+        bolleDoc.push([{
+            table: {
+                widths: ['auto', '*'],
+                body: bolla.note ? [
+                    ["ID", { text: bolla.id, link: BASE_URL+"/bolle/"+bolla.id, font: 'Courier' }],
+                    ["Data", bolla.data.toLocaleDateString('it-IT', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    })],
+                    ["Note", { text: bolla.note }]
+                ] : [
+                    ["ID", { text: bolla.id, link: BASE_URL+"/bolle/"+bolla.id, font: 'Courier' }],
+                    ["Data", bolla.data.toLocaleDateString('it-IT', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    })]
+                ]
+            }
+        }, { text: "\n", fontSize: 4 }])
+    }
+
     const scheda = {
         content: [
-            {
-                svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 349.50
-            },
             { text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center', margin: [0, 0, 0, 4] },
-            { text: [{ text: "ID del nucleo: " }, { text: "#" + nucleo.id.toString(), font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 8] },
+            { text: [{ text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL+"/nuclei/"+nucleo.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 8] },
             {
                 table: {
                     widths: ['auto', '*'],
@@ -45,8 +82,22 @@ export async function GET({ request, params }) {
                         ["Note", nucleo.note ? nucleo.note.replace(/\r\n/g, '\n') : "(non presenti)"],
                     ]
                 }
+            },
+            (displayBolle && bolleDoc) ? [{ text: 'Bolle emesse', bold: true, margin: [0, 2, 0, 1] }, bolleDoc] : { text: "" }
+        ],
+        header: function (currentPage: number, pageCount: number) {
+            return {
+                layout: 'noBorders',
+                table: {
+                    widths: ['auto', '*'],
+                    body: [
+                        [{ svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 340, margin: [0, 0, 2, 0] }, { text: `${currentPage}/${pageCount}`, alignment: 'right' }],
+                    ],
+                },
+                margin: [15, 15, 15, 0]
             }
-        ], defaultStyle: { font: 'Arial' }, pageSize: 'A5', pageOrientation: 'portrait', pageMargins: 35,
+        },
+        defaultStyle: { font: 'Arial' }, pageSize: 'A5', pageOrientation: 'portrait', pageMargins: [15, 85, 15, 15],
         info: {
             title: 'Scheda anagrafica',
             author: 'Associazione XXX',

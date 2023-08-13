@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { modalStore, type ModalSettings, type PopupSettings, popup } from '@skeletonlabs/skeleton';
+	import {
+		modalStore,
+		type ModalSettings,
+		type PopupSettings,
+		popup
+	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
@@ -58,7 +63,12 @@
 <div class="container mx-auto p-8 space-y-8">
 	<div class="flex w-full justify-between">
 		<div>
-			<h1 class="h1">Bolla <span class="font-mono btn variant-filled p-2 text-xl align-middle" use:popup={qrPopup}>#{data.bolle.id}</span></h1>
+			<h1 class="h1">
+				Bolla <span
+					class="font-mono btn variant-filled p-2 text-xl align-middle"
+					use:popup={qrPopup}>#{data.bolle.id}</span
+				>
+			</h1>
 			<div>
 				<i
 					>Creata in data {new Date(
@@ -124,6 +134,9 @@
 					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
+			<a href="/bolle/{data.bolle.id}/pdf" class="btn variant-filled-tertiary">
+				<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
+			>
 			<div>
 				<form
 					class="form"
