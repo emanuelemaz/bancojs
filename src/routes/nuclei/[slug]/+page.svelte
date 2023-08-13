@@ -186,9 +186,11 @@
 					<a href="/nuclei/{data.feed.id}/pdf" class="btn variant-filled-tertiary">
 						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
 					>
+					{#if data.bolleNucleo.length}
 					<a href="/nuclei/{data.feed.id}/pdf?bolle=true" class="btn variant-filled-tertiary">
 						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con bolle)</a
 					>
+					{/if}
 			</div>
 			<div>
 				<form
