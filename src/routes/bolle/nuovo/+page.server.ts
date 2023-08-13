@@ -3,12 +3,6 @@ import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 import type { Bolla } from '@prisma/client';
 
-const getUTCDate = (date: Date) => {
-    const d = new Date(date);
-    const utcDate = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
-    return new Date(utcDate);
-}
-
 export const load = (async ({ url }) => {
     let nuclei = (await prisma.nucleo.findMany({
         orderBy: {
@@ -42,7 +36,7 @@ export const actions: Actions = {
     aggiungi: async ({ request }) => {
         const newData = await request.formData()
 
-        const data = getUTCDate(new Date(newData.get("data") as string));
+        const data = new Date(newData.get("data") as string);
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
@@ -58,6 +52,9 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile creare la bolla.")
-        } throw redirect(302, `/bolle/${newBolla ? newBolla.id:""}`);
+        }
+        if (newBolla) {
+            throw redirect(302,  newBolla.id)
+        }
     }
 }

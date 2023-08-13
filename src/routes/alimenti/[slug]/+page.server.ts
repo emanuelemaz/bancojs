@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
+import moment from 'moment';
 
 export const load = (async ({ params }) => {
     const response = await prisma.alimento.findUniqueOrThrow({ where: { id: params.slug } })
@@ -23,7 +24,7 @@ export const actions: Actions = {
         const id = params.slug;
         const nome = newData.get("nome") as string;
         const unita = newData.get("unita") as string;
-        const scadenza = new Date((newData.get("scadenza") as string));
+        const scadenza = moment(newData.get("scadenza") as string).toDate();
         const note = newData.get("note") as string;
         function distribuibile() {
             if ((newData.get("distribuibile") !== null || newData.get("distribuibile") !== undefined) && newData.get("distribuibile") == "on") {

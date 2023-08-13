@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
 	function maxBambini() {
@@ -8,7 +11,18 @@
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nuovo nucleo</h1>
-	<form class="form" method="POST" action="/nuclei/nuovo?/aggiungi">
+	<form
+		class="form"
+		method="POST"
+		action="/nuclei/nuovo?/aggiungi"
+		use:enhance={() => {
+			return async ({ result }) => {
+				if (result.type === 'success') {
+					goto('/nuclei')}
+				}
+			}
+		}
+	>
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Nome</span>

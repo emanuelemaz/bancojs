@@ -5,7 +5,6 @@ import type { Actions, PageServerLoad } from './$types';
 import QRCode from 'qrcode'
 
 export const load = (async ({ params, url }) => {
-    // 1.
     const response = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug } })
     let response_fix: nucleo_fix = {
         id: response.id,
@@ -96,7 +95,8 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiornare il nucleo.")
-        } throw redirect(302, "/nuclei");
+        }
+        throw redirect(302, '/nuclei')
     },
     elimina: async ({ params }) => {
         try {
@@ -108,6 +108,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile eliminare il nucleo.")
-        } throw redirect(302, "/nuclei");
+        }
+        throw redirect(302, '/nuclei')
     },
 }

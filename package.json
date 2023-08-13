@@ -44,6 +44,7 @@
 		"@types/blob-stream": "^0.1.30",
 		"@types/pdfmake": "^0.2.2",
 		"iconify-icon": "^1.0.8",
+		"moment": "^2.29.4",
 		"pdfmake": "^0.2.7",
 		"prisma": "^5.1.1"
 	}

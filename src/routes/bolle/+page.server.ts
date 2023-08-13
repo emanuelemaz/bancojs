@@ -1,12 +1,13 @@
 import type { Bolla, Nucleo } from '@prisma/client';
 import prisma from '../../../prisma/prisma';
 import type { PageServerLoad } from './$types';
+import moment from 'moment';
 
 export const load = (async ({ url }) => {
 
     let id = url.searchParams.get("nucleoId") as string;
-    let dataInizio = new Date(Date.parse(url.searchParams.get("dataInizio") as string));
-    let dataFine = new Date(Date.parse(url.searchParams.get("dataFine") as string));
+    let dataInizio = moment(url.searchParams.get("dataInizio") as string).set({'hours': 0, 'minutes': 0, 'seconds': 0});
+    let dataFine = moment(url.searchParams.get("dataFine") as string).set({'hours': 23, 'minutes': 59, 'seconds': 59});
 
     let response = (await prisma.bolla.findMany({
         orderBy: {
@@ -17,10 +18,10 @@ export const load = (async ({ url }) => {
         response = response.filter((bolla) => bolla.nucleoId === id)
     }
     if (url.searchParams.get("dataInizio")) {
-        response = response.filter((bolla) => bolla.data >= dataInizio)
+        response = response.filter((bolla) => bolla.data >= dataInizio.toDate())
     }
     if (url.searchParams.get("dataFine")) {
-        response = response.filter((bolla) => bolla.data <= dataFine)
+        response = response.filter((bolla) => bolla.data <= dataFine.toDate())
     }
 
 

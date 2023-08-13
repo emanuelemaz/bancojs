@@ -1,26 +1,8 @@
 <script lang="ts">
 	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
+	import moment from 'moment';
 	export let data: PageData;
-
-	const getUTCDate = (date: Date) => {
-		const d = new Date(date);
-		const utcDate = Date.UTC(
-			d.getFullYear(),
-			d.getMonth(),
-			d.getDate(),
-			d.getHours(),
-			d.getMinutes(),
-			d.getSeconds()
-		);
-		return new Date(utcDate);
-	};
-	function dataFix(x: Date | null) {
-		if (!x) {
-			return;
-		}
-		return getUTCDate(x).toISOString().slice(0, -14);
-	}
 
 	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
 		return {
@@ -96,7 +78,7 @@
 					class="input p-2"
 					type="date"
 					name="scadenza"
-					value={dataFix(data.alimento.scadenza)}
+					value={moment(data.alimento.scadenza)}
 					id="dataInput"
 				/>
 			</label>

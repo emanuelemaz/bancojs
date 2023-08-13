@@ -14,7 +14,7 @@ datasource db {
 model Bolla {
   id       String          @id @default(auto()) @map("_id") @db.ObjectId
   nucleo   Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
-  data     DateTime
+  data     DateTime        @db.Timestamp
   note     String?
   alimenti BollaAlimento[]
   nucleoId String          @db.ObjectId

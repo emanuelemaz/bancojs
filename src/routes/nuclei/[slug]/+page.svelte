@@ -7,6 +7,8 @@
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
+	import { goto } from '$app/navigation';
+	import { enhance } from '$app/forms';
 	export let data: PageData;
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
@@ -181,14 +183,12 @@
 						><iconify-icon icon="mdi:add" class="text-xl inline" /> Emetti bolla
 					</button>
 				</form>
-				<div class="btn-group variant-filled-tertiary">
-					<a href="/nuclei/{data.feed.id}/pdf" class="btn">
+					<a href="/nuclei/{data.feed.id}/pdf" class="btn variant-filled-tertiary">
 						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
 					>
-					<a href="/nuclei/{data.feed.id}/pdf?bolle=true" class="btn">
+					<a href="/nuclei/{data.feed.id}/pdf?bolle=true" class="btn variant-filled-tertiary">
 						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con bolle)</a
 					>
-				</div>
 			</div>
 			<div>
 				<form
@@ -207,12 +207,14 @@
 			</div>
 		</div>
 	</form>
+	{#if data.bolleNucleo.length}
 	<div class="space-y-4">
 		<h2 class="h2">Bolle emesse</h2>
 		{#each data.bolleNucleo as row}
 			<Bolla {row} />
 		{/each}
 	</div>
+	{/if}
 </div>
 
 <style>

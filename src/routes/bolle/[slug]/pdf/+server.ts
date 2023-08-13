@@ -4,7 +4,7 @@ import PdfPrinter from 'pdfmake'
 import fs from 'fs'
 import { BASE_URL } from '$env/static/private';
 
-export async function GET({ request, params }) {
+export async function GET({ params }) {
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {

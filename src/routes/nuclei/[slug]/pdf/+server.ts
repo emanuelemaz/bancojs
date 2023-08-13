@@ -83,7 +83,7 @@ export async function GET({ url, params }) {
                     ]
                 }
             },
-            (displayBolle && bolleDoc) ? [{ text: 'Bolle emesse', bold: true, margin: [0, 2, 0, 1] }, bolleDoc] : { text: "" }
+            (displayBolle && bolleDoc.length) ? [{ text: 'Bolle emesse', bold: true, margin: [0, 2, 0, 1] }, bolleDoc] : { text: "" }
         ],
         header: function (currentPage: number, pageCount: number) {
             return {

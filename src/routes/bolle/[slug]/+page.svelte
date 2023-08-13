@@ -3,16 +3,27 @@
 		modalStore,
 		type ModalSettings,
 		type PopupSettings,
-		popup
+		popup,
+		SlideToggle
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
+	import moment from 'moment';
+	import { onMount } from 'svelte';
 	export let data: PageData;
+
+	onMount(() => {
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
+			'YYYY-MM-DDTHH:mm:ss'
+		);
+	});
+
+	let showNoDist: boolean = false;
 
 	const confirmDeleteBolla = (form: HTMLFormElement): ModalSettings => {
 		return {
 			type: 'confirm',
 			title: 'Elimina',
-			body: `Sicuro di voler eliminare la bolla #${data.bolle.id} del nucleo <strong>${data.bolle.nomeN} ${data.bolle.cognomeN}</strong> (#${data.bolle.nucleoId})?`,
+			body: `Sicuro di voler eliminare la bolla #${data.bolla.id} del nucleo <strong>${data.bolla.nomeN} ${data.bolla.cognomeN}</strong> (#${data.bolla.nucleoId})?`,
 			buttonTextConfirm: 'Elimina',
 			buttonTextCancel: 'Annulla',
 			response: (r: boolean) => {
@@ -58,6 +69,8 @@
 		target: 'qrPopup',
 		placement: 'right'
 	};
+
+	$: showNoDist
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -66,13 +79,13 @@
 			<h1 class="h1">
 				Bolla <span
 					class="font-mono btn variant-filled p-2 text-xl align-middle"
-					use:popup={qrPopup}>#{data.bolle.id}</span
+					use:popup={qrPopup}>#{data.bolla.id}</span
 				>
 			</h1>
 			<div>
 				<i
 					>Creata in data {new Date(
-						parseInt(data.bolle.id.slice(0, 8), 16) * 1000
+						parseInt(data.bolla.id.slice(0, 8), 16) * 1000
 					).toLocaleDateString('it-IT', {
 						day: '2-digit',
 						month: '2-digit',
@@ -91,18 +104,18 @@
 	<form
 		class="form"
 		method="POST"
-		action="/bolle/{data.bolle.id}?/modifica"
+		action="/bolle/{data.bolla.id}?/modifica"
 		on:submit|preventDefault={(e) => {
 			modalStore.clear();
 			modalStore.trigger(confirmUpdateBolla(e.currentTarget));
 		}}
 	>
 		<h2 class="h2">Beneficiario</h2>
-		<input type="hidden" name="id" value={data.bolle.id} />
+		<input type="hidden" name="id" value={data.bolla.id} />
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Beneficiario</span>
-				<select name="nucleoId" class="select" value={data.bolle.nucleoId}>
+				<select name="nucleoId" class="select" value={data.bolla.nucleoId}>
 					{#each data.nuclei as nucleo}
 						<option value={nucleo.id}
 							>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti} p., {nucleo.bambini} b.)</option
@@ -115,15 +128,16 @@
 				<input
 					class="input p-2"
 					type="datetime-local"
+					step="1"
 					name="data"
-					value={data.bolle.data.toISOString().slice(0, -8)}
+					id="dataInput"
 					required
 				/>
 			</label>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>
-			<textarea class="input textarea p-2" name="note" value={data.bolle.note} />
+			<textarea class="input textarea p-2" name="note" value={data.bolla.note} />
 		</label>
 		<div class="flex justify-between my-4">
 			<div>
@@ -134,14 +148,14 @@
 					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
-			<a href="/bolle/{data.bolle.id}/pdf" class="btn variant-filled-tertiary">
+			<a href="/bolle/{data.bolla.id}/pdf" class="btn variant-filled-tertiary">
 				<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
 			>
 			<div>
 				<form
 					class="form"
 					method="POST"
-					action="/bolle/{data.bolle.id}?/elimina"
+					action="/bolle/{data.bolla.id}?/elimina"
 					on:submit|preventDefault={(e) => {
 						modalStore.clear();
 						modalStore.trigger(confirmDeleteBolla(e.currentTarget));
@@ -156,13 +170,18 @@
 		<div class="block mt-12">
 			<h2 class="h2">Alimenti</h2>
 			<p class="h4">Le modifiche vengono salvate automaticamente.</p>
+			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<div class="my-4">
-				<form action="/bolle/{data.bolle.id}?/aggiungiAlimento" method="POST">
+					<SlideToggle name="distSlide" bind:checked={showNoDist}>Mosta alimenti non distribuibili</SlideToggle>
+			</div>
+			<div class="my-4">
+				<form action="/bolle/{data.bolla.id}?/aggiungiAlimento" method="POST">
 					<div class="grid grid-cols-2 gap-4 my-2">
 						<label class="label">
 							<span>Alimento</span>
 							<select name="alimentoId" class="select" required>
 								{#each data.allAlimenti as alimento}
+								{#if alimento.distribuibile || showNoDist}
 									<option value={alimento.id}>
 										{alimento.nome} ({alimento.unita})
 										{!alimento.distribuibile ? '❌ Non servibile ❌' : ''}
@@ -171,6 +190,7 @@
 											: ''}
 										{alimento.note ? ' || Note: ' + alimento.note : ''}
 									</option>
+									{/if}
 								{/each}
 							</select>
 						</label>
@@ -209,7 +229,7 @@
 									<p class="text-xl">{alimento.quantita} {alimento.unita}</p>
 								</div>
 								<form
-									action="/bolle/{data.bolle.id}?/eliminaAlimento"
+									action="/bolle/{data.bolla.id}?/eliminaAlimento"
 									method="POST"
 									on:submit|preventDefault={(e) => {
 										modalStore.clear();

@@ -1,15 +1,10 @@
 import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
-import type { Alimento, Nucleo } from '@prisma/client';
+import type { Nucleo } from '@prisma/client';
 
 import QRCode from 'qrcode';
-
-const getUTCDate = (date: Date) => {
-    const d = new Date(date);
-    const utcDate = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds());
-    return new Date(utcDate);
-}
+import moment from 'moment';
 
 export const load = (async ({ params }) => {
     const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: params.slug } })
@@ -70,7 +65,7 @@ export const load = (async ({ params }) => {
         light: '#0000'
       }, margin: 0}))
 
-    return { bolle: response_fix, nuclei: nuclei_fix, alimenti: alimenti_fix, allAlimenti: allAlimenti_fix, qrID: qrID };
+    return { bolla: response_fix, nuclei: nuclei_fix, alimenti: alimenti_fix, allAlimenti: allAlimenti_fix, qrID: qrID };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -78,7 +73,7 @@ export const actions: Actions = {
         const newData = await request.formData()
 
         let id = newData.get("id") as string;
-        const data = getUTCDate(new Date(newData.get("data") as string));
+        const data = moment(newData.get("data") as string).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 

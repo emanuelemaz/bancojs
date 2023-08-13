@@ -1,20 +1,24 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import moment from 'moment';
+	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	export let data: PageData;
 
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = new Date(
-			Date.now() - new Date().getTimezoneOffset() * 60 * 1000
-		)
-			.toISOString()
-			.slice(0, -8);
+		(<HTMLInputElement>document.getElementById('dataInput')).value =
+			moment().format('YYYY-MM-DDTHH:mm:ss');
 	});
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nuova bolla</h1>
-	<form class="form" method="POST" action="/bolle/nuovo?/aggiungi">
+	<form
+		class="form"
+		method="POST"
+		action="/bolle/nuovo?/aggiungi"
+	>
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Beneficiario</span>
@@ -34,7 +38,14 @@
 			</label>
 			<label class="label">
 				<span>Data</span>
-				<input class="input p-2" type="datetime-local" name="data" id="dataInput" required />
+				<input
+					class="input p-2"
+					type="datetime-local"
+					step="1"
+					name="data"
+					id="dataInput"
+					required
+				/>
 			</label>
 		</div>
 		<label class="mt-4 label">
