@@ -1,5 +1,5 @@
 <script lang="ts">
-		import moment from 'moment-timezone'
+	import moment from 'moment-timezone';
 	export let row: bolla_fix;
 </script>
 
@@ -20,7 +20,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment(row.data).format("DD/MM/YYYY, HH:mm:ss")}
+					{moment(row.data).tz('Europe/Rome').format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>

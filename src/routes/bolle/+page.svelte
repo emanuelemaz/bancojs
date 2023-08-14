@@ -16,7 +16,6 @@
 		servibileCheckbox.checked = true;
 	}
 
-	let servibileBoolInput: HTMLInputElement;
 	let servibileCheckbox: HTMLInputElement;
 </script>
 
