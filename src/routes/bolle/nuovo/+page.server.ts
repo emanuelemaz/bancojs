@@ -3,6 +3,8 @@ import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 import type { Bolla } from '@prisma/client';
 
+import moment from 'moment-timezone'
+
 export const load = (async ({ url }) => {
     let nuclei = (await prisma.nucleo.findMany({
         orderBy: {
@@ -36,7 +38,7 @@ export const actions: Actions = {
     aggiungi: async ({ request }) => {
         const newData = await request.formData()
 
-        const data = moment(newData.get("data") as string).tz('Europe/Rome');
+        const data = moment(newData.get("data") as string).tz('Europe/Rome').toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
