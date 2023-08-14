@@ -37,21 +37,21 @@ export async function GET({ params }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Quantità', true), cCell('Alimento', true), cCell('Quantità', true)]];
+    let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true), cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true)]];
 
     alimenti_fix.forEach((al, i) => {
         if (alimenti_fix[i + 1]) {
             if (i % 2 === 0) {
                 tblBody.push(
-                    [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita),
-                    cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita),
-                    ]
+                    [
+                        cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""),
+                        cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita), alimenti_fix[i + 1].note ? cCell(alimenti_fix[i + 1].note as string) : cCell("")]
                 )
             }
         } else {
             if (i % 2 == 0) {
                 tblBody.push(
-                    [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), cCell("/"), cCell("/")]
+                    [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""), cCell("/"), cCell("/"), cCell("/")]
                 )
             }
         }
@@ -61,6 +61,7 @@ export async function GET({ params }) {
         Arial: {
             normal: 'pdf_static/ARIALN.TTF',
             bold: 'pdf_static/ARIALNB.TTF',
+            italics: 'pdf_static/ARIALNI.TTF'
         },
         Courier: {
             normal: 'pdf_static/cour.ttf'
@@ -71,9 +72,9 @@ export async function GET({ params }) {
     const scheda = {
         content: [
             { text: "BOLLA DI DISTRIBUZIONE ALIMENTARE\n", fontSize: 14, bold: true, alignment: 'center', margin: [0, 0, 0, 4] },
-            { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL+"/nuclei/"+nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 0, 0, 0] },
+            { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 0, 0, 0] },
             {
-                text: [{ text: "Bolla: " }, { text: "#" + bolla.id, link: BASE_URL+"/bolle/"+bolla.id, font: 'Courier' }, {
+                text: [{ text: "Bolla: " }, { text: "#" + bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }, {
                     text: " (" + bolla.data.toLocaleDateString('it-IT', {
                         day: '2-digit',
                         month: '2-digit',
@@ -86,15 +87,15 @@ export async function GET({ params }) {
             },
             {
                 table: {
-                    widths: ['*', 'auto', '*', 'auto'],
+                    widths: ['*', 'auto', 'auto', '*', 'auto', 'auto'],
                     headerRows: 1,
                     body: tblBody.length ? tblBody : [
-                        [{ text: 'Non sono presenti alimenti', colSpan: 4, alignment: 'center', bold: true }, {}],
+                        [{ text: 'Non sono presenti alimenti', colSpan: 6, alignment: 'center', bold: true }, {}],
                     ]
                 }
             }, bolla.note ? {
                 text: [{ text: "Note: ", bold: true }, { text: bolla.note }], margin: [0, 2, 0, 0]
-            } : null
+            } : null,
         ],
         header: function (currentPage: number, pageCount: number) {
             return {
@@ -102,7 +103,7 @@ export async function GET({ params }) {
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        [{svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 240, margin: [0,0,2,0]}, {text: `${currentPage}/${pageCount}`, alignment: 'right'}],
+                        [{ svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 240, margin: [0, 0, 2, 0] }, { text: `${currentPage}/${pageCount}`, alignment: 'right' }],
                     ],
                 },
                 margin: [15, 15, 15, 0]

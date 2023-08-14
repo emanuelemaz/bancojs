@@ -25,6 +25,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile creare l'alimento.")
-        } throw redirect(302, "/alimenti");
+        } 
+        throw redirect(302, "/alimenti");
     },
 }
