@@ -6,7 +6,7 @@
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
-			moment().tz('Europe/Rome').format('YYYY-MM-DDTHH:mm:ss');
+			moment().format('YYYY-MM-DDTHH:mm:ss');
 	});
 </script>
 
