@@ -8,9 +8,9 @@
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
-			moment(new Date()).format('YYYY-MM-DDTHH:mm:ss');
+			moment().format("YYYY-MM-DDTHH:mm:ss");
 	});
-	console.log(moment().format('YYYY-MM-DDTHH:mm:ss'))
+
 </script>
 
 <div class="container mx-auto p-8 space-y-8">

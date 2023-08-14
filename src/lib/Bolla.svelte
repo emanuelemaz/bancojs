@@ -2,8 +2,8 @@
 	import moment from 'moment-timezone';
 	export let row: bolla_fix;
 
-	moment.tz.guess()	
-</script>
+	moment.tz.guess()
+	</script>
 
 <a class="block" href="/bolle/{row.id}">
 	<div class="card card-hover mx-auto p-8">
