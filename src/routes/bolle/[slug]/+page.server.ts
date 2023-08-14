@@ -3,6 +3,8 @@ import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 import type { Nucleo } from '@prisma/client';
 
+import moment from 'moment-timezone'
+
 import QRCode from 'qrcode';
 import moment from 'moment';
 
@@ -11,7 +13,7 @@ export const load = (async ({ params }) => {
     let nucleo: Nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: bolla.nucleoId } });
     let response_fix: bolla_fix = {
         id: bolla.id,
-        data: bolla.data,
+        data: moment(bolla.data).tz('Europe/Rome').toDate(),
         note: bolla.note,
         nucleoId: bolla.nucleoId,
         nomeN: nucleo.nome,
@@ -77,7 +79,7 @@ export const actions: Actions = {
         const newData = await request.formData()
 
         let id = newData.get("id") as string;
-        const data = moment(newData.get("data") as string).toDate();
+        const data = moment(newData.get("data") as string).tz('Europe/Rome').toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
