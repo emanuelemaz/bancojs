@@ -2,7 +2,7 @@
 	import moment from 'moment-timezone';
 	export let row: bolla_fix;
 
-	console.log(moment(row.data.getTime()).format('DD/MM/YYYY, HH:mm:ss'))
+	console.log(moment(row.data.getTime()-row.data.getTimezoneOffset()*60*1000).format('DD/MM/YYYY, HH:mm:ss'))
 	</script>
 
 <a class="block" href="/bolle/{row.id}">
