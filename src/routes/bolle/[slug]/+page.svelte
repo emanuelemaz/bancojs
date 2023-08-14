@@ -149,9 +149,14 @@
 					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
-			<a href="/bolle/{data.bolla.id}/pdf" class="btn variant-filled-tertiary">
-				<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
-			>
+			<div>
+				<a href="/bolle/{data.bolla.id}/pdf" class="btn variant-filled-tertiary">
+					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
+				>
+				<a href="/bolle/{data.bolla.id}/pdf?note" class="btn variant-filled-tertiary">
+					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</a
+				>
+			</div>
 			<div>
 				<form
 					class="form"

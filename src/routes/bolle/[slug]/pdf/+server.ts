@@ -4,7 +4,9 @@ import PdfPrinter from 'pdfmake'
 import fs from 'fs'
 import { BASE_URL } from '$env/static/private';
 
-export async function GET({ params }) {
+export async function GET({ url, params }) {
+
+    const displayNotes: boolean = url.searchParams.has("note")
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {
@@ -37,22 +39,38 @@ export async function GET({ params }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true), cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true)]];
+    let tblBody: Object[][] = displayNotes ? [[cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true), cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true)]] : [[cCell('Alimento', true), cCell('Quantità', true), cCell('Alimento', true), cCell('Quantità', true)]];
 
     alimenti_fix.forEach((al, i) => {
         if (alimenti_fix[i + 1]) {
             if (i % 2 === 0) {
-                tblBody.push(
-                    [
-                        cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""),
-                        cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita), alimenti_fix[i + 1].note ? cCell(alimenti_fix[i + 1].note as string) : cCell("")]
-                )
+                if (displayNotes) {
+                    tblBody.push(
+                        [
+                            cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""),
+                            cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita), alimenti_fix[i + 1].note ? cCell(alimenti_fix[i + 1].note as string) : cCell("")]
+                    )
+                } else {
+                    tblBody.push(
+                        [
+                            cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita),
+                            cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita)]
+                    )
+
+                }
             }
         } else {
             if (i % 2 == 0) {
-                tblBody.push(
-                    [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""), cCell("///"), cCell("///"), cCell("///")]
-                )
+                if (displayNotes) {
+                    tblBody.push(
+                        [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""), cCell("///"), cCell("///"), cCell("///")]
+                    )
+                } else {
+                    tblBody.push(
+                        [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), cCell("///"), cCell("///")]
+                    )
+
+                }
             }
         }
     })
@@ -87,10 +105,10 @@ export async function GET({ params }) {
             },
             {
                 table: {
-                    widths: ['*', 'auto', 'auto', '*', 'auto', 'auto'],
+                    widths: displayNotes ? ['*', 'auto', 'auto', '*', 'auto', 'auto'] : ['*', 'auto', '*', 'auto'],
                     headerRows: 1,
                     body: tblBody.length ? tblBody : [
-                        [{ text: 'Non sono presenti alimenti', colSpan: 6, alignment: 'center', bold: true }, {}],
+                        [{ text: 'Non sono presenti alimenti', colSpan: displayNotes ? 6 : 4, alignment: 'center', bold: true }, {}],
                     ]
                 }
             }, bolla.note ? {
