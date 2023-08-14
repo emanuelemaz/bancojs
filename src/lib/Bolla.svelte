@@ -21,7 +21,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment(row.data).format('DD/MM/YYYY, HH:mm:ss')}
+					{moment(row.data.getTime() + row.data.getTimezoneOffset()*60*1000).format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>
