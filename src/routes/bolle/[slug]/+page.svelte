@@ -15,7 +15,7 @@
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(
 			data.bolla.data.getTime() + data.bolla.data.getTimezoneOffset() * 60 * 1000
-		).format('DD/MM/YYYY, HH:mm:ss');
+		).format('YYYY-MM-DDTHH:mm:ss');
 	});
 
 	let showNoDist: boolean = false;
