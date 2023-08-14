@@ -11,11 +11,11 @@
 	import { onMount } from 'svelte';
 	export let data: PageData;
 
-	moment.tz.guess()
+	moment.tz.guess();
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
-			'YYYY-MM-DDTHH:mm:ss'
-		);
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(
+			data.bolla.data.getTime() + data.bolla.data.getTimezoneOffset() * 60 * 1000
+		).format('DD/MM/YYYY, HH:mm:ss');
 	});
 
 	let showNoDist: boolean = false;
@@ -194,10 +194,10 @@
 													: ''
 												: ''}
 											{alimento.scadenza
-													? moment().isSame(alimento.scadenza, 'day')
-														? '⚠️ Scade oggi ⚠️'
-														: ''
-													: ''}
+												? moment().isSame(alimento.scadenza, 'day')
+													? '⚠️ Scade oggi ⚠️'
+													: ''
+												: ''}
 											{alimento.note ? ' || Note: ' + alimento.note : ''}
 										</option>
 									{/if}
