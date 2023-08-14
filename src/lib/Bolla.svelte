@@ -1,7 +1,8 @@
 <script lang="ts">
 	import moment from 'moment-timezone';
 	export let row: bolla_fix;
-	moment.tz.setDefault('Europe/Rome')
+
+	moment.tz.guess()	
 </script>
 
 <a class="block" href="/bolle/{row.id}">

@@ -3,10 +3,12 @@
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	export let data: PageData;
-	moment.tz.setDefault('Europe/Rome')
+
+	moment.tz.guess()
+
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
-			moment().format('YYYY-MM-DDTHH:mm:ss');
+			moment(new Date()).format('YYYY-MM-DDTHH:mm:ss');
 	});
 	console.log(moment().format('YYYY-MM-DDTHH:mm:ss'))
 </script>

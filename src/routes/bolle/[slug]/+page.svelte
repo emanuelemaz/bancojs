@@ -11,7 +11,7 @@
 	import { onMount } from 'svelte';
 	export let data: PageData;
 
-	moment.tz.setDefault('Europe/Rome')
+	moment.tz.guess()
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
 			'YYYY-MM-DDTHH:mm:ss'
