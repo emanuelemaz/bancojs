@@ -6,17 +6,14 @@
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
-			moment().tz('Europe/Rome').format('YYYY-MM-DDTHH:mm:ss');
+			moment().format('YYYY-MM-DDTHH:mm:ss');
 	});
+	console.log(moment().format('YYYY-MM-DDTHH:mm:ss'))
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nuova bolla</h1>
-	<form
-		class="form"
-		method="POST"
-		action="/bolle/nuovo?/aggiungi"
-	>
+	<form class="form" method="POST" action="/bolle/nuovo?/aggiungi">
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Beneficiario</span>
