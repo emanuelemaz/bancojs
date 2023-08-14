@@ -36,7 +36,7 @@ export const actions: Actions = {
     aggiungi: async ({ request }) => {
         const newData = await request.formData()
 
-        const data = new Date(newData.get("data") as string);
+        const data = moment(newData.get("data") as string).tz('Europe/Rome');
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
