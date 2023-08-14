@@ -12,9 +12,26 @@ export async function GET({ }) {
 
     let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Unità', true), cCell('Distribuibile', true), cCell('Scadenza', true), cCell('Note')]];
 
+    function scadenza(data: Date | null) {
+        let response: Object[] = [];
+        if (data) {
+            response.push({text: moment(data).format("DD/MM/YYYY")});
+            if (moment().isAfter(data, 'day')) {
+                response.push({text: ' (scaduto)', bold: true});
+            }
+            if (moment().isSame(data, 'day')) {
+                response.push({text: ' (scade oggi)', bold: true});
+            }
+        } else {
+            return "";
+        }
+        return {text: response};
+    }
+
+    
     for (let al of alimenti) {
         tblBody.push(
-            [cCell(al.nome), cCell(al.unita), al.distribuibile ? '' : cCell('non distribuibile', true), al.scadenza ? moment(al.scadenza).format("DD/MM/YYYY") : "(non specificata)", al.note ? cCell(al.note) : '']
+            [cCell(al.nome), cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
         )
     }
 
@@ -40,7 +57,7 @@ export async function GET({ }) {
                     widths: ['*', 'auto', 'auto', 'auto', '*'],
                     headerRows: 1,
                     body: tblBody.length ? tblBody : [
-                        [{ text: 'Non sono presenti alimenti', colSpan: 5, alignment: 'center', bold: true }, {}],
+                        [{ text: 'Non sono presenti alimenti', colSpan: 5, alignment: 'center', bold: true }],
                     ]
                 }
             }
