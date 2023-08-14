@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import moment from 'moment-timezone';
 	export let data: PageData;
 
-	moment.tz.guess()
+	import moment from 'moment-timezone'
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
 			moment().format("YYYY-MM-DDTHH:mm:ss");
 	});
-
 </script>
 
 <div class="container mx-auto p-8 space-y-8">

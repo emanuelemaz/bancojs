@@ -70,6 +70,7 @@ export const load = (async ({ params }) => {
         light: '#0000'
       }, margin: 0}))
 
+
     return { bolla: response_fix, nuclei: nuclei_fix, alimenti: alimenti_fix, allAlimenti: allAlimenti_fix, qrID: qrID };
 }) satisfies PageServerLoad;
 
@@ -78,7 +79,7 @@ export const actions: Actions = {
         const newData = await request.formData()
 
         let id = newData.get("id") as string;
-        const data = moment(newData.get("data") as string).tz('Europe/Rome').toDate();
+        const data = moment(newData.get("data") as string).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
