@@ -6,7 +6,6 @@ import type { Nucleo } from '@prisma/client';
 import moment from 'moment-timezone'
 
 import QRCode from 'qrcode';
-import moment from 'moment';
 
 export const load = (async ({ params }) => {
     const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: params.slug } })
