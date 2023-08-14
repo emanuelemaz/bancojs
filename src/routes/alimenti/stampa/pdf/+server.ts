@@ -76,7 +76,7 @@ export async function GET({ }) {
         },
         defaultStyle: { font: 'Arial' }, pageSize: 'A4', pageOrientation: 'portrait', pageMargins: [30, 120, 30, 30],
         info: {
-            title: 'Bolla di distribuzione alimentare',
+            title: 'Lista degli alimenti',
             author: 'Associazione XXX',
             subject: 'Inventario'
         },
