@@ -1,8 +1,6 @@
 <script lang="ts">
 	import moment from 'moment-timezone';
 	export let row: bolla_fix;
-
-	console.log(moment(row.data.getTime()-row.data.getTimezoneOffset()*60*1000).format('DD/MM/YYYY, HH:mm:ss'))
 	</script>
 
 <a class="block" href="/bolle/{row.id}">
@@ -22,7 +20,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment(row.data.getTime()).format('DD/MM/YYYY, HH:mm:ss')}
+					{moment(row.data.getTime()+row.data.getTimezoneOffset()*60*1000).format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>
