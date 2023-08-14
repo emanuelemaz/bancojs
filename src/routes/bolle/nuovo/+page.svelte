@@ -3,7 +3,7 @@
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	export let data: PageData;
-
+	moment.tz.setDefault('Europe/Rome')
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
 			moment().format('YYYY-MM-DDTHH:mm:ss');
