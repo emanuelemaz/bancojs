@@ -8,11 +8,13 @@ import moment from 'moment-timezone'
 import QRCode from 'qrcode';
 
 export const load = (async ({ params }) => {
+    const timezone = moment.tz.guess();
     const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: params.slug } })
     let nucleo: Nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: bolla.nucleoId } });
+
     let response_fix: bolla_fix = {
         id: bolla.id,
-        data: moment(bolla.data).tz('Europe/Rome').toDate(),
+        data: bolla.data,
         note: bolla.note,
         nucleoId: bolla.nucleoId,
         nomeN: nucleo.nome,
@@ -20,6 +22,7 @@ export const load = (async ({ params }) => {
         componentiN: nucleo.componenti,
         bambiniN: nucleo.bambini
     };
+
 
     const nuclei = await prisma.nucleo.findMany({
         orderBy: {

@@ -3,11 +3,11 @@
 	import type { PageData } from './$types';
 	export let data: PageData;
 
-	import moment from 'moment-timezone'
+	import moment from 'moment-timezone';
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
-			moment().format("YYYY-MM-DDTHH:mm:ss");
+			moment().format('YYYY-MM-DDTHH:mm:ss');
 	});
 </script>
 

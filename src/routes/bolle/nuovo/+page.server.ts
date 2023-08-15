@@ -42,7 +42,7 @@ export const actions: Actions = {
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
-        var newBolla : Bolla | null = null;
+        var newBolla: Bolla | null = null;
         try {
             newBolla = await prisma.bolla.create({
                 data: {
@@ -56,7 +56,7 @@ export const actions: Actions = {
             console.error("Non è stato possibile creare la bolla.")
         }
         if (newBolla) {
-            throw redirect(302,  newBolla.id)
+            throw redirect(302, newBolla.id)
         }
     }
 }

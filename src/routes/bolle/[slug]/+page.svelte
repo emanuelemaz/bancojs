@@ -13,9 +13,10 @@
 
 	moment.tz.guess();
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(
-			data.bolla.data.getTime() + data.bolla.data.getTimezoneOffset() * 60 * 1000
-		).format('YYYY-MM-DDTHH:mm:ss');
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment
+			.utc(data.bolla.data)
+			.local()
+			.format('YYYY-MM-DDTHH:mm:ss');
 	});
 
 	let showNoDist: boolean = false;
