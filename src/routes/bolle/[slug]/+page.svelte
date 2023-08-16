@@ -15,7 +15,6 @@
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value = moment
 			.utc(data.bolla.data)
-			.local()
 			.format('YYYY-MM-DDTHH:mm:ss');
 	});
 

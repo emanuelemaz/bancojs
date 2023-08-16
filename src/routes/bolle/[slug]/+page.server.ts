@@ -42,6 +42,7 @@ export const load = (async ({ params }) => {
             indirizzo: el.indirizzo,
             citta: el.citta,
             servibile: el.servibile,
+            createdAt: el.createdAt,
             note: el.note
         };
         nuclei_fix.push(el_fix)
