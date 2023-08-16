@@ -4,6 +4,7 @@ import PdfPrinter from 'pdfmake'
 import fs from 'fs'
 import { BASE_URL } from '$env/static/private';
 
+import moment from 'moment-timezone';
 import QRCode from 'qrcode';
 
 export async function GET({ url, params }) {
@@ -41,25 +42,11 @@ export async function GET({ url, params }) {
                 widths: ['auto', '*'],
                 body: bolla.note ? [
                     ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                    ["Data", bolla.data.toLocaleDateString('it-IT', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    })],
+                    ["Data", moment(bolla.data).format("DD/MM/YYYY, HH:mm:ss")],
                     ["Note", { text: bolla.note }]
                 ] : [
                     ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                    ["Data", bolla.data.toLocaleDateString('it-IT', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    })]
+                    ["Data", moment(bolla.data).format("DD/MM/YYYY, HH:mm:ss")]
                 ]
             }
         }, { text: "\n", fontSize: 4 }])
@@ -71,15 +58,8 @@ export async function GET({ url, params }) {
 
     const scheda = {
         content: [
-            {
-                table: {
-                    widths: ['*', 'auto'],
-                    body: [
-                        [
-                            { text: [{ text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center' }, { svg: qrID }],
-                    ],
-                }, margin: [0, 4, 0, 4], layout: "noBorders"
-            },
+            !displayBolle ? { svg: qrID, alignment: 'center', margin: [0, 0, 0, 4] } : null,
+            [{ text: [{ text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 4] }],
             {
                 table: {
                     widths: ['auto', '*'],
