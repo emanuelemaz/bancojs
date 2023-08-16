@@ -43,7 +43,7 @@ export const actions: Actions = {
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
-        console.log(data)
+        console.log(data.toString())
 
         var newBolla: Bolla | null = null;
         try {
