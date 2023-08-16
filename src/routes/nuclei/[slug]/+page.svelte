@@ -4,9 +4,7 @@
 		type ModalSettings,
 		type PopupSettings,
 		popup,
-
 		SlideToggle
-
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
@@ -66,9 +64,7 @@
 				>
 			</h1>
 			<div>
-				<i
-					>Creato in data {moment(data.feed.createdAt).format("DD/MM/YYYY, HH:mm:ss")}</i
-				>
+				<i>Creato in data {moment(data.feed.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
 			</div>
 		</div>
 		<div class="card qr p-6" data-popup="qrPopup">
@@ -169,14 +165,21 @@
 						><iconify-icon icon="mdi:add" class="text-xl inline" /> Emetti bolla
 					</button>
 				</form>
-					<a href="/nuclei/{data.feed.id}/pdf" class="btn variant-filled-tertiary">
-						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
+				<form action="/nuclei/{data.feed.id}/pdf" method="get" class="inline">
+					<input type="hidden" name="offset" value={moment().utcOffset()} />
+					<button type="submit" class="btn variant-filled-tertiary"
+						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 					>
-					{#if data.bolleNucleo.length}
-					<a href="/nuclei/{data.feed.id}/pdf?bolle=true" class="btn variant-filled-tertiary">
-						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con bolle)</a
-					>
-					{/if}
+				</form>
+				{#if data.bolleNucleo.length}
+					<form action="/nuclei/{data.feed.id}/pdf" method="get" class="inline">
+						<input type="hidden" name="offset" value={moment().utcOffset()} />
+						<input type="hidden" name="bolle" />
+						<button type="submit" class="btn variant-filled-tertiary"
+							><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con bolle)</button
+						>
+					</form>
+				{/if}
 			</div>
 			<div>
 				<form
@@ -196,12 +199,12 @@
 		</div>
 	</form>
 	{#if data.bolleNucleo.length}
-	<div class="space-y-4">
-		<h2 class="h2">Bolle emesse</h2>
-		{#each data.bolleNucleo as row}
-			<Bolla {row} />
-		{/each}
-	</div>
+		<div class="space-y-4">
+			<h2 class="h2">Bolle emesse</h2>
+			{#each data.bolleNucleo as row}
+				<Bolla {row} />
+			{/each}
+		</div>
 	{/if}
 </div>
 

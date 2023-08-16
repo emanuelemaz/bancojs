@@ -9,7 +9,8 @@ import QRCode from 'qrcode';
 
 export async function GET({ url, params }) {
 
-    const displayBolle: boolean = (url.searchParams.get("bolle") as string) === "true" ? true : false;
+    const displayBolle: boolean = url.searchParams.has("bolle");
+    const offset: number = parseInt(url.searchParams.get("offset") as string)
 
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {
@@ -42,11 +43,11 @@ export async function GET({ url, params }) {
                 widths: ['auto', '*'],
                 body: bolla.note ? [
                     ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                    ["Data", moment(bolla.data).format("DD/MM/YYYY, HH:mm:ss")],
+                    ["Data", moment(bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
                     ["Note", { text: bolla.note }]
                 ] : [
                     ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                    ["Data", moment(bolla.data).format("DD/MM/YYYY, HH:mm:ss")]
+                    ["Data", moment(bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")]
                 ]
             }
         }, { text: "\n", fontSize: 4 }])
