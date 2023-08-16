@@ -82,7 +82,7 @@ export const actions: Actions = {
         const newData = await request.formData()
 
         let id = newData.get("id") as string;
-        const data = moment(newData.get("data") as string).toDate();
+        const data = moment(newData.get("data") as string).local().toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
