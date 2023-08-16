@@ -116,7 +116,6 @@
 			</label>
 			<label class="label">
 				<span>Data</span>
-				<input type="hidden" name="offset" value={moment().utcOffset()}/>
 				<input
 					class="input p-2"
 					type="datetime-local"
@@ -141,10 +140,10 @@
 				>
 			</div>
 			<div>
-				<a href="/bolle/{data.bolla.id}/pdf" class="btn variant-filled-tertiary">
+				<a href="/bolle/{data.bolla.id}/pdf?offset={moment().utcOffset()}" class="btn variant-filled-tertiary">
 					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
 				>
-				<a href="/bolle/{data.bolla.id}/pdf?note" class="btn variant-filled-tertiary">
+				<a href="/bolle/{data.bolla.id}/pdf?offset={moment().utcOffset()}&note" class="btn variant-filled-tertiary">
 					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</a
 				>
 			</div>
