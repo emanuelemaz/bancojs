@@ -4,6 +4,9 @@ import PdfPrinter from 'pdfmake'
 import fs from 'fs'
 import { BASE_URL } from '$env/static/private';
 
+import QRCode from 'qrcode';
+import moment from 'moment-timezone';
+
 export async function GET({ url, params }) {
 
     const displayNotes: boolean = url.searchParams.has("note")
@@ -30,6 +33,7 @@ export async function GET({ url, params }) {
             }
         }
     })
+
     for (let al of alimenti) {
         let alimento = await prisma.alimento.findUniqueOrThrow({ where: { id: al.alimentoId } })
         alimenti_fix.push({ id: al.id, nome: alimento.nome, unita: alimento.unita, bollaId: al.bollaId, alimentoId: al.alimentoId, note: al.note, quantita: al.quantita });
@@ -87,28 +91,26 @@ export async function GET({ url, params }) {
     }
     const pdfPrinter = new PdfPrinter(fonts)
 
+    const qrID = (await QRCode.toString(`${BASE_URL}/bolle/${bolla.id}`, {
+        type: 'svg', margin: 0, width: 90
+    }));
+
     const scheda = {
         content: [
-            { text: "BOLLA DI DISTRIBUZIONE ALIMENTARE\n", fontSize: 14, bold: true, alignment: 'center', margin: [0, 0, 0, 4] },
-            { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 0, 0, 0] },
+            { svg: qrID, alignment: 'center', margin: [0, 0, 0, 4], absolutePosition: { x: 420, y: 15 } },
+            { text: "BOLLA DI DISTRIBUZIONE ALIMENTARE\n", fontSize: 14, bold: true, alignment: 'center' },
+            { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 2, 0, 0] },
             {
                 text: [{ text: "Bolla: " }, { text: "#" + bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }, {
-                    text: " (" + bolla.data.toLocaleDateString('it-IT', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    }) + ")"
-                }], alignment: 'center', margin: [0, 0, 0, 8]
+                    text: " (" + moment(bolla.data).format("DD/MM/YYYY, HH:mm:ss" + ")")
+                }], alignment: 'center', margin: [0, 0, 0, 4]
             },
             {
                 table: {
                     widths: displayNotes ? ['*', 'auto', 'auto', '*', 'auto', 'auto'] : ['*', 'auto', '*', 'auto'],
-                    headerRows: 1,
-                    body: tblBody.length ? tblBody : [
-                        [{ text: 'Non sono presenti alimenti', colSpan: displayNotes ? 6 : 4, alignment: 'center', bold: true }, {}],
+                    headerRows: tblBody.length > 1 ? 1 : 0,
+                    body: tblBody.length > 1 ? tblBody : [
+                        displayNotes ? [{ text: "Non sono presenti alimenti", colSpan: 6, bold: true, alignment: 'center' }, {}, {}, {}, {}, {}] : [{ text: "Non sono presenti alimenti", colSpan: 4, bold: true, alignment: 'center' }, {}, {}, {}]
                     ]
                 }
             }, bolla.note ? {

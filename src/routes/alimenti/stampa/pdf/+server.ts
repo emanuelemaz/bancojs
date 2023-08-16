@@ -10,25 +10,25 @@ export async function GET({ }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Unità', true), cCell('Distribuibile', true), cCell('Scadenza', true), cCell('Note')]];
+    let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Unità', true), cCell('Distribuibile', true), cCell('Scadenza', true), cCell('Note', true)]];
 
     function scadenza(data: Date | null) {
         let response: Object[] = [];
         if (data) {
-            response.push({text: moment(data).format("DD/MM/YYYY")});
+            response.push({ text: moment(data).format("DD/MM/YYYY") });
             if (moment().isAfter(data, 'day')) {
-                response.push({text: ' (scaduto)', bold: true});
+                response.push({ text: ' (scaduto)', bold: true });
             }
             if (moment().isSame(data, 'day')) {
-                response.push({text: ' (scade oggi)', bold: true});
+                response.push({ text: ' (scade oggi)', bold: true });
             }
         } else {
             return "";
         }
-        return {text: response};
+        return { text: response };
     }
 
-    
+
     for (let al of alimenti) {
         tblBody.push(
             [cCell(al.nome), cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
@@ -48,16 +48,18 @@ export async function GET({ }) {
 
     const scheda = {
         content: [
-            { text: "LISTA DEGLI ALIMENTI\n", fontSize: 18, bold: true, alignment: 'center', margin: [0, 0, 0, 4] },
             {
-                text: "Aggiornata al " + moment().tz('Europe/Rome').format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16, margin: [0, 0, 0, 8]
+                text: [
+                    { text: "LISTA DEGLI ALIMENTI\n", fontSize: 18, bold: true, alignment: 'center' },
+                    { text: "Aggiornata al " + moment().format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
+                ], margin: [0, 0, 0, 4]
             },
             {
                 table: {
                     widths: ['*', 'auto', 'auto', 'auto', '*'],
-                    headerRows: 1,
-                    body: tblBody.length ? tblBody : [
-                        [{ text: 'Non sono presenti alimenti', colSpan: 5, alignment: 'center', bold: true }],
+                    headerRows: tblBody.length > 1 ? 1 : 0,
+                    body: tblBody.length > 1 ? tblBody : [
+                        [{ text: 'Non sono presenti alimenti', colSpan: 5, alignment: 'center', bold: true }, {}, {}, {}, {}],
                     ]
                 }
             }

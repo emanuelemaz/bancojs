@@ -58,8 +58,14 @@ export async function GET({ url, params }) {
 
     const scheda = {
         content: [
-            !displayBolle ? { svg: qrID, alignment: 'center', margin: [0, 0, 0, 4] } : null,
-            [{ text: [{ text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 4] }],
+            {
+                table: {
+                    widths: ['*', 'auto'],
+                    body: [
+                        [{ text: [{ text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 4] }, { svg: qrID }]
+                    ]
+                }, layout: "noBorders", margin: [0, 4]
+            },
             {
                 table: {
                     widths: ['auto', '*'],
