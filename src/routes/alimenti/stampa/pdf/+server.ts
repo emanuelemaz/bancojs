@@ -51,7 +51,7 @@ export async function GET({ }) {
             {
                 text: [
                     { text: "LISTA DEGLI ALIMENTI\n", fontSize: 18, bold: true, alignment: 'center' },
-                    { text: "Aggiornata al " + moment().format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
+                    { text: "Aggiornata al " + moment().local().format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
                 ], margin: [0, 0, 0, 4]
             },
             {
