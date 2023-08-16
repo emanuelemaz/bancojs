@@ -23,6 +23,7 @@ type bolla_fix = {
     cognomeN: string;
     componentiN: number;
     bambiniN: number;
+    createdAt: Date;
 }
 
 type bollaalimento_fix = {

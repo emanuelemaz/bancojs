@@ -16,6 +16,7 @@ export const load = (async ({ params }) => {
         data: bolla.data,
         note: bolla.note,
         nucleoId: bolla.nucleoId,
+        createdAt: bolla.createdAt,
         nomeN: nucleo.nome,
         cognomeN: nucleo.cognome,
         componentiN: nucleo.componenti,

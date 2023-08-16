@@ -84,14 +84,7 @@
 			</h1>
 			<div>
 				<i
-					>Creata in data {new Date(parseInt(data.bolla.createdAt)).toLocaleDateString('it-IT', {
-						day: '2-digit',
-						month: '2-digit',
-						year: 'numeric',
-						hour: '2-digit',
-						minute: '2-digit',
-						second: '2-digit'
-					})}</i
+					>Creata in data {moment(data.bolla.createdAt).format("DD/MM/YYYY, HH:mm:ss")}</i
 				>
 			</div>
 			<div class="card qr p-6" data-popup="qrPopup">
