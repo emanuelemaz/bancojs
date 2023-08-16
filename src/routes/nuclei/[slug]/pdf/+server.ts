@@ -73,10 +73,10 @@ export async function GET({ url, params }) {
         content: [
             {
                 table: {
-                    widths: ['auto', '*'],
+                    widths: ['*', 'auto'],
                     body: [
-                        [{ svg: qrID, rowSpan: 2 }, { text: "SCHEDA ANAGRAFICA", fontSize: 14, bold: true, alignment: 'center', }],
-                        [{}, { text: [{ text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center' }]
+                        [
+                            { text: [{ text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center' }, { svg: qrID }],
                     ],
                 }, margin: [0, 4, 0, 4], layout: "noBorders"
             },
