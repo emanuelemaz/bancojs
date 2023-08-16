@@ -40,7 +40,7 @@ export const actions: Actions = {
         const newData = await request.formData()
 
         const offset = newData.get("offset") as string;
-        const data = moment(newData.get("data") as string).utcOffset(parseInt(offset)).toDate();
+        const data = moment(newData.get("data") as string).add(parseInt(offset), 'minutes').toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
