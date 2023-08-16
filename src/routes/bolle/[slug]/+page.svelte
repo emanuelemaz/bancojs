@@ -69,7 +69,7 @@
 	const qrPopup: PopupSettings = {
 		event: 'click',
 		target: 'qrPopup',
-		placement: 'right'
+		placement: 'bottom'
 	};
 
 	$: showNoDist;

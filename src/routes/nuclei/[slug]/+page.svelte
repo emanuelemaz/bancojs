@@ -10,6 +10,7 @@
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
+	import moment from 'moment-timezone';
 	export let data: PageData;
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
@@ -51,7 +52,7 @@
 	const qrPopup: PopupSettings = {
 		event: 'click',
 		target: 'qrPopup',
-		placement: 'right'
+		placement: 'bottom'
 	};
 </script>
 
@@ -66,16 +67,7 @@
 			</h1>
 			<div>
 				<i
-					>Creato in data {new Date(
-						parseInt(data.feed.id.slice(0, 8), 16) * 1000
-					).toLocaleDateString('it-IT', {
-						day: '2-digit',
-						month: '2-digit',
-						year: 'numeric',
-						hour: '2-digit',
-						minute: '2-digit',
-						second: '2-digit'
-					})}</i
+					>Creato in data {moment(data.feed.createdAt).format("DD/MM/YYYY, HH:mm:ss")}</i
 				>
 			</div>
 		</div>

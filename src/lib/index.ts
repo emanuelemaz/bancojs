@@ -11,6 +11,7 @@ type nucleo_fix = {
     citta: string | null;
     servibile: boolean;
     note: string | null;
+    createdAt: Date;
 };
 
 type bolla_fix = {

@@ -14,7 +14,7 @@
 		for (let i of inputs) {
 			i.value = '';
 		}
-		servSlide = true;
+		servSlide = false;
 	}
 
 	let servSlide: boolean;

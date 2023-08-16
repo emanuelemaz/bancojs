@@ -4,6 +4,8 @@ import PdfPrinter from 'pdfmake'
 import fs from 'fs'
 import { BASE_URL } from '$env/static/private';
 
+import QRCode from 'qrcode';
+
 export async function GET({ url, params }) {
 
     const displayBolle: boolean = (url.searchParams.get("bolle") as string) === "true" ? true : false;
@@ -38,7 +40,7 @@ export async function GET({ url, params }) {
             table: {
                 widths: ['auto', '*'],
                 body: bolla.note ? [
-                    ["ID", { text: bolla.id, link: BASE_URL+"/bolle/"+bolla.id, font: 'Courier' }],
+                    ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
                     ["Data", bolla.data.toLocaleDateString('it-IT', {
                         day: '2-digit',
                         month: '2-digit',
@@ -49,7 +51,7 @@ export async function GET({ url, params }) {
                     })],
                     ["Note", { text: bolla.note }]
                 ] : [
-                    ["ID", { text: bolla.id, link: BASE_URL+"/bolle/"+bolla.id, font: 'Courier' }],
+                    ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
                     ["Data", bolla.data.toLocaleDateString('it-IT', {
                         day: '2-digit',
                         month: '2-digit',
@@ -63,10 +65,21 @@ export async function GET({ url, params }) {
         }, { text: "\n", fontSize: 4 }])
     }
 
+    const qrID = (await QRCode.toString(`${BASE_URL}/nuclei/${nucleo.id}`, {
+        type: 'svg', margin: 0, width: 100
+    }));
+
     const scheda = {
         content: [
-            { text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center', margin: [0, 0, 0, 4] },
-            { text: [{ text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL+"/nuclei/"+nucleo.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 8] },
+            {
+                table: {
+                    widths: ['auto', '*'],
+                    body: [
+                        [{ svg: qrID, rowSpan: 2 }, { text: "SCHEDA ANAGRAFICA", fontSize: 14, bold: true, alignment: 'center', }],
+                        [{}, { text: [{ text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center' }]
+                    ],
+                }, margin: [0, 4, 0, 4], layout: "noBorders"
+            },
             {
                 table: {
                     widths: ['auto', '*'],

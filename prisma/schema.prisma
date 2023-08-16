@@ -12,26 +12,30 @@ datasource db {
 }
 
 model Bolla {
-  id       String          @id @default(auto()) @map("_id") @db.ObjectId
-  nucleo   Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
-  data     DateTime        
-  note     String?
-  alimenti BollaAlimento[]
-  nucleoId String          @db.ObjectId
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  nucleo    Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
+  data      DateTime
+  note      String?
+  alimenti  BollaAlimento[]
+  nucleoId  String          @db.ObjectId
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }
 
 model BollaAlimento {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
-  bolla      Bolla    @relation(fields: [bollaId], references: [id], onDelete: Cascade)
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  alimento   Alimento  @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
+  bolla      Bolla     @relation(fields: [bollaId], references: [id], onDelete: Cascade)
   quantita   Float
-  alimentoId String   @db.ObjectId
-  bollaId    String   @db.ObjectId
+  alimentoId String    @db.ObjectId
+  bollaId    String    @db.ObjectId
   note       String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Nucleo {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   nome       String
   cognome    String
   isee       Float?
@@ -40,9 +44,11 @@ model Nucleo {
   cellulare  String?
   indirizzo  String?
   citta      String?
-  servibile  Boolean @default(true)
+  servibile  Boolean   @default(true)
   note       String?
   bolle      Bolla[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Alimento {
@@ -53,4 +59,6 @@ model Alimento {
   distribuibile Boolean         @default(true)
   note          String?
   bolle         BollaAlimento[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }

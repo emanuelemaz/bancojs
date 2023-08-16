@@ -3,6 +3,7 @@ import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 
 import QRCode from 'qrcode'
+import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params, url }) => {
     const response = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug } })
@@ -17,10 +18,11 @@ export const load = (async ({ params, url }) => {
         indirizzo: response.indirizzo,
         citta: response.citta,
         servibile: response.servibile,
-        note: response.note
+        note: response.note,
+        createdAt: response.createdAt
     };
 
-    const qrID = (await QRCode.toString(`nuclei/${response.id}`, {
+    const qrID = (await QRCode.toString(`${BASE_URL}/nuclei/${response.id}`, {
         type: 'svg', color: {
             dark: '#FFFF',
             light: '#0000'
