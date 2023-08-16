@@ -82,13 +82,12 @@ export const load = (async ({ params }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-
     modifica: async ({ request }) => {
         const newData = await request.formData()
 
         const offset = parseInt(newData.get("offset") as string);
         let id = newData.get("id") as string;
-        const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
+        const data = moment(newData.get("data") as string).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
