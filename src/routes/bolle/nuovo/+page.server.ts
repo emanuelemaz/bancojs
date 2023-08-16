@@ -39,13 +39,13 @@ export const actions: Actions = {
     aggiungi: async ({ request }) => {
         const newData = await request.formData()
 
-        const timezone = newData.get("timezone") as string;
-        const data = moment.tz(moment(newData.get("data") as string), timezone).toDate();
+        const offset = newData.get("offset") as string;
+        const data = moment(newData.get("data") as string).utcOffset(offset).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
         console.log(data.toString())
-        console.log(timezone)
+        console.log(offset)
 
         var newBolla: Bolla | null = null;
         try {
