@@ -69,10 +69,12 @@ export const load = (async ({ params }) => {
         allAlimenti_fix.push({ id: al.id, nome: al.nome, unita: al.unita, scadenza: al.scadenza, distribuibile: al.distribuibile, note: al.note });
     }
 
-    const qrID = (await QRCode.toString(`bolle/${bolla.id}`, {type: 'svg', color: {
-        dark: '#FFFF',
-        light: '#0000'
-      }, margin: 0}))
+    const qrID = (await QRCode.toString(`bolle/${bolla.id}`, {
+        type: 'svg', color: {
+            dark: '#FFFF',
+            light: '#0000'
+        }, margin: 0
+    }))
 
 
     return { bolla: response_fix, nuclei: nuclei_fix, alimenti: alimenti_fix, allAlimenti: allAlimenti_fix, qrID: qrID };

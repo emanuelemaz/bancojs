@@ -39,7 +39,8 @@ export const load = (async ({ url }) => {
                 nomeN: nucleo.nome,
                 cognomeN: nucleo.cognome,
                 componentiN: nucleo.componenti,
-                bambiniN: nucleo.bambini
+                bambiniN: nucleo.bambini,
+                createdAt: nucleo.createdAt
             })
         }
 
@@ -66,7 +67,8 @@ export const load = (async ({ url }) => {
                 indirizzo: el.indirizzo,
                 citta: el.citta,
                 servibile: el.servibile,
-                note: el.note
+                note: el.note,
+                createdAt: el.createdAt
             });
         }
     }
