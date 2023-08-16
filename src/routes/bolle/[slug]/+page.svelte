@@ -116,6 +116,7 @@
 			</label>
 			<label class="label">
 				<span>Data</span>
+				<input type="hidden" name="offset" value={moment().utcOffset()}/>
 				<input
 					class="input p-2"
 					type="datetime-local"

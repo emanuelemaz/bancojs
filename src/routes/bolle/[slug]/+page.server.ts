@@ -87,7 +87,7 @@ export const actions: Actions = {
 
         const offset = parseInt(newData.get("offset") as string);
         let id = newData.get("id") as string;
-        const data = moment(newData.get("data") as string).toDate();
+        const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
