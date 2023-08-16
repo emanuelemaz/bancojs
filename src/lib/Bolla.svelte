@@ -20,7 +20,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment.utc(row.data).local().format('DD/MM/YYYY, HH:mm:ss')}
+					{moment(row.data).local().format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>
