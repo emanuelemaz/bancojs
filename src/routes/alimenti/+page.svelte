@@ -2,6 +2,7 @@
 	import Alimento from '$lib/Alimento.svelte';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
+	import moment from 'moment-timezone';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
@@ -18,7 +19,7 @@
 	}
 
 	let servSlide: boolean;
-	$: servSlide
+	$: servSlide;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -30,9 +31,12 @@
 	<a class="btn variant-filled-primary" href="/alimenti/nuovo"
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi alimento</a
 	>
-	<a href="/alimenti/stampa/pdf" class="btn variant-filled-tertiary">
-		<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
-	>
+	<form action="/alimenti/stampa/pdf" method="get" class="inline">
+		<input type="hidden" name="offset" value={moment().utcOffset()} />
+		<button type="submit" class="btn variant-filled-tertiary"
+			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
+		>
+	</form>
 	<form action="/alimenti" method="get" bind:this={searchForm}>
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">
@@ -61,7 +65,11 @@
 				<input class="input p-2 search-input" type="date" name="dataFine" id="dataInput" />
 			</label>
 			<div class="space-y-2 flex items-center">
-				<SlideToggle bind:checked={servSlide} name="distribuibile" on:click={() => searchBtn.click()}>Includi non distribuibili</SlideToggle>
+				<SlideToggle
+					bind:checked={servSlide}
+					name="distribuibile"
+					on:click={() => searchBtn.click()}>Includi non distribuibili</SlideToggle
+				>
 			</div>
 		</div>
 		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>Invia</button>
@@ -71,6 +79,6 @@
 	</form>
 
 	{#each data.alimenti as row}
-		<Alimento row={row}/>
+		<Alimento {row} />
 	{/each}
 </div>

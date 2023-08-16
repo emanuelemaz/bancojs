@@ -3,8 +3,10 @@ import prisma from '../../../../../prisma/prisma';
 import moment from 'moment-timezone';
 import fs from 'fs'
 
-export async function GET({ }) {
+export async function GET({ url }) {
     const alimenti = await prisma.alimento.findMany();
+
+    const offset: number = parseInt(url.searchParams.get("offset") as string)
 
     function cCell(text: string, isBold: boolean = false): Object {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
