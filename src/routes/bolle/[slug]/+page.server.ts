@@ -8,6 +8,7 @@ import moment from 'moment-timezone'
 import QRCode from 'qrcode';
 
 export const load = (async ({ params }) => {
+
     const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: params.slug } })
     let nucleo: Nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: bolla.nucleoId } });
 
@@ -81,11 +82,13 @@ export const load = (async ({ params }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
+
     modifica: async ({ request }) => {
         const newData = await request.formData()
 
+        const offset = parseInt(newData.get("offset") as string);
         let id = newData.get("id") as string;
-        const data = moment(newData.get("data") as string).local().toDate();
+        const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 

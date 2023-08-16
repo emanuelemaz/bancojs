@@ -44,9 +44,6 @@ export const actions: Actions = {
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
-        console.log(data.toString())
-        console.log(offset)
-
         var newBolla: Bolla | null = null;
         try {
             newBolla = await prisma.bolla.create({
