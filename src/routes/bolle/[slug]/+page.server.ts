@@ -24,6 +24,7 @@ export const load = (async ({ params }) => {
         bambiniN: nucleo.bambini
     };
 
+    console.log(moment.tz(moment(), moment.tz.guess(true)).utcOffset())
 
     const nuclei = await prisma.nucleo.findMany({
         orderBy: {
