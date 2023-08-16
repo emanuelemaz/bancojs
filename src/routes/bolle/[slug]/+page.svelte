@@ -87,8 +87,7 @@
 			<div>
 				<i
 					>Creata in data {new Date(
-						parseInt(data.bolla.id.slice(0, 8), 16) * 1000
-					).toLocaleDateString('it-IT', {
+						parseInt(data.bolla.createdAt)).toLocaleDateString('it-IT', {
 						day: '2-digit',
 						month: '2-digit',
 						year: 'numeric',
