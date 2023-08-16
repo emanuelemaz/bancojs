@@ -13,8 +13,8 @@
 
 	moment.tz.guess();
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment
-			.utc(data.bolla.data)
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data)
+			.local()
 			.format('YYYY-MM-DDTHH:mm:ss');
 	});
 
@@ -85,8 +85,7 @@
 			</h1>
 			<div>
 				<i
-					>Creata in data {new Date(
-						parseInt(data.bolla.createdAt)).toLocaleDateString('it-IT', {
+					>Creata in data {new Date(parseInt(data.bolla.createdAt)).toLocaleDateString('it-IT', {
 						day: '2-digit',
 						month: '2-digit',
 						year: 'numeric',
