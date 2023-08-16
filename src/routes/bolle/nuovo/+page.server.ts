@@ -25,7 +25,8 @@ export const load = (async ({ url }) => {
             indirizzo: el.indirizzo,
             citta: el.citta,
             servibile: el.servibile,
-            note: el.note
+            note: el.note,
+            createdAt: el.createdAt
         };
         nuclei_fix.push(el_fix)
     });
@@ -41,6 +42,8 @@ export const actions: Actions = {
         const data = moment(newData.get("data") as string).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
+
+        console.log(data)
 
         var newBolla: Bolla | null = null;
         try {
