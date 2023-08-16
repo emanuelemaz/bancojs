@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 export async function GET({ url, params }) {
 
     const displayNotes: boolean = url.searchParams.has("note")
-    const offset: number = parseInt(url.searchParams.get("offset"))
+    const offset: number = parseInt(url.searchParams.get("offset") as string)
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {
