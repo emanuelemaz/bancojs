@@ -16,6 +16,7 @@ export async function GET({ url, params }) {
             id: params.slug
         }
     })
+    
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {
             id: bolla.nucleoId
