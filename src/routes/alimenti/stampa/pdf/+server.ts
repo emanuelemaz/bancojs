@@ -6,7 +6,7 @@ import fs from 'fs'
 export async function GET({ url }) {
     const alimenti = await prisma.alimento.findMany();
 
-    const offset: number = parseInt(url.searchParams.get("offset") as string)
+    const offset: number = moment.tz(moment(), moment.tz.guess(true)).utcOffset()
 
     function cCell(text: string, isBold: boolean = false): Object {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
