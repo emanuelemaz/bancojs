@@ -141,12 +141,15 @@
 				>
 			</div>
 			<div>
-				<a href="/bolle/{data.bolla.id}/pdf" class="btn variant-filled-tertiary">
-					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</a
-				>
-				<a href="/bolle/{data.bolla.id}/pdf?note" class="btn variant-filled-tertiary">
-					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</a
-				>
+				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
+					<input type="hidden" name="offset" value={moment().utcOffset()}/>
+					<button type="submit" class="btn variant-filled-tertiary"><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button>
+				</form>
+				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
+					<input type="hidden" name="offset" value={moment().utcOffset()}/>
+					<input type="hidden" name="note"/>
+					<button type="submit" class="btn variant-filled-tertiary"><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</button>
+				</form>
 			</div>
 			<div>
 				<form
