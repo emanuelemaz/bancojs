@@ -10,13 +10,14 @@ import moment from 'moment-timezone';
 export async function GET({ url, params }) {
 
     const displayNotes: boolean = url.searchParams.has("note")
+    const offset: number = parseInt(url.searchParams.get("offset"))
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {
             id: params.slug
         }
     })
-    
+
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {
             id: bolla.nucleoId
@@ -103,7 +104,7 @@ export async function GET({ url, params }) {
             { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 2, 0, 0] },
             {
                 text: [{ text: "Bolla: " }, { text: "#" + bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }, {
-                    text: " (" + moment(bolla.data).format("DD/MM/YYYY, HH:mm:ss") + ")"
+                    text: " (" + moment(bolla.data).utcOffset(offset, true).format("DD/MM/YYYY, HH:mm:ss") + ")"
                 }], alignment: 'center', margin: [0, 0, 0, 4]
             },
             {
