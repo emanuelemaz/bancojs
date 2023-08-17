@@ -1,6 +1,6 @@
 # BancoJS
 
-Gestionale per le attività di banco alimentare. Scritto in [Svelte](https://github.com/sveltejs/kit), [Skeleton](https://github.com/skeletonlabs/skeleton) e [Prisma](https://github.com/prisma/prisma). I PDF vengono generati con [pdfmake](https://github.com/bpampuch/pdfmake).
+Gestionale per le attività di banco alimentare. Scritto in [Svelte](https://github.com/sveltejs/kit), [Skeleton](https://github.com/skeletonlabs/skeleton) e [Prisma](https://github.com/prisma/prisma). I PDF vengono generati con [pdfmake](https://github.com/bpampuch/pdfmake). Il database utilizzato è [MongoDB (Community Server)](https://github.com/mongodb/mongo).
 
 ## Offline
 Può essere usato in self-hosting, anche offline, con MongoDB Community Server in modalità replica-set.
