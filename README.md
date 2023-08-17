@@ -2,7 +2,12 @@
 
 Gestionale per le attività di banco alimentare. Scritto in [Svelte](https://github.com/sveltejs/kit), [Skeleton](https://github.com/skeletonlabs/skeleton) e [Prisma](https://github.com/prisma/prisma). I PDF vengono generati con [pdfmake](https://github.com/bpampuch/pdfmake). Il database utilizzato è [MongoDB (Community Server)](https://github.com/mongodb/mongo).
 
+## Personalizzazione
+
+Per cambiare intestazione inserire un'intestazione vettoriale personalizzata al posto di `pdf_static/intestazione.svg`. Per modificare dimensioni, o per usare un'immagine vettoriale andrà modificato direttamente il codice dei file `+server.ts` in `src/routes/nuclei/[slug]/pdf/+server.ts`, `src/routes/bolle/[slug]/pdf/+server.ts` e `src/routes/alimenti/stampa/pdf/+server.ts`.
+
 ## Offline
+
 Può essere usato in self-hosting, anche offline, con MongoDB Community Server in modalità replica-set.
 
 ### Come creare un replica-set con MongoDB Community server
