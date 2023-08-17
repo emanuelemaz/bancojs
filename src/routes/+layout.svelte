@@ -8,40 +8,49 @@
 		LightSwitch,
 		Modal,
 		modalStore,
-
 		Toast
-
 	} from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
 	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import Navigation from '$lib/Navigation.svelte';
 	import { storePopup } from '@skeletonlabs/skeleton';
-	
-	
+	import { autoModeWatcher } from '@skeletonlabs/skeleton';
+	import 'iconify-icon';
+
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	function drawerOpen(): void {
-		drawerStore.open({});
+		drawerStore.open({
+			width: 'w-[280px] md:w-[480px]',
+		});
 	}
 
-	import { autoModeWatcher } from '@skeletonlabs/skeleton';
-	import 'iconify-icon';
+	$: positionClasses = $drawerStore.open ? 'translate-x-[50%]' : '';
 </script>
 
 <svelte:head
 	>{@html `<script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}</svelte:head
 >
 
-
 <Modal buttonPositive="variant-filled-warning" />
 <Toast />
-<Drawer class="g:w-0 w-64 "><Navigation /></Drawer>
-<AppShell slotSidebarLeft="bg-surface-500/5 w-0 lg:w-64 p-0 lg:p-4">
+<Drawer>
+	<Navigation />
+</Drawer>
+<AppShell
+	slotSidebarLeft="bg-surface-500/5 lg:w-64 w-0"
+	class="transition-transform {positionClasses} m-0"
+>
 	<svelte:fragment slot="sidebarLeft">
 		<Navigation />
 	</svelte:fragment>
-	<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end" slot="header">
+	<AppBar
+		gridColumns="grid-cols-3"
+		slotDefault="place-self-center"
+		slotTrail="place-content-end"
+		slot="header"
+	>
 		<svelte:fragment slot="lead">
 			<div class="flex items-center">
 				<button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>

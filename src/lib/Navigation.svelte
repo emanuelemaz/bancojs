@@ -10,7 +10,7 @@
 	$: classesActive = (href: string) => ($page.url.pathname.includes(href) && (href == "/" ? false : href != "/") ? '!bg-surface-600' : '');
 </script>
 
-<nav class="list-nav">
+<nav class="list-nav p-4 w-full">
 	<ul>
 		<li><a on:click={drawerClose} href="/" class="{homeActive("/")}">Home</a></li>
 		<li><a on:click={drawerClose} href="/nuclei" class="{classesActive("/nuclei")}">Nuclei</a></li>
