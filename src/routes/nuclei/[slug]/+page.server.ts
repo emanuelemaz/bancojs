@@ -6,55 +6,16 @@ import QRCode from 'qrcode'
 import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params, url }) => {
-    const response = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug } })
-    let response_fix: nucleo_fix = {
-        id: response.id,
-        nome: response.nome,
-        cognome: response.cognome,
-        isee: (response.isee || response.isee == 0) ? response.isee : null,
-        componenti: response.componenti,
-        bambini: response.bambini,
-        cellulare: response.cellulare,
-        indirizzo: response.indirizzo,
-        citta: response.citta,
-        servibile: response.servibile,
-        note: response.note,
-        createdAt: response.createdAt
-    };
+    const nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug }, include: { bolle: true } })
 
-    const qrID = (await QRCode.toString(`${BASE_URL}/nuclei/${response.id}`, {
+    const qrID = (await QRCode.toString(`${BASE_URL}/nuclei/${nucleo.id}`, {
         type: 'svg', color: {
             dark: '#FFFF',
             light: '#0000'
         }, margin: 0
     }));
 
-    const bolleNucleo = (await prisma.bolla.findMany({
-        where: {
-            nucleoId: response.id
-        },
-        orderBy: {
-            data: 'desc'
-        }
-    }))
-
-    let bolleNucleo_fix: bolla_fix[] = [];
-    for (let el of bolleNucleo) {
-        bolleNucleo_fix.push({
-            id: el.id,
-            data: el.data,
-            note: el.note,
-            nucleoId: el.nucleoId,
-            createdAt: el.createdAt,
-            nomeN: response.nome,
-            cognomeN: response.cognome,
-            componentiN: response.componenti,
-            bambiniN: response.bambini
-        })
-    }
-
-
-    return { feed: response_fix, qrID: qrID, bolleNucleo: bolleNucleo_fix };
+    return { nucleo: nucleo, qrID: qrID, bolleNucleo: nucleo.bolle };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

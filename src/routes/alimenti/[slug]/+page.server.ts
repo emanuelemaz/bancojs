@@ -5,17 +5,9 @@ import type { Actions, PageServerLoad } from './$types';
 import moment from 'moment';
 
 export const load = (async ({ params }) => {
-    const response = await prisma.alimento.findUniqueOrThrow({ where: { id: params.slug } })
-    let response_fix: alimento_fix = {
-        id: response.id,
-        nome: response.nome,
-        unita: response.unita,
-        scadenza: response.scadenza,
-        distribuibile: response.distribuibile,
-        note: response.note
-    };
+    const alimenti = await prisma.alimento.findUniqueOrThrow({ where: { id: params.slug } })
 
-    return { alimento: response_fix };
+    return { alimento: alimenti };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

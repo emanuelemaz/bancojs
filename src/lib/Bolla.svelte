@@ -1,34 +1,36 @@
 <script lang="ts">
+	import type { Nucleo, Bolla } from '@prisma/client';
 	import moment from 'moment-timezone';
-	export let row: bolla_fix;
-	</script>
+	export let bolla: Bolla;
+	export let nucleo: Nucleo;
+</script>
 
-<a class="block" href="/bolle/{row.id}">
+<a class="block" href="/bolle/{bolla.id}">
 	<div class="card card-hover mx-auto p-8">
 		<div class="grid grid-cols-3 gap-4">
 			<div>
 				<p>Bolla</p>
-				<p class="text-xl">(#{row.id})</p>
+				<p class="text-xl">(#{bolla.id})</p>
 			</div>
 			<div>
 				<p>Beneficiario</p>
 				<p class="text-xl">
-					{row.nomeN}
-					{row.cognomeN} (#{row.nucleoId}) || {row.componentiN}p, {row.bambiniN}b
+					{nucleo.nome}
+					{nucleo.cognome} (#{bolla.nucleoId}) || {nucleo.componenti}p, {nucleo.bambini}b
 				</p>
 			</div>
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment(row.data).format('DD/MM/YYYY, HH:mm:ss')}
+					{moment(bolla.data).format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>
-		{#if row.note}
+		{#if bolla.note}
 			<!-- svelte-ignore a11y-invalid-attribute -->
 			<a href="#"
 				><div class="mt-4">
-					Note <textarea class="textarea p-2" readonly>{row.note}</textarea>
+					Note <textarea class="textarea p-2" readonly>{bolla.note}</textarea>
 				</div></a
 			>
 		{/if}

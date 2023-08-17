@@ -1,74 +1,37 @@
 import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
-import type { Nucleo } from '@prisma/client';
 
 import moment from 'moment-timezone'
-
 import QRCode from 'qrcode';
 
 export const load = (async ({ params }) => {
-
-    const bolla = await prisma.bolla.findUniqueOrThrow({ where: { id: params.slug } })
-    let nucleo: Nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: bolla.nucleoId } });
-
-    let response_fix: bolla_fix = {
-        id: bolla.id,
-        data: bolla.data,
-        note: bolla.note,
-        nucleoId: bolla.nucleoId,
-        createdAt: bolla.createdAt,
-        nomeN: nucleo.nome,
-        cognomeN: nucleo.cognome,
-        componentiN: nucleo.componenti,
-        bambiniN: nucleo.bambini
-    };
-
+    const bolla = await prisma.bolla.findUniqueOrThrow({
+        where: { id: params.slug }, include: {
+            nucleo: true,
+            alimenti: {
+                orderBy: {
+                    alimento: {
+                        nome: 'asc'
+                    }
+                },
+                include: {
+                    alimento: true
+                }
+            }
+        },
+    })
 
     const nuclei = await prisma.nucleo.findMany({
         orderBy: {
-            nome: 'asc'
+            nome: 'asc',
         }
     });
-
-    let nuclei_fix: nucleo_fix[] = [];
-    nuclei.forEach(el => {
-        let el_fix: nucleo_fix = {
-            id: el.id,
-            nome: el.nome,
-            cognome: el.cognome,
-            isee: el.isee || null,
-            componenti: el.componenti,
-            bambini: el.bambini,
-            cellulare: el.cellulare,
-            indirizzo: el.indirizzo,
-            citta: el.citta,
-            servibile: el.servibile,
-            createdAt: el.createdAt,
-            note: el.note
-        };
-        nuclei_fix.push(el_fix)
-    });
-
-    let alimenti_fix: bollaalimento_fix[] = [];
-    const alimenti = await prisma.bollaAlimento.findMany({
-        where: {
-            bollaId: bolla.id
-        }, orderBy: {
-            alimento: {
-                nome: 'asc'
-            }
+    const alimenti = await prisma.alimento.findMany({
+        orderBy: {
+            nome: 'asc',
         }
-    })
-    for (let al of alimenti) {
-        let alimento = await prisma.alimento.findUniqueOrThrow({ where: { id: al.alimentoId } })
-        alimenti_fix.push({ id: al.id, nome: alimento.nome, unita: alimento.unita, bollaId: al.bollaId, alimentoId: al.alimentoId, note: al.note, quantita: al.quantita });
-    }
-    let allAlimenti_fix: alimento_fix[] = [];
-    const allAlimenti = await prisma.alimento.findMany({ orderBy: { nome: 'asc' } })
-    for (let al of allAlimenti) {
-        allAlimenti_fix.push({ id: al.id, nome: al.nome, unita: al.unita, scadenza: al.scadenza, distribuibile: al.distribuibile, note: al.note });
-    }
+    });
 
     const qrID = (await QRCode.toString(`bolle/${bolla.id}`, {
         type: 'svg', color: {
@@ -78,7 +41,7 @@ export const load = (async ({ params }) => {
     }))
 
 
-    return { bolla: response_fix, nuclei: nuclei_fix, alimenti: alimenti_fix, allAlimenti: allAlimenti_fix, qrID: qrID };
+    return { bolla: bolla, nuclei: nuclei, alimenti: bolla.alimenti, allAlimenti: alimenti, qrID: qrID };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

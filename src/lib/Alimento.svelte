@@ -1,5 +1,6 @@
 <script lang="ts">
-    export let row: alimento_fix;
+	import type { Alimento } from "@prisma/client";
+    export let row: Alimento;
 </script>
 
 <a class="block" href="/alimenti/{row.id}">

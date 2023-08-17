@@ -61,7 +61,7 @@
 	</form>
 
 	{#each data.bolle as row}
-		<Bolla {row} />
+		<Bolla bolla={row} nucleo={row.nucleo} />
 	{/each}
 </div>
 

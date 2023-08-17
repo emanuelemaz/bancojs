@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let row: nucleo_fix;
+	import type { Nucleo } from "@prisma/client";
+
+    export let row: Nucleo;
 
     function valuta(x: number | undefined | null) {
 		if (x || x == 0) {

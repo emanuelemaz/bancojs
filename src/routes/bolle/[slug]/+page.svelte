@@ -12,18 +12,19 @@
 	export let data: PageData;
 
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data)
-			.local()
-			.format('YYYY-MM-DDTHH:mm:ss');
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
+			'YYYY-MM-DDTHH:mm:ss'
+		);
 	});
 
 	let showNoDist: boolean = false;
+	let showNoServ: boolean = false;
 
 	const confirmDeleteBolla = (form: HTMLFormElement): ModalSettings => {
 		return {
 			type: 'confirm',
 			title: 'Elimina',
-			body: `Sicuro di voler eliminare la bolla #${data.bolla.id} del nucleo <strong>${data.bolla.nomeN} ${data.bolla.cognomeN}</strong> (#${data.bolla.nucleoId})?`,
+			body: `Sicuro di voler eliminare la bolla #${data.bolla.id} del nucleo <strong>${data.bolla.nucleo.nome} ${data.bolla.nucleo.cognome}</strong> (#${data.bolla.nucleo.id})?`,
 			buttonTextConfirm: 'Elimina',
 			buttonTextCancel: 'Annulla',
 			response: (r: boolean) => {
@@ -70,7 +71,7 @@
 		placement: 'bottom'
 	};
 
-	$: showNoDist;
+	$: showNoDist, showNoServ;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -83,9 +84,7 @@
 				>
 			</h1>
 			<div>
-				<i
-					>Creata in data {moment(data.bolla.createdAt).format("DD/MM/YYYY, HH:mm:ss")}</i
-				>
+				<i>Creata in data {moment(data.bolla.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
 			</div>
 			<div class="card qr p-6" data-popup="qrPopup">
 				{@html data.qrID}
@@ -103,20 +102,27 @@
 	>
 		<h2 class="h2">Beneficiario</h2>
 		<input type="hidden" name="id" value={data.bolla.id} />
+		<div class="my-4">
+			<SlideToggle name="servSlide" bind:checked={showNoServ}
+				>Mostra beneficiari non servibili</SlideToggle
+			>
+		</div>
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Beneficiario</span>
 				<select name="nucleoId" class="select" value={data.bolla.nucleoId}>
 					{#each data.nuclei as nucleo}
-						<option value={nucleo.id}
-							>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
-						>
+						{#if nucleo.servibile || showNoServ}
+							<option value={nucleo.id}
+								>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile ? '❌ Non servibile ❌' : ''}</option
+							>
+						{/if}
 					{/each}
 				</select>
 			</label>
 			<label class="label">
 				<span>Data</span>
-				<input type="hidden" name="offset" value={moment().utcOffset()}/>
+				<input type="hidden" name="offset" value={moment().utcOffset()} />
 				<input
 					class="input p-2"
 					type="datetime-local"
@@ -142,13 +148,17 @@
 			</div>
 			<div>
 				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
-					<input type="hidden" name="offset" value={moment().utcOffset()}/>
-					<button type="submit" class="btn variant-filled-tertiary"><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button>
+					<input type="hidden" name="offset" value={moment().utcOffset()} />
+					<button type="submit" class="btn variant-filled-tertiary"
+						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
+					>
 				</form>
 				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
-					<input type="hidden" name="offset" value={moment().utcOffset()}/>
-					<input type="hidden" name="note"/>
-					<button type="submit" class="btn variant-filled-tertiary"><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</button>
+					<input type="hidden" name="offset" value={moment().utcOffset()} />
+					<input type="hidden" name="note" />
+					<button type="submit" class="btn variant-filled-tertiary"
+						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</button
+					>
 				</form>
 			</div>
 			<div>
@@ -173,7 +183,7 @@
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<div class="my-4">
 				<SlideToggle name="distSlide" bind:checked={showNoDist}
-					>Mosta alimenti non distribuibili</SlideToggle
+					>Mostra alimenti non distribuibili</SlideToggle
 				>
 			</div>
 			<div class="my-4">
@@ -225,17 +235,17 @@
 				</form>
 			</div>
 			<div class="grid grid-cols-2 gap-4 my-4">
-				{#each data.alimenti as alimento}
+				{#each data.alimenti as alimentoBolla}
 					<div class="block card p-4 flex justify-between">
 						<div class="flex justify-between w-full">
 							<div class="grid grid-cols-3 gap-4 w-full items-start">
 								<div class="h-min">
 									<p>Alimento</p>
-									<p class="text-xl">{alimento.nome}</p>
+									<p class="text-xl">{alimentoBolla.alimento.nome}</p>
 								</div>
 								<div class="h-min">
 									<p>Quantità</p>
-									<p class="text-xl">{alimento.quantita} {alimento.unita}</p>
+									<p class="text-xl">{alimentoBolla.quantita} {alimentoBolla.alimento.unita}</p>
 								</div>
 								<form
 									action="/bolle/{data.bolla.id}?/eliminaAlimento"
@@ -246,16 +256,16 @@
 									}}
 								>
 									<div>
-										<input type="hidden" value={alimento.id} name="alimentoId" />
+										<input type="hidden" value={alimentoBolla.id} name="alimentoId" />
 										<button type="submit" class="btn variant-filled-error w-full">
 											<iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
 										</button>
 									</div>
 								</form>
-								{#if alimento.note}
+								{#if alimentoBolla.note}
 									<div class="col-span-3">
 										<p>Note</p>
-										<p class="text-xl">{alimento.note}</p>
+										<p class="text-xl">{alimentoBolla.note}</p>
 									</div>
 								{/if}
 							</div>

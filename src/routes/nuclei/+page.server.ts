@@ -9,8 +9,6 @@ export const load = (async ({ url }) => {
         }
     }))
 
-    let response_fix: nucleo_fix[] = [];
-
     if (response) {
         let nome = url.searchParams.get("nome") as string;
         let cognome = url.searchParams.get("cognome") as string;
@@ -53,26 +51,9 @@ export const load = (async ({ url }) => {
         if (servibile) {
             response = response.filter(nucleo => nucleo.servibile === servibile)
         }
-
-        for (let el of response) {
-            response_fix.push({
-                id: el.id,
-                nome: el.nome,
-                cognome: el.cognome,
-                isee: (el.isee || el.isee == 0) ? el.isee : null,
-                componenti: el.componenti,
-                bambini: el.bambini,
-                cellulare: el.cellulare,
-                indirizzo: el.indirizzo,
-                citta: el.citta,
-                servibile: el.servibile,
-                note: el.note,
-                createdAt: el.createdAt
-            })
-        }
     }
 
     let numNuclei = await prisma.nucleo.count() ? prisma.nucleo.count() : 0;
 
-    return { feed: response_fix, tot: numNuclei };
+    return { feed: response, tot: numNuclei };
 }) satisfies PageServerLoad;

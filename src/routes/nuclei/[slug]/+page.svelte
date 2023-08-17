@@ -21,7 +21,7 @@
 		return {
 			type: 'confirm',
 			title: 'Elimina',
-			body: `Sicuro di voler eliminare il nucleo ${data.feed.nome} ${data.feed.cognome} (#${data.feed.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
+			body: `Sicuro di voler eliminare il nucleo ${data.nucleo.nome} ${data.nucleo.cognome} (#${data.nucleo.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
 			buttonTextConfirm: 'Elimina',
 			buttonTextCancel: 'Annulla',
 			response: (r: boolean) => {
@@ -60,11 +60,11 @@
 			<h1 class="h1">
 				Nucleo <span
 					class="font-mono btn variant-filled p-2 text-xl align-middle"
-					use:popup={qrPopup}>#{data.feed.id}</span
+					use:popup={qrPopup}>#{data.nucleo.id}</span
 				>
 			</h1>
 			<div>
-				<i>Creato in data {moment(data.feed.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
+				<i>Creato in data {moment(data.nucleo.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
 			</div>
 		</div>
 		<div class="card qr p-6" data-popup="qrPopup">
@@ -74,21 +74,21 @@
 	<form
 		class="form"
 		method="POST"
-		action="/nuclei/{data.feed.id}?/modifica"
+		action="/nuclei/{data.nucleo.id}?/modifica"
 		on:submit|preventDefault={(e) => {
 			modalStore.clear();
 			modalStore.trigger(confirmUpdate(e.currentTarget));
 		}}
 	>
-		<input type="hidden" name="id" value={data.feed.id} />
+		<input type="hidden" name="id" value={data.nucleo.id} />
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Nome</span>
-				<input class="input p-2" type="text" name="nome" value={data.feed.nome} required />
+				<input class="input p-2" type="text" name="nome" value={data.nucleo.nome} required />
 			</label>
 			<label class="label">
 				<span>Cognome</span>
-				<input class="input p-2" type="text" name="cognome" value={data.feed.cognome} required />
+				<input class="input p-2" type="text" name="cognome" value={data.nucleo.cognome} required />
 			</label>
 		</div>
 		<div class="grid grid-cols-3 gap-4 my-4">
@@ -98,7 +98,7 @@
 					class="input p-2"
 					type="number"
 					name="isee"
-					value={data.feed.isee}
+					value={data.nucleo.isee}
 					min="0"
 					step="0.01"
 				/>
@@ -113,7 +113,7 @@
 					step="1"
 					name="componenti"
 					on:change={() => maxBambini()}
-					value={data.feed.componenti}
+					value={data.nucleo.componenti}
 					required
 				/>
 			</label>
@@ -125,29 +125,29 @@
 					type="number"
 					name="bambini"
 					min="0"
-					max={data.feed.componenti}
+					max={data.nucleo.componenti}
 					step="1"
-					value={data.feed.bambini}
+					value={data.nucleo.bambini}
 					required
 				/>
 			</label>
 			<label class="label">
 				<span>Cellulare</span>
-				<input class="input p-2" type="text" name="cellulare" value={data.feed.cellulare} />
+				<input class="input p-2" type="text" name="cellulare" value={data.nucleo.cellulare} />
 			</label>
 			<label class="label">
 				<span>Indirizzo</span>
-				<input class="input p-2" type="text" name="indirizzo" value={data.feed.indirizzo} />
+				<input class="input p-2" type="text" name="indirizzo" value={data.nucleo.indirizzo} />
 			</label>
 			<label class="label">
 				<span>Comune</span>
-				<input class="input p-2" type="text" name="citta" value={data.feed.citta} />
+				<input class="input p-2" type="text" name="citta" value={data.nucleo.citta} />
 			</label>
-			<SlideToggle name="servibile" checked={data.feed.servibile}>Servibile</SlideToggle>
+			<SlideToggle name="servibile" checked={data.nucleo.servibile}>Servibile</SlideToggle>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>
-			<textarea class="input textarea p-2" name="note" value={data.feed.note} />
+			<textarea class="input textarea p-2" name="note" value={data.nucleo.note} />
 		</label>
 		<div class="mt-4 flex justify-between">
 			<div>
@@ -160,19 +160,19 @@
 			</div>
 			<div>
 				<form method="get" action="/bolle/nuovo" class="inline">
-					<input type="hidden" name="nucleoId" value={data.feed.id} />
+					<input type="hidden" name="nucleoId" value={data.nucleo.id} />
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:add" class="text-xl inline" /> Emetti bolla
 					</button>
 				</form>
-				<form action="/nuclei/{data.feed.id}/pdf" method="get" class="inline">
+				<form action="/nuclei/{data.nucleo.id}/pdf" method="get" class="inline">
 					<input type="hidden" name="offset" value={moment().utcOffset()} />
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 					>
 				</form>
 				{#if data.bolleNucleo.length}
-					<form action="/nuclei/{data.feed.id}/pdf" method="get" class="inline">
+					<form action="/nuclei/{data.nucleo.id}/pdf" method="get" class="inline">
 						<input type="hidden" name="offset" value={moment().utcOffset()} />
 						<input type="hidden" name="bolle" />
 						<button type="submit" class="btn variant-filled-tertiary"
@@ -185,7 +185,7 @@
 				<form
 					class="form"
 					method="POST"
-					action="/nuclei/{data.feed.id}?/elimina"
+					action="/nuclei/{data.nucleo.id}?/elimina"
 					on:submit|preventDefault={(e) => {
 						modalStore.clear();
 						modalStore.trigger(confirmDelete(e.currentTarget));
@@ -202,7 +202,7 @@
 		<div class="space-y-4">
 			<h2 class="h2">Bolle emesse</h2>
 			{#each data.bolleNucleo as row}
-				<Bolla {row} />
+				<Bolla nucleo={data.nucleo} bolla={row} />
 			{/each}
 		</div>
 	{/if}
