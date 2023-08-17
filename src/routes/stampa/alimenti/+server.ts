@@ -1,5 +1,5 @@
 import PdfPrinter from 'pdfmake';
-import prisma from '../../../../../prisma/prisma';
+import prisma from '../../../../prisma/prisma';
 import moment from 'moment-timezone';
 import fs from 'fs'
 

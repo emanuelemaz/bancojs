@@ -1,4 +1,3 @@
-import PdfPrinter from 'pdfmake';
 import prisma from '../../../prisma/prisma';
 import type { PageServerLoad } from './$types';
 import moment from 'moment';

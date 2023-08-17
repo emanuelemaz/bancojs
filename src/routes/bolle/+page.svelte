@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Bolla from '$lib/Bolla.svelte';
+	import moment from 'moment-timezone';
 	import type { PageData } from './$types';
 	export let data: PageData;
 
@@ -27,6 +28,12 @@
 	<a class="btn variant-filled-primary" href="/bolle/nuovo"
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi bolla</a
 	>
+	<form action="/stampa/bolle" method="get" class="inline">
+		<input type="hidden" name="offset" value={moment().utcOffset()} />
+		<button type="submit" class="btn variant-filled-tertiary"
+			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
+		>
+	</form>
 	<form action="/bolle" method="get" bind:this={searchForm}>
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">

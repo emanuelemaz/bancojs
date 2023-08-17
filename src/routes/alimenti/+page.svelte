@@ -31,7 +31,7 @@
 	<a class="btn variant-filled-primary" href="/alimenti/nuovo"
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi alimento</a
 	>
-	<form action="/alimenti/stampa/pdf" method="get" class="inline">
+	<form action="/stampa/alimenti" method="get" class="inline">
 		<input type="hidden" name="offset" value={moment().utcOffset()} />
 		<button type="submit" class="btn variant-filled-tertiary"
 			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
