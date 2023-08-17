@@ -11,7 +11,9 @@
 		Toast
 	} from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+
 	import '@skeletonlabs/skeleton/themes/theme-gold-nouveau.css';
+	
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import Navigation from '$lib/Navigation.svelte';
 	import { storePopup } from '@skeletonlabs/skeleton';
