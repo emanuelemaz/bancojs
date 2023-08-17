@@ -32,6 +32,9 @@ export const load = (async ({ params, url }) => {
     const bolleNucleo = (await prisma.bolla.findMany({
         where: {
             nucleoId: response.id
+        },
+        orderBy: {
+            data: 'desc'
         }
     }))
 
@@ -42,6 +45,7 @@ export const load = (async ({ params, url }) => {
             data: el.data,
             note: el.note,
             nucleoId: el.nucleoId,
+            createdAt: el.createdAt,
             nomeN: response.nome,
             cognomeN: response.cognome,
             componentiN: response.componenti,

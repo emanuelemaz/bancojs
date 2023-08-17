@@ -66,7 +66,8 @@ export const load = (async ({ url }) => {
                 indirizzo: el.indirizzo,
                 citta: el.citta,
                 servibile: el.servibile,
-                note: el.note
+                note: el.note,
+                createdAt: el.createdAt
             })
         }
     }
