@@ -15,6 +15,18 @@ export async function GET({ url, params }) {
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {
             id: params.slug
+        },
+        include: {
+            alimenti: {
+                include: {
+                    alimento: true
+                },
+                orderBy: {
+                    alimento: {
+                        nome: 'asc'
+                    }
+                }
+            }
         }
     })
 
@@ -23,44 +35,26 @@ export async function GET({ url, params }) {
             id: bolla.nucleoId
         }
     })
-
-    let alimenti_fix: bollaalimento_fix[] = [];
-    const alimenti = await prisma.bollaAlimento.findMany({
-        where: {
-            bollaId: bolla.id
-        },
-        orderBy: {
-            alimento: {
-                nome: 'asc'
-            }
-        }
-    })
-
-    for (let al of alimenti) {
-        let alimento = await prisma.alimento.findUniqueOrThrow({ where: { id: al.alimentoId } })
-        alimenti_fix.push({ id: al.id, nome: alimento.nome, unita: alimento.unita, bollaId: al.bollaId, alimentoId: al.alimentoId, note: al.note, quantita: al.quantita });
-    }
-
     function cCell(text: string, isBold: boolean = false): Object {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
     let tblBody: Object[][] = displayNotes ? [[cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true), cCell('Alimento', true), cCell('Quantità', true), cCell('Note', true)]] : [[cCell('Alimento', true), cCell('Quantità', true), cCell('Alimento', true), cCell('Quantità', true)]];
 
-    alimenti_fix.forEach((al, i) => {
-        if (alimenti_fix[i + 1]) {
+    bolla.alimenti.forEach((al, i) => {
+        if (bolla.alimenti[i + 1]) {
             if (i % 2 === 0) {
                 if (displayNotes) {
                     tblBody.push(
                         [
-                            cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""),
-                            cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita), alimenti_fix[i + 1].note ? cCell(alimenti_fix[i + 1].note as string) : cCell("")]
+                            cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), bolla.alimenti[i].note ? cCell(bolla.alimenti[i].note as string) : cCell(""),
+                            cCell(bolla.alimenti[i + 1].alimento.nome), cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita), bolla.alimenti[i + 1].note ? cCell(bolla.alimenti[i + 1].note as string) : cCell("")]
                     )
                 } else {
                     tblBody.push(
                         [
-                            cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita),
-                            cCell(alimenti_fix[i + 1].nome), cCell(alimenti_fix[i + 1].quantita.toString() + " " + alimenti_fix[i + 1].unita)]
+                            cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita),
+                            cCell(bolla.alimenti[i + 1].alimento.nome), cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita)]
                     )
 
                 }
@@ -69,11 +63,11 @@ export async function GET({ url, params }) {
             if (i % 2 == 0) {
                 if (displayNotes) {
                     tblBody.push(
-                        [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), alimenti_fix[i].note ? cCell(alimenti_fix[i].note as string) : cCell(""), cCell("///"), cCell("///"), cCell("///")]
+                        [cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), bolla.alimenti[i].note ? cCell(bolla.alimenti[i].note as string) : cCell(""), cCell("///"), cCell("///"), cCell("///")]
                     )
                 } else {
                     tblBody.push(
-                        [cCell(alimenti_fix[i].nome), cCell(alimenti_fix[i].quantita.toString() + " " + alimenti_fix[i].unita), cCell("///"), cCell("///")]
+                        [cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), cCell("///"), cCell("///")]
                     )
 
                 }

@@ -5,27 +5,14 @@ import moment from 'moment-timezone';
 import fs from 'fs'
 
 export async function GET({ url }) {
-    let bolle_fix: bolla_fix[] = [];
     let bolle = (await prisma.bolla.findMany({
         orderBy: {
             data: 'desc'
+        },
+        include: {
+            nucleo: true
         }
     }))
-    for (let el of bolle) {
-        let nucleo: Nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: el.nucleoId } });
-        bolle_fix.push({
-            id: el.id,
-            data: el.data,
-            note: el.note,
-            nucleoId: el.nucleoId,
-            nomeN: nucleo.nome,
-            cognomeN: nucleo.cognome,
-            componentiN: nucleo.componenti,
-            bambiniN: nucleo.bambini,
-            createdAt: nucleo.createdAt
-        })
-    }
-
     const offset: number = parseInt(url.searchParams.get("offset") as string)
 
     function cCell(text: string, isBold: boolean = false): Object {
@@ -61,9 +48,9 @@ export async function GET({ url }) {
         return `(${x} bambini)`;
     }
 
-    for (let b of bolle_fix) {
+    for (let b of bolle) {
         tblBody.push(
-            [cCell(`${b.nomeN} ${b.cognomeN}`), cCell(`${b.componentiN} ${bambini(b.bambiniN)}`), moment(b.data).format("DD/MM/YYYY, HH:mm:ss"), b.note ? cCell(b.note) : '']
+            [cCell(`${b.nucleo.nome} ${b.nucleo.cognome}`), cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), moment(b.data).format("DD/MM/YYYY, HH:mm:ss"), b.note ? cCell(b.note) : '']
         )
     }
 
