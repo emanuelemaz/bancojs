@@ -72,9 +72,15 @@
 				>
 			</div>
 		</div>
-		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>Invia</button>
-		<a class="btn variant-filled-warning" href="/alimenti" on:click={() => resetAllInputs()}
-			>Reset</a
+		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>
+			<iconify-icon icon="mdi:send" class="text-xl" />Invia
+		</button>
+		<input type="hidden" name="offset" value={moment().utcOffset()} />
+		<a class="btn variant-filled-warning" href="/alimenti" on:click={() => resetAllInputs()}>
+			<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
+		>
+		<button type="submit" class="btn variant-filled-tertiary" formaction="/stampa/alimenti"
+			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 		>
 	</form>
 

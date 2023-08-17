@@ -10,7 +10,7 @@
 		return '-';
 	}
 
-	function bambini(x: number, y: number) {
+	function bambini(x: number) {
 		if (x == 0) {
 			return '';
 		}
@@ -37,7 +37,7 @@
             </div>
             <div>
                 <p>Componenti</p>
-                <p class="text-xl">{row.componenti} {bambini(row.bambini, row.componenti)}</p>
+                <p class="text-xl">{row.componenti} {bambini(row.bambini)}</p>
             </div>
             <div>
                 <p>Cellulare</p>

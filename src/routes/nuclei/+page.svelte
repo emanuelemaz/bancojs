@@ -2,10 +2,11 @@
 	import Nucleo from '$lib/Nucleo.svelte';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
+	import moment from 'moment-timezone';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
-	let searchBtn: HTMLInputElement;
+	let searchBtn: HTMLButtonElement;
 	let servSlide: boolean;
 
 	function resetAllInputs() {
@@ -17,8 +18,6 @@
 		}
 		servSlide = false;
 	}
-
-	
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -38,14 +37,24 @@
 				class="search-input input p-3"
 				placeholder="Cerca cognome..."
 			/>
-			<input
-				type="number"
-				name="isee"
-				class="search-input input p-3"
-				step="0.01"
-				min="0"
-				placeholder="Cerca ISEE..."
-			/>
+			<div class="grid grid-cols-2 gap-4">
+				<input
+					type="number"
+					name="iseeMin"
+					class="search-input input p-3"
+					step="0.01"
+					min="0"
+					placeholder="Cerca ISEE minimo..."
+				/>
+				<input
+					type="number"
+					name="iseeMax"
+					class="search-input input p-3"
+					step="0.01"
+					min="0"
+					placeholder="Cerca ISEE massimo..."
+				/>
+			</div>
 			<input
 				type="number"
 				name="componenti"
@@ -77,20 +86,24 @@
 			<input type="text" name="citta" class="search-input input p-3" placeholder="Cerca citta..." />
 			<input type="text" name="note" class="search-input input p-3" placeholder="Cerca note..." />
 			<div class="space-y-2">
-				<SlideToggle name="servibile" bind:checked={servSlide} on:click={() => searchBtn.click()}>Includi non servibili</SlideToggle>
+				<SlideToggle name="servibile" bind:checked={servSlide} on:click={() => searchBtn.click()}
+					>Includi non servibili</SlideToggle
+				>
 			</div>
 		</div>
-		<input type="submit" class="btn variant-filled-secondary" bind:this={searchBtn} />
-		<a class="btn variant-filled-warning" href="/nuclei" on:click={() => resetAllInputs()}>Reset</a>
+		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>
+			<iconify-icon icon="mdi:send" class="text-xl" />Invia
+		</button>
+		<a class="btn variant-filled-warning" href="/nuclei" on:click={() => resetAllInputs()}>
+			<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
+		>
+		<input type="hidden" name="offset" value={moment().utcOffset()} />
+		<button type="submit" class="btn variant-filled-tertiary" formaction="/stampa/nuclei"
+			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
+		>
 	</form>
 
 	{#each data.feed as row}
-		<Nucleo row={row}/>
+		<Nucleo {row} />
 	{/each}
 </div>
-
-<style>
-	input[type='submit'] {
-		cursor: pointer;
-	}
-</style>

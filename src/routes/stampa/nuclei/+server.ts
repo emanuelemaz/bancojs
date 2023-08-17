@@ -2,10 +2,10 @@ import PdfPrinter from 'pdfmake';
 import prisma from '../../../../prisma/prisma';
 import moment from 'moment-timezone';
 import fs from 'fs'
-import { filterAlimento } from '$lib';
+import { filterNucleo } from '$lib';
 
 export async function GET({ url }) {
-    let alimenti = await filterAlimento(url)
+    let nuclei = await filterNucleo(url);
 
     const offset: number = parseInt(url.searchParams.get("offset") as string)
 
@@ -13,28 +13,26 @@ export async function GET({ url }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Alimento', true), cCell('Unità', true), cCell('Distribuibile', true), cCell('Scadenza', true), cCell('Note', true)]];
-
-    function scadenza(data: Date | null) {
-        let response: Object[] = [];
-        if (data) {
-            response.push({ text: moment(data).format("DD/MM/YYYY") });
-            if (moment().isAfter(data, 'day')) {
-                response.push({ text: ' (scaduto)', bold: true });
-            }
-            if (moment().isSame(data, 'day')) {
-                response.push({ text: ' (scade oggi)', bold: true });
-            }
-        } else {
-            return "";
+    function bambini(x: number) {
+        if (x == 0) {
+            return '';
         }
-        return { text: response };
+        return `(${x}b.)`;
     }
 
+    let tblBody: Object[][] = [[cCell('Nome', true), cCell('Cognome', true), cCell('ISEE', true), cCell('Pers. (b.)', true), cCell('Cellulare', true), cCell('Indirizzo', true), cCell('Comune', true), cCell('Note', true)]];
 
-    for (let al of alimenti) {
+    for (let n of nuclei) {
         tblBody.push(
-            [cCell(al.nome), cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
+            [
+                cCell(n.nome),
+                cCell(n.cognome),
+                n.isee ? cCell(Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(n.isee)) : cCell("///"),
+                cCell(`${n.componenti} ${bambini(n.bambini)}`),
+                n.cellulare ? cCell(n.cellulare) : cCell("///"),
+                n.indirizzo ? cCell(n.indirizzo) : cCell("///"),
+                n.citta ? cCell(n.citta) : cCell("///"),
+                n.note ? cCell(n.note) : cCell("///")]
         )
     }
 
@@ -53,16 +51,16 @@ export async function GET({ url }) {
         content: [
             {
                 text: [
-                    { text: "LISTA DEGLI ALIMENTI\n", fontSize: 18, bold: true, alignment: 'center' },
+                    { text: "LISTA DEI NUCLEI\n", fontSize: 18, bold: true, alignment: 'center' },
                     { text: "Aggiornata al " + moment().utcOffset(offset).format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
                 ], margin: [0, 0, 0, 4]
             },
             {
                 table: {
-                    widths: ['*', 'auto', 'auto', 'auto', '*'],
+                    widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', '*'],
                     headerRows: tblBody.length > 1 ? 1 : 0,
                     body: tblBody.length > 1 ? tblBody : [
-                        [{ text: 'Non sono presenti alimenti', colSpan: 5, alignment: 'center', bold: true }, {}, {}, {}, {}],
+                        [{ text: 'Non sono presenti nuclei', colSpan: 8, alignment: 'center', bold: true }, {}, {}, {}, {}, {}, {}, {}],
                     ]
                 }
             }
@@ -79,11 +77,11 @@ export async function GET({ url }) {
                 margin: [30, 30, 30, 0]
             }
         },
-        defaultStyle: { font: 'Arial' }, pageSize: 'A4', pageOrientation: 'portrait', pageMargins: [30, 120, 30, 30],
+        defaultStyle: { font: 'Arial' }, pageSize: 'A4', pageOrientation: 'landscape', pageMargins: [30, 120, 30, 30],
         info: {
-            title: 'Lista degli alimenti',
+            title: 'Lista dei nuclei',
             author: 'Associazione XXX',
-            subject: 'Inventario'
+            subject: 'Beneficiari'
         },
     }
 

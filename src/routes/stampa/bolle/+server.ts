@@ -1,39 +1,16 @@
 import PdfPrinter from 'pdfmake';
-import type { Nucleo } from '@prisma/client';
 import prisma from '../../../../prisma/prisma';
 import moment from 'moment-timezone';
 import fs from 'fs'
+import { filterBolla } from '$lib';
 
 export async function GET({ url }) {
-    let bolle = (await prisma.bolla.findMany({
-        orderBy: {
-            data: 'desc'
-        },
-        include: {
-            nucleo: true
-        }
-    }))
+    let bolle = await filterBolla(url)
+
     const offset: number = parseInt(url.searchParams.get("offset") as string)
 
     function cCell(text: string, isBold: boolean = false): Object {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
-    }
-
-
-    function scadenza(data: Date | null) {
-        let response: Object[] = [];
-        if (data) {
-            response.push({ text: moment(data).format("DD/MM/YYYY") });
-            if (moment().isAfter(data, 'day')) {
-                response.push({ text: ' (scaduto)', bold: true });
-            }
-            if (moment().isSame(data, 'day')) {
-                response.push({ text: ' (scade oggi)', bold: true });
-            }
-        } else {
-            return "";
-        }
-        return { text: response };
     }
 
     let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Componenti', true), cCell('Data', true), cCell('Note', true)]];
@@ -97,9 +74,9 @@ export async function GET({ url }) {
         },
         defaultStyle: { font: 'Arial' }, pageSize: 'A4', pageOrientation: 'portrait', pageMargins: [30, 120, 30, 30],
         info: {
-            title: 'Lista degli alimenti',
+            title: 'Lista delle bolle',
             author: 'Associazione XXX',
-            subject: 'Inventario'
+            subject: 'Bolle di distribuzione'
         },
     }
 

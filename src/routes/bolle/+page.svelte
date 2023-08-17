@@ -5,7 +5,7 @@
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
-	let searchBtn: HTMLInputElement;
+	let searchBtn: HTMLButtonElement;
 
 	function resetAllInputs() {
 		var inputs = <HTMLCollectionOf<HTMLInputElement>>(
@@ -28,12 +28,6 @@
 	<a class="btn variant-filled-primary" href="/bolle/nuovo"
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi bolla</a
 	>
-	<form action="/stampa/bolle" method="get" class="inline">
-		<input type="hidden" name="offset" value={moment().utcOffset()} />
-		<button type="submit" class="btn variant-filled-tertiary"
-			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
-		>
-	</form>
 	<form action="/bolle" method="get" bind:this={searchForm}>
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">
@@ -56,17 +50,19 @@
 				<input class="input p-2 search-input" type="date" name="dataFine" id="dataInput" />
 			</label>
 		</div>
-		<input type="submit" class="btn variant-filled-secondary" bind:this={searchBtn} />
-		<a class="btn variant-filled-warning" href="/bolle" on:click={() => resetAllInputs()}>Reset</a>
+		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>
+			<iconify-icon icon="mdi:send" class="text-xl" />Invia
+		</button>
+		<a class="btn variant-filled-warning" href="/bolle" on:click={() => resetAllInputs()}>
+			<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
+		>
+		<input type="hidden" name="offset" value={moment().utcOffset()} />
+		<button type="submit" class="btn variant-filled-tertiary" formaction="/stampa/bolle"
+			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
+		>
 	</form>
 
 	{#each data.bolle as row}
 		<Bolla bolla={row} nucleo={row.nucleo} />
 	{/each}
 </div>
-
-<style>
-	input[type='submit'] {
-		cursor: pointer;
-	}
-</style>

@@ -76,9 +76,9 @@ export async function GET({ url, params }) {
                         ["ISEE", (nucleo.isee || nucleo.isee == 0) ? Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(nucleo.isee) : "(non specificato)"],
                         ["Componenti", nucleo.componenti.toString()],
                         ["(di cui) bambini", nucleo.bambini.toString()],
+                        ["Cellulare", nucleo.cellulare ? nucleo.cellulare : "(non specificato)"],
                         ["Indirizzo", nucleo.indirizzo ? nucleo.indirizzo : "(non specificato)"],
                         ["Comune", nucleo.citta ? nucleo.citta : "(non specificato)"],
-                        ["Cellulare", nucleo.cellulare ? nucleo.cellulare : "(non specificato)"],
                         ["Note", nucleo.note ? nucleo.note.replace(/\r\n/g, '\n') : "(non presenti)"],
                     ]
                 }
