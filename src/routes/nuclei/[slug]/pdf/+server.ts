@@ -10,7 +10,7 @@ import QRCode from 'qrcode';
 export async function GET({ url, params }) {
 
     const displayBolle: boolean = url.searchParams.has("bolle");
-    const offset: number = moment.tz(moment(), moment.tz.guess(true)).utcOffset()
+    const offset: number = parseInt(url.searchParams.get("offset") as string)
 
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {

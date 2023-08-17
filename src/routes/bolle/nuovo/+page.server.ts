@@ -39,7 +39,7 @@ export const actions: Actions = {
     aggiungi: async ({ request }) => {
         const newData = await request.formData()
 
-        const offset = moment.tz(moment(), moment.tz.guess(true)).utcOffset();
+        const offset = parseInt(newData.get("offset") as string);
         const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
