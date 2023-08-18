@@ -18,10 +18,6 @@
 		);
 	});
 
-	if (browser) {
-		document.cookie = `tz=${moment().utcOffset()}`;
-	}
-
 	let showNoDist: boolean = false;
 	let showNoServ: boolean = false;
 

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Nucleo, Bolla } from '@prisma/client';
 	import moment from 'moment-timezone';
+	import { get } from 'svelte/store';
+	import tz from './stores';
 	export let bolla: Bolla;
 	export let nucleo: Nucleo;
 </script>
@@ -22,7 +24,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment(bolla.data).format('DD/MM/YYYY, HH:mm:ss')}
+					{moment(bolla.data).utcOffset(get(tz)).format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>

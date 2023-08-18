@@ -6,10 +6,6 @@
 	import { browser } from '$app/environment';
 	export let data: PageData;
 
-	if (browser) {
-		document.cookie = `tz=${moment().utcOffset()}`;
-	}
-
 	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
 		return {
 			type: 'confirm',

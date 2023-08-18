@@ -13,10 +13,6 @@
 			: (bambini.value = bambini.value);
 		bambini.max = componenti.value;
 	}
-
-	if (browser) {
-		document.cookie = `tz=${moment().utcOffset()}`;
-	}
 </script>
 
 <div class="container mx-auto p-8 space-y-8">

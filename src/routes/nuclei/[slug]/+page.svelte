@@ -14,10 +14,6 @@
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
-	if (browser) {
-		document.cookie = `tz=${moment().utcOffset()}`;
-	}
-
 	function maxBambini() {
 		bambini.value > componenti.value ? bambini.valueAsNumber = componenti.valueAsNumber : bambini.value = bambini.value
 		bambini.max = componenti.value;

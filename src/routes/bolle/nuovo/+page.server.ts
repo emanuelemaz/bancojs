@@ -4,6 +4,8 @@ import type { Actions, PageServerLoad } from './$types';
 import type { Bolla } from '@prisma/client';
 
 import moment from 'moment-timezone'
+import { get } from 'svelte/store';
+import tz from '$lib/stores';
 
 export const load = (async ({ url }) => {
     let fromNucleo = url.searchParams.get("nucleoId")
@@ -19,10 +21,10 @@ export const load = (async ({ url }) => {
 })
 
 export const actions: Actions = {
-    aggiungi: async ({ request, cookies }) => {
+    aggiungi: async ({ request }) => {
         const newData = await request.formData()
 
-        const offset = cookies.get("offset") ? parseInt((cookies.get("offset") as string).toString()) : 0;
+        const offset = get(tz)
         const data = moment(newData.get("data") as string).utcOffset(offset).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;

@@ -4,11 +4,6 @@
 	export let data: PageData;
 
 	import moment from 'moment-timezone';
-	import { browser } from '$app/environment';
-
-	if (browser) {
-		document.cookie = `tz=${moment().utcOffset()}`;
-	}
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =

@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
 	import moment from "moment-timezone";
-
-	if (browser) {
-		document.cookie = `tz=${moment().utcOffset()}`;
-	}
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
