@@ -50,7 +50,7 @@ export const actions: Actions = {
 
         let id = newData.get("id") as string;
         const offset = cookies.get("offset") ? parseInt((cookies.get("offset") as string).toString()) : 0;
-        const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
+        const data = moment(newData.get("data") as string).utcOffset(offset).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 

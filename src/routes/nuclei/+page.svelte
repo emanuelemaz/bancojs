@@ -27,7 +27,7 @@
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">
-		Nuclei serviti <span class="h4">({data.feed.length} filtrati, {data.tot} totali)</span>
+		Nuclei serviti <span class="h4">({data.nuclei.length} filtrati, {data.tot} totali)</span>
 	</h1>
 	<p>Sezione dedicata alla gestione dell'anagrafica.</p>
 	<a class="btn variant-filled-primary" href="/nuclei/nuovo"
@@ -107,7 +107,7 @@
 		>
 	</form>
 
-	{#each data.feed as row}
+	{#each data.nuclei as row}
 		<Nucleo {row} />
 	{/each}
 </div>
