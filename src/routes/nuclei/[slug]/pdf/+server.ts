@@ -6,11 +6,13 @@ import { BASE_URL } from '$env/static/private';
 
 import moment from 'moment-timezone';
 import QRCode from 'qrcode';
+import { get } from 'svelte/store';
+import tz from '$lib/stores';
 
 export async function GET({ url, params }) {
 
     const displayBolle: boolean = url.searchParams.has("bolle");
-    const offset: =
+    const offset = get(tz)
     
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {
