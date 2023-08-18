@@ -24,7 +24,7 @@
 			<div>
 				<p>Data</p>
 				<p class="text-xl">
-					{moment(bolla.data).utcOffset(get(tz)).format('DD/MM/YYYY, HH:mm:ss')}
+					{moment(bolla.data).format('DD/MM/YYYY, HH:mm:ss')}
 				</p>
 			</div>
 		</div>
