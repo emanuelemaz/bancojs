@@ -58,7 +58,6 @@ export async function GET({ url, params }) {
                             cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita),
                             cCell(bolla.alimenti[i + 1].alimento.nome), cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita)]
                     )
-
                 }
             }
         } else {
@@ -95,7 +94,8 @@ export async function GET({ url, params }) {
 
     const scheda = {
         content: [
-            { svg: qrID, alignment: 'center', margin: [0, 0, 0, 4], absolutePosition: { x: 420, y: 15 } },
+            { text: "Stampato il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n", absolutePosition: { x: 15, y: 91 } },
+            { svg: qrID, alignment: 'center', absolutePosition: { x: 420, y: 15 } },
             { text: "BOLLA DI DISTRIBUZIONE ALIMENTARE\n", fontSize: 14, bold: true, alignment: 'center' },
             { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 2, 0, 0] },
             {
@@ -127,7 +127,7 @@ export async function GET({ url, params }) {
                 margin: [15, 15, 15, 0]
             }
         },
-        defaultStyle: { font: 'Arial' }, pageSize: 'A5', pageOrientation: 'landscape', pageMargins: [15, 85, 15, 15],
+        defaultStyle: { font: 'Arial' }, pageSize: 'A5', pageOrientation: 'landscape', pageMargins: [15, 90, 15, 15],
         info: {
             title: 'Bolla di distribuzione alimentare',
             author: 'Associazione XXX',

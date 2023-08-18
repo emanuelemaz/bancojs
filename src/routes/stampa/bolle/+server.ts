@@ -49,7 +49,7 @@ export async function GET({ url }) {
             {
                 text: [
                     { text: "LISTA DELLE BOLLE\n", fontSize: 18, bold: true, alignment: 'center' },
-                    { text: "Aggiornata al " + moment().utcOffset(offset, true).format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
+                    { text: "Aggiornata al " + moment().utcOffset(offset).format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
                 ], margin: [0, 0, 0, 4]
             },
             {
