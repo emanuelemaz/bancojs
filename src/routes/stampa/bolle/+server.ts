@@ -29,7 +29,7 @@ export async function GET({ url }) {
 
     for (let b of bolle) {
         tblBody.push(
-            [cCell(`${b.nucleo.nome} ${b.nucleo.cognome}`), cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), moment(b.data).format("DD/MM/YYYY, HH:mm:ss"), b.note ? cCell(b.note) : '']
+            [cCell(`${b.nucleo.nome} ${b.nucleo.cognome}`), cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), b.note ? cCell(b.note) : '']
         )
     }
 
