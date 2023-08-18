@@ -32,11 +32,6 @@
 	<a class="btn variant-filled-primary" href="/alimenti/nuovo"
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi alimento</a
 	>
-	<form action="/stampa/alimenti" method="get" class="inline">
-		<button type="submit" class="btn variant-filled-tertiary"
-			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
-		>
-	</form>
 	<form action="/alimenti" method="get" bind:this={searchForm}>
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">
