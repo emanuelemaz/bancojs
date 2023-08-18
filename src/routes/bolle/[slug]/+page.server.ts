@@ -52,7 +52,7 @@ export const actions: Actions = {
 
         let id = newData.get("id") as string;
         const offset = get(tz);
-        const data = moment(newData.get("data") as string).utcOffset(offset).toDate();
+        const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;
 
