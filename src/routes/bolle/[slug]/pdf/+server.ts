@@ -6,11 +6,13 @@ import { BASE_URL } from '$env/static/private';
 
 import QRCode from 'qrcode';
 import moment from 'moment-timezone';
+import { get } from 'svelte/store';
+import tz from '$lib/stores';
 
 export async function GET({ url, params }) {
 
     const displayNotes: boolean = url.searchParams.has("note")
-    const offset =
+    const offset = get(tz)
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {
