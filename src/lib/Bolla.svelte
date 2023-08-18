@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { Nucleo, Bolla } from '@prisma/client';
 	import moment from 'moment-timezone';
-	import { get } from 'svelte/store';
-	import tz from './stores';
 	export let bolla: Bolla;
 	export let nucleo: Nucleo;
 </script>
