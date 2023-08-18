@@ -3,7 +3,12 @@
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
+	import { browser } from '$app/environment';
 	export let data: PageData;
+
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
+	}
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
@@ -32,7 +37,6 @@
 		><iconify-icon icon="mdi:add" class="text-xl" /> Aggiungi alimento</a
 	>
 	<form action="/stampa/alimenti" method="get" class="inline">
-		<input type="hidden" name="offset" value={moment().utcOffset()} />
 		<button type="submit" class="btn variant-filled-tertiary"
 			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 		>
@@ -75,7 +79,6 @@
 		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>
 			<iconify-icon icon="mdi:send" class="text-xl" />Invia
 		</button>
-		<input type="hidden" name="offset" value={moment().utcOffset()} />
 		<a class="btn variant-filled-warning" href="/alimenti" on:click={() => resetAllInputs()}>
 			<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
 		>

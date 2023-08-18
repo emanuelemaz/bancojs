@@ -4,10 +4,10 @@ import moment from 'moment-timezone';
 import fs from 'fs'
 import { filterBolla } from '$lib';
 
-export async function GET({ url }) {
+export async function GET({ url, cookies }) {
     let bolle = await filterBolla(url)
 
-    const offset: number = parseInt(url.searchParams.get("offset") as string)
+    const offset: number = cookies.get("offset") ? parseInt((cookies.get("offset") as string).toString()) : 0
 
     function cCell(text: string, isBold: boolean = false): Object {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }

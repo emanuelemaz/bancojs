@@ -9,6 +9,7 @@
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 	export let data: PageData;
 
 	onMount(() => {
@@ -16,6 +17,10 @@
 			'YYYY-MM-DDTHH:mm:ss'
 		);
 	});
+
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
+	}
 
 	let showNoDist: boolean = false;
 	let showNoServ: boolean = false;
@@ -122,7 +127,6 @@
 			</label>
 			<label class="label">
 				<span>Data</span>
-				<input type="hidden" name="offset" value={moment().utcOffset()} />
 				<input
 					class="input p-2"
 					type="datetime-local"
@@ -148,13 +152,11 @@
 			</div>
 			<div>
 				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
-					<input type="hidden" name="offset" value={moment().utcOffset()} />
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 					>
 				</form>
 				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
-					<input type="hidden" name="offset" value={moment().utcOffset()} />
 					<input type="hidden" name="note" />
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</button

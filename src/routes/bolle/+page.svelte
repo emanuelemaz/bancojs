@@ -2,7 +2,12 @@
 	import Bolla from '$lib/Bolla.svelte';
 	import moment from 'moment-timezone';
 	import type { PageData } from './$types';
+	import { browser } from '$app/environment';
 	export let data: PageData;
+
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
+	}
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
@@ -56,7 +61,6 @@
 		<a class="btn variant-filled-warning" href="/bolle" on:click={() => resetAllInputs()}>
 			<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
 		>
-		<input type="hidden" name="offset" value={moment().utcOffset()} />
 		<button type="submit" class="btn variant-filled-tertiary" formaction="/stampa/bolle"
 			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 		>

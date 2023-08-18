@@ -7,10 +7,10 @@ import { BASE_URL } from '$env/static/private';
 import moment from 'moment-timezone';
 import QRCode from 'qrcode';
 
-export async function GET({ url, params }) {
+export async function GET({ url, params, cookies }) {
 
     const displayBolle: boolean = url.searchParams.has("bolle");
-    const offset: number = parseInt(url.searchParams.get("offset") as string)
+    const offset: number = cookies.get("offset") ? parseInt((cookies.get("offset") as string).toString()) : 0
 
     const nucleo = await prisma.nucleo.findUniqueOrThrow({
         where: {

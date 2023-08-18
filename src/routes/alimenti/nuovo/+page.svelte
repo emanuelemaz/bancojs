@@ -1,5 +1,11 @@
 <script lang="ts">
+	import { browser } from "$app/environment";
 	import { SlideToggle } from "@skeletonlabs/skeleton";
+	import moment from "moment-timezone";
+
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
+	}
 
 	let servSlide: boolean = true;
 </script>

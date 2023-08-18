@@ -7,10 +7,10 @@ import { BASE_URL } from '$env/static/private';
 import QRCode from 'qrcode';
 import moment from 'moment-timezone';
 
-export async function GET({ url, params }) {
+export async function GET({ url, params, cookies }) {
 
     const displayNotes: boolean = url.searchParams.has("note")
-    const offset: number = parseInt(url.searchParams.get("offset") as string)
+    const offset: number = cookies.get("offset") ? parseInt((cookies.get("offset") as string).toString()) : 0
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {

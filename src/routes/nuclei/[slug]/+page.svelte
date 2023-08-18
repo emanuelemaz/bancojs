@@ -9,11 +9,17 @@
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
 	import moment from 'moment-timezone';
+	import { browser } from '$app/environment';
 	export let data: PageData;
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
+	}
+
 	function maxBambini() {
+		bambini.value > componenti.value ? bambini.valueAsNumber = componenti.valueAsNumber : bambini.value = bambini.value
 		bambini.max = componenti.value;
 	}
 
@@ -166,14 +172,12 @@
 					</button>
 				</form>
 				<form action="/nuclei/{data.nucleo.id}/pdf" method="get" class="inline">
-					<input type="hidden" name="offset" value={moment().utcOffset()} />
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 					>
 				</form>
 				{#if data.bolleNucleo.length}
 					<form action="/nuclei/{data.nucleo.id}/pdf" method="get" class="inline">
-						<input type="hidden" name="offset" value={moment().utcOffset()} />
 						<input type="hidden" name="bolle" />
 						<button type="submit" class="btn variant-filled-tertiary"
 							><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con bolle)</button

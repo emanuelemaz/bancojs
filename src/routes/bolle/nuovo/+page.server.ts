@@ -19,10 +19,10 @@ export const load = (async ({ url }) => {
 })
 
 export const actions: Actions = {
-    aggiungi: async ({ request }) => {
+    aggiungi: async ({ request, cookies }) => {
         const newData = await request.formData()
 
-        const offset = parseInt(newData.get("offset") as string);
+        const offset = cookies.get("offset") ? parseInt((cookies.get("offset") as string).toString()) : 0;
         const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
         const nucleoId = newData.get("nucleoId") as string;

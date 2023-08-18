@@ -1,12 +1,21 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import moment from 'moment-timezone';
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
 	function maxBambini() {
+		bambini.value > componenti.value
+			? (bambini.valueAsNumber = componenti.valueAsNumber)
+			: (bambini.value = bambini.value);
 		bambini.max = componenti.value;
+	}
+
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
 	}
 </script>
 
@@ -19,10 +28,10 @@
 		use:enhance={() => {
 			return async ({ result }) => {
 				if (result.type === 'success') {
-					goto('/nuclei')}
+					goto('/nuclei');
 				}
-			}
-		}
+			};
+		}}
 	>
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">

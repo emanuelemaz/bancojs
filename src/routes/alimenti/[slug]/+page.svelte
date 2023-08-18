@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { modalStore, type ModalSettings, SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
-	import moment from 'moment';
+	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 	export let data: PageData;
+
+	if (browser) {
+		document.cookie = `tz=${moment().utcOffset()}`;
+	}
 
 	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
 		return {
