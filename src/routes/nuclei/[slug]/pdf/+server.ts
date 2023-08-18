@@ -75,13 +75,13 @@ export async function GET({ url, params }) {
                     body: [
                         ["Nome", nucleo.nome],
                         ["Cognome", nucleo.cognome],
-                        ["ISEE", (nucleo.isee || nucleo.isee == 0) ? Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(nucleo.isee) : "(non specificato)"],
+                        ["ISEE", (nucleo.isee || nucleo.isee == 0) ? Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(nucleo.isee) : "///"],
                         ["Componenti", nucleo.componenti.toString()],
                         ["(di cui) bambini", nucleo.bambini.toString()],
-                        ["Cellulare", nucleo.cellulare ? nucleo.cellulare : "(non specificato)"],
-                        ["Indirizzo", nucleo.indirizzo ? nucleo.indirizzo : "(non specificato)"],
-                        ["Comune", nucleo.citta ? nucleo.citta : "(non specificato)"],
-                        ["Note", nucleo.note ? nucleo.note.replace(/\r\n/g, '\n') : "(non presenti)"],
+                        ["Cellulare", nucleo.cellulare ? nucleo.cellulare : "///"],
+                        ["Indirizzo", nucleo.indirizzo ? nucleo.indirizzo : "///"],
+                        ["Comune", nucleo.citta ? nucleo.citta : "///"],
+                        ["Note", nucleo.note ? nucleo.note.replace(/\r\n/g, '\n') : "///"],
                     ]
                 }
             },

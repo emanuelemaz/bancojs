@@ -6,7 +6,7 @@ import QRCode from 'qrcode'
 import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params, url }) => {
-    const nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug }, include: { bolle: true } })
+    const nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug }, include: { bolle: { orderBy: { data: 'desc' } } } })
 
     const qrID = (await QRCode.toString(`${BASE_URL}/nuclei/${nucleo.id}`, {
         type: 'svg', color: {
