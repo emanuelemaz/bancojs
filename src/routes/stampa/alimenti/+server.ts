@@ -3,11 +3,13 @@ import prisma from '../../../../prisma/prisma';
 import moment from 'moment-timezone';
 import fs from 'fs'
 import { filterAlimento } from '$lib';
+import { get } from 'svelte/store';
+import tz from '$lib/stores';
 
 export async function GET({ url }) {
     let alimenti = await filterAlimento(url)
 
-    const offset = 
+    const offset = get(tz)
 
     function cCell(text: string, isBold: boolean = false): Object {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
@@ -54,7 +56,7 @@ export async function GET({ url }) {
             {
                 text: [
                     { text: "LISTA DEGLI ALIMENTI\n", fontSize: 18, bold: true, alignment: 'center' },
-                    { text: "Aggiornata al " + moment().utcOffset(offset).format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
+                    { text: "Aggiornata al " + moment().utcOffset(offset, true).format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
                 ], margin: [0, 0, 0, 4]
             },
             {
