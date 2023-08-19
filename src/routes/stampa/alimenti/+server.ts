@@ -36,7 +36,7 @@ export async function GET({ url }) {
 
     for (let al of alimenti) {
         tblBody.push(
-            [cCell(al.nome), cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
+            [{text: al.nome, alignment: 'center', link: `/alimenti/${al.id}`}, cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
         )
     }
 

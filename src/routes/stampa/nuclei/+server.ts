@@ -27,9 +27,9 @@ export async function GET({ url }) {
     for (let n of nuclei) {
         tblBody.push(
             [
-                cCell(n.nome),
-                cCell(n.cognome),
-                n.isee ? cCell(Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(n.isee)) : cCell("///"),
+                {text: (n.nome), link: `/nuclei/${n.id}`, alignment: 'center'},
+                {text: (n.cognome), link: `/nuclei/${n.id}`, alignment: 'center'},
+                n.isee || n.isee == 0 ? cCell(Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(n.isee)) : cCell("///"),
                 cCell(`${n.componenti} ${bambini(n.bambini)}`),
                 n.cellulare ? cCell(n.cellulare) : cCell("///"),
                 n.indirizzo ? cCell(n.indirizzo) : cCell("///"),
