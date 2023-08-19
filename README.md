@@ -14,7 +14,7 @@ Prima di avviare il server andranno inserite, nel file `.env`, tre variabili d'a
 
 ### Personalizzazione
 
-Per cambiare intestazione inserire un'intestazione vettoriale personalizzata al posto di `pdf_static/intestazione.svg`. Per modificare dimensioni, o per usare un'immagine vettoriale andrà modificato direttamente il codice dei file `+server.ts` in `src/routes/nuclei/[slug]/pdf/+server.ts`, `src/routes/bolle/[slug]/pdf/+server.ts` e `src/routes/alimenti/stampa/pdf/+server.ts`.
+Per cambiare intestazione inserire un'intestazione vettoriale personalizzata al posto di `pdf/static/intestazione.svg`. Per modificare dimensioni, o per usare un'immagine vettoriale andrà modificato direttamente il codice dei file `+server.ts` in `src/routes/nuclei/[slug]/pdf/+server.ts`, `src/routes/bolle/[slug]/pdf/+server.ts` e `src/routes/alimenti/stampa/pdf/+server.ts`.
 
 ## Offline
 

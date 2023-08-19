@@ -8,4 +8,4 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-pdf_static/intestazione.svg
+pdf/static/intestazione.svg

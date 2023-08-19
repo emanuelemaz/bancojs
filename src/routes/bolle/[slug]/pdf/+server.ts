@@ -78,12 +78,12 @@ export async function GET({ url, params }) {
 
     const fonts = {
         Arial: {
-            normal: 'pdf_static/ARIALN.TTF',
-            bold: 'pdf_static/ARIALNB.TTF',
-            italics: 'pdf_static/ARIALNI.TTF'
+            normal: 'pdf/static/ARIALN.TTF',
+            bold: 'pdf/static/ARIALNB.TTF',
+            italics: 'pdf/static/ARIALNI.TTF'
         },
         Courier: {
-            normal: 'pdf_static/cour.ttf'
+            normal: 'pdf/static/cour.ttf'
         }
     }
     const pdfPrinter = new PdfPrinter(fonts)
@@ -121,7 +121,7 @@ export async function GET({ url, params }) {
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        [{ svg: fs.readFileSync('pdf_static/intestazione.svg'), width: 240, margin: [0, 0, 2, 0] }, { text: `${currentPage}/${pageCount}`, alignment: 'right' }],
+                        [{ svg: fs.readFileSync('pdf/static/intestazione.svg'), width: 240, margin: [0, 0, 2, 0] }, { text: `${currentPage}/${pageCount}`, alignment: 'right' }],
                     ],
                 },
                 margin: [15, 15, 15, 0]
