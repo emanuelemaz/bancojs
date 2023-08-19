@@ -15,7 +15,7 @@ export async function GET({ url }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Componenti', true), cCell('Data', true), cCell('Note', true)]];
+    let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Componenti', true), cCell('Alimenti', true), cCell('Data', true), cCell('Note', true)]];
 
     function bambini(x: number) {
         if (x == 0) {
@@ -29,7 +29,7 @@ export async function GET({ url }) {
 
     for (let b of bolle) {
         tblBody.push(
-            [cCell(`${b.nucleo.nome} ${b.nucleo.cognome}`), cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), b.note ? cCell(b.note) : '']
+            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `/bolle/${b.id}`}, b.note ? cCell(b.note) : '']
         )
     }
 
@@ -54,7 +54,7 @@ export async function GET({ url }) {
             },
             {
                 table: {
-                    widths: ['*', 'auto', 'auto', '*'],
+                    widths: ['*', 'auto', 'auto', 'auto', '*'],
                     headerRows: tblBody.length > 1 ? 1 : 0,
                     body: tblBody.length > 1 ? tblBody : [
                         [{ text: 'Non sono presenti bolle', colSpan: 4, alignment: 'center', bold: true }, {}, {}, {}],

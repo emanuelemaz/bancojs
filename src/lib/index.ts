@@ -65,8 +65,11 @@ export async function filterBolla(url: URL) {
             data: 'desc'
         },
         include: {
-            nucleo: true
-        }
+            nucleo: true,
+            _count: {
+                select: { alimenti: true }
+            }
+        },
     })
     if (bolle) {
         let id = url.searchParams.get("nucleoId") as string;
