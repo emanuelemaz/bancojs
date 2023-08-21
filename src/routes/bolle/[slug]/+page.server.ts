@@ -105,6 +105,28 @@ export const actions: Actions = {
             console.error("Non è stato possibile aggiungere l'alimento.")
         } throw redirect(302, `/bolle/${params.slug}`);
     },
+    updateAlimento: async ({ request, params }) => {
+        const newData = await request.formData()
+
+        const bollaAlimentoId = newData.get("bollaAlimentoId") as string;
+        const alimentoId = newData.get("alimentoId") as string
+        const quantita = parseFloat(newData.get("quantita") as string)
+        const note = newData.get("note") as string
+
+        try {
+            await prisma.bollaAlimento.update({
+                where: { id: bollaAlimentoId },
+                data: {
+                    alimentoId: alimentoId,
+                    quantita: quantita,
+                    note: note
+                }
+            })
+        } catch (error) {
+            console.error(error);
+            console.error("Non è stato possibile aggiornare l'alimento.")
+        } throw redirect(302, `/bolle/${params.slug}`);
+    },
     eliminaAlimento: async ({ request, params }) => {
         const alimentoId = (await request.formData()).get("alimentoId") as string
 

@@ -4,12 +4,14 @@
 		type ModalSettings,
 		type PopupSettings,
 		popup,
-		SlideToggle
+		SlideToggle,
+		type ModalComponent
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import type { BollaAlimento } from '@prisma/client';
+	import BollaAlimentoForm from '$lib/BollaAlimentoForm.svelte';
 	export let data: PageData;
 
 	onMount(() => {
@@ -66,6 +68,16 @@
 		};
 	};
 
+	const confirmUpdateBollaAlimento = (alimento: BollaAlimento): ModalSettings => {
+		return {
+			type: 'component',
+			component: {
+				ref: BollaAlimentoForm,
+				props: { allAlimenti: data.allAlimenti, bollaAlimento: alimento }
+			}
+		};
+	};
+
 	const qrPopup: PopupSettings = {
 		event: 'click',
 		target: 'qrPopup',
@@ -115,7 +127,10 @@
 					{#each data.nuclei as nucleo}
 						{#if nucleo.servibile || showNoServ}
 							<option value={nucleo.id}
-								>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile ? '❌ Non servibile ❌' : ''}</option
+								>{nucleo.nome}
+								{nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile
+									? '❌ Non servibile ❌'
+									: ''}</option
 							>
 						{/if}
 					{/each}
@@ -245,21 +260,33 @@
 									<p>Quantità</p>
 									<p class="text-xl">{alimentoBolla.quantita} {alimentoBolla.alimento.unita}</p>
 								</div>
-								<form
-									action="/bolle/{data.bolla.id}?/eliminaAlimento"
-									method="POST"
-									on:submit|preventDefault={(e) => {
-										modalStore.clear();
-										modalStore.trigger(confirmDeleteBollaAlimento(e.currentTarget));
-									}}
-								>
-									<div>
-										<input type="hidden" value={alimentoBolla.id} name="alimentoId" />
-										<button type="submit" class="btn variant-filled-error w-full">
-											<iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
-										</button>
-									</div>
-								</form>
+								<div class="grid grid-cols-2 gap-2">
+									<form
+										action="/bolle/{data.bolla.id}?/eliminaAlimento"
+										method="POST"
+										on:submit|preventDefault={(e) => {
+											modalStore.clear();
+											modalStore.trigger(confirmDeleteBollaAlimento(e.currentTarget));
+										}}
+									>
+										<div>
+											<input type="hidden" value={alimentoBolla.id} name="alimentoId" />
+											<button type="submit" class="btn variant-filled-error w-full">
+												<iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
+											</button>
+										</div>
+									</form>
+									<button
+										type="button"
+										class="btn variant-filled-primary w-full"
+										on:click|preventDefault={() => {
+											modalStore.clear();
+											modalStore.trigger(confirmUpdateBollaAlimento(alimentoBolla));
+										}}
+									>
+										<iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
+									</button>
+								</div>
 								{#if alimentoBolla.note}
 									<div class="col-span-3">
 										<p>Note</p>
