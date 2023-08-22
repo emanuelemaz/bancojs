@@ -1,20 +1,21 @@
 <script lang="ts">
 	import {
 		modalStore,
-		type ModalSettings,
 		type PopupSettings,
 		popup,
 		SlideToggle,
-		type ModalComponent
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
 	import type { BollaAlimento } from '@prisma/client';
 	import BollaAlimentoForm from '$lib/BollaAlimentoForm.svelte';
+	import { applyAction, enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	export let data: PageData;
 
 	onMount(() => {
+		invalidateAll();
 		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
 			'YYYY-MM-DDTHH:mm:ss'
 		);
@@ -22,61 +23,6 @@
 
 	let showNoDist: boolean = false;
 	let showNoServ: boolean = false;
-
-	const confirmDeleteBolla = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Elimina',
-			body: `Sicuro di voler eliminare la bolla #${data.bolla.id} del nucleo <strong>${data.bolla.nucleo.nome} ${data.bolla.nucleo.cognome}</strong> (#${data.bolla.nucleo.id})?`,
-			buttonTextConfirm: 'Elimina',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
-
-	const confirmUpdateBolla = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Modifica',
-			body: `Sicuro di voler applicare le modifiche?`,
-			buttonTextConfirm: 'Modifica',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
-
-	const confirmDeleteBollaAlimento = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Elimina',
-			body: `Sicuro di voler eliminare l'alimento dalla bolla?`,
-			buttonTextConfirm: 'Elimina',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
-
-	const confirmUpdateBollaAlimento = (alimento: BollaAlimento): ModalSettings => {
-		return {
-			type: 'component',
-			component: {
-				ref: BollaAlimentoForm,
-				props: { allAlimenti: data.allAlimenti, bollaAlimento: alimento }
-			}
-		};
-	};
 
 	const qrPopup: PopupSettings = {
 		event: 'click',
@@ -107,10 +53,28 @@
 	<form
 		class="form"
 		method="POST"
-		action="/bolle/{data.bolla.id}?/modifica"
-		on:submit|preventDefault={(e) => {
+		action="?/modifica"
+		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 			modalStore.clear();
-			modalStore.trigger(confirmUpdateBolla(e.currentTarget));
+
+			const doCancelPromise = new Promise((resolve) =>
+				modalStore.trigger({
+					type: 'confirm',
+					title: 'Modifica',
+					body: `Sicuro di voler applicare le modifiche?`,
+					buttonTextConfirm: 'Modifica',
+					buttonTextCancel: 'Annulla',
+					response: (r) => resolve(!r)
+				})
+			);
+
+			if (await doCancelPromise) {
+				cancel();
+			}
+
+			return async ({ result }) => {
+				await applyAction(result);
+			};
 		}}
 	>
 		<h2 class="h2">Beneficiario</h2>
@@ -178,10 +142,28 @@
 				<form
 					class="form"
 					method="POST"
-					action="/bolle/{data.bolla.id}?/elimina"
-					on:submit|preventDefault={(e) => {
+					action="?/elimina"
+					use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 						modalStore.clear();
-						modalStore.trigger(confirmDeleteBolla(e.currentTarget));
+
+						const doCancelPromise = new Promise((resolve) =>
+							modalStore.trigger({
+								type: 'confirm',
+								title: 'Elimina',
+								body: `Sicuro di voler eliminare la bolla #${data.bolla.id} del nucleo <strong>${data.bolla.nucleo.nome} ${data.bolla.nucleo.cognome}</strong> (#${data.bolla.nucleo.id})?`,
+								buttonTextConfirm: 'Elimina',
+								buttonTextCancel: 'Annulla',
+								response: (r) => resolve(!r)
+							})
+						);
+
+						if (await doCancelPromise) {
+							cancel();
+						}
+
+						return async ({ result, update }) => {
+							await applyAction(result);
+						};
 					}}
 				>
 					<button type="submit" class="btn variant-filled-error">
@@ -200,7 +182,7 @@
 				>
 			</div>
 			<div class="my-4">
-				<form action="/bolle/{data.bolla.id}?/aggiungiAlimento" method="POST">
+				<form action="?/aggiungiAlimento" method="POST" use:enhance>
 					<div class="grid grid-cols-2 gap-4 my-2">
 						<label class="label">
 							<span>Alimento</span>
@@ -262,11 +244,29 @@
 								</div>
 								<div class="grid grid-cols-2 gap-2">
 									<form
-										action="/bolle/{data.bolla.id}?/eliminaAlimento"
+										action="?/eliminaAlimento"
 										method="POST"
-										on:submit|preventDefault={(e) => {
+										use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 											modalStore.clear();
-											modalStore.trigger(confirmDeleteBollaAlimento(e.currentTarget));
+
+											const doCancelPromise = new Promise((resolve) =>
+												modalStore.trigger({
+													type: 'confirm',
+													title: 'Elimina',
+													body: `Sicuro di voler eliminare l'alimento dalla bolla?`,
+													buttonTextConfirm: 'Elimina',
+													buttonTextCancel: 'Annulla',
+													response: (r) => resolve(!r)
+												})
+											);
+
+											if (await doCancelPromise) {
+												cancel();
+											}
+
+											return async ({ update }) => {
+												await update()
+											};
 										}}
 									>
 										<div>
@@ -281,7 +281,13 @@
 										class="btn variant-filled-primary w-full"
 										on:click|preventDefault={() => {
 											modalStore.clear();
-											modalStore.trigger(confirmUpdateBollaAlimento(alimentoBolla));
+											modalStore.trigger({
+												type: 'component',
+												component: {
+													ref: BollaAlimentoForm,
+													props: { allAlimenti: data.allAlimenti, bollaAlimento: alimentoBolla }
+												}
+											});
 										}}
 									>
 										<iconify-icon icon="mdi:edit" class="text-xl" /> Modifica

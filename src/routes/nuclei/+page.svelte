@@ -2,14 +2,19 @@
 	import Nucleo from '$lib/Nucleo.svelte';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
-	import moment from 'moment-timezone';
-	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
+	import { enhance } from '$app/forms';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
 	let servSlide: boolean;
 
+	onMount(() => {
+		invalidateAll();
+	});
+	
 	function resetAllInputs() {
 		var inputs = <HTMLCollectionOf<HTMLInputElement>>(
 			document.getElementsByClassName('search-input')

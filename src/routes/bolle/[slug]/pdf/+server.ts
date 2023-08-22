@@ -97,11 +97,20 @@ export async function GET({ url, params }) {
             { text: "Stampato il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n", absolutePosition: { x: 15, y: 91 } },
             { svg: qrID, alignment: 'center', absolutePosition: { x: 420, y: 15 } },
             { text: "BOLLA DI DISTRIBUZIONE ALIMENTARE\n", fontSize: 14, bold: true, alignment: 'center' },
-            { text: [{ text: "Nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ` (${nucleo.nome} ${nucleo.cognome})` }], alignment: 'center', margin: [0, 2, 0, 0] },
             {
-                text: [{ text: "Bolla: " }, { text: "#" + bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }, {
-                    text: " (" + moment(bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss") + ")"
-                }], alignment: 'center', margin: [0, 0, 0, 4]
+                text: [{ text: "Nucleo: " },
+                { text: `${nucleo.nome} ${nucleo.cognome} (` },
+                { text: nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ")" }],
+                alignment: 'center', margin: [0, 2, 0, 0]
+            },
+            {
+                text: [{ text: "Bolla: " },
+                {
+                    text: moment(bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss") + " ("
+                },
+                { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' },
+                { text: ")" }
+                ], alignment: 'center', margin: [0, 0, 0, 4]
             },
             {
                 table: {

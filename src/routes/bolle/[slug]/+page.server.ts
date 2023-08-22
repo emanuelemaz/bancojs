@@ -70,7 +70,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiornare la bolla.")
-        } throw redirect(302, "/bolle");
+        }
     },
     elimina: async ({ params }) => {
         try {
@@ -82,7 +82,8 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile eliminare il nucleo.")
-        } throw redirect(302, "/bolle");
+        }
+        throw redirect(302, "/bolle")
     },
     aggiungiAlimento: async ({ request, params }) => {
         const newData = await request.formData()
@@ -125,7 +126,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiornare l'alimento.")
-        } throw redirect(302, `/bolle/${params.slug}`);
+        }
     },
     eliminaAlimento: async ({ request, params }) => {
         const alimentoId = (await request.formData()).get("alimentoId") as string
@@ -139,6 +140,6 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile eliminare l'alimento.")
-        } throw redirect(302, `/bolle/${params.slug}`);
+        }
     }
 }

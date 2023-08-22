@@ -37,7 +37,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiornare l'alimento.")
-        } throw redirect(302, "/alimenti");
+        }
     },
     elimina: async ({ params }) => {
         try {

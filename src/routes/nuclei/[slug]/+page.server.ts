@@ -57,7 +57,6 @@ export const actions: Actions = {
             console.error(error);
             console.error("Non è stato possibile aggiornare il nucleo.")
         }
-        throw redirect(302, '/nuclei')
     },
     elimina: async ({ params }) => {
         try {

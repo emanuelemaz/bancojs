@@ -92,7 +92,11 @@ export async function filterBolla(url: URL) {
 }
 
 export async function filterAlimento(url: URL) {
-    let alimenti = await prisma.alimento.findMany();
+    let alimenti = await prisma.alimento.findMany({
+        orderBy: [
+            { nome: 'asc' },
+        ]
+    });
 
     if (alimenti) {
         let nome = url.searchParams.get("nome") as string;

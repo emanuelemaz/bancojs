@@ -3,43 +3,13 @@
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import { applyAction, enhance } from '$app/forms';
 	export let data: PageData;
 
-	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Elimina',
-			body: `Sicuro di voler eliminare l'alimento?`,
-			buttonTextConfirm: 'Elimina',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
-
-	const confirmUpdate = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Modifica',
-			body: `Sicuro di voler applicare le modifiche?`,
-			buttonTextConfirm: 'Modifica',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
-
 	onMount(() => {
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.alimento.scadenza).format(
-			'YYYY-MM-DD'
-		);
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(
+			data.alimento.scadenza
+		).format('YYYY-MM-DD');
 	});
 </script>
 
@@ -65,10 +35,28 @@
 	<form
 		class="form"
 		method="POST"
-		action="/alimenti/{data.alimento.id}?/modifica"
-		on:submit|preventDefault={(e) => {
+		action="?/modifica"
+		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 			modalStore.clear();
-			modalStore.trigger(confirmUpdate(e.currentTarget));
+
+			const doCancelPromise = new Promise((resolve) =>
+				modalStore.trigger({
+					type: 'confirm',
+					title: 'Modifica',
+					body: `Sicuro di voler applicare le modifiche?`,
+					buttonTextConfirm: 'Modifica',
+					buttonTextCancel: 'Annulla',
+					response: (r) => resolve(!r)
+				})
+			);
+
+			if (await doCancelPromise) {
+				cancel();
+			}
+
+			return async ({ result }) => {
+				await applyAction(result);
+			};
 		}}
 	>
 		<div class="grid grid-cols-3 gap-4 my-4">
@@ -82,23 +70,20 @@
 			</label>
 			<label class="label">
 				<span>Data di scadenza</span>
-				<input
-					class="input p-2"
-					type="date"
-					name="scadenza"
-					id="dataInput"
-				/>
+				<input class="input p-2" type="date" name="scadenza" id="dataInput" />
 			</label>
 		</div>
 		<div class="grid grid-cols-3 gap-4 my-4">
-			<SlideToggle checked={data.alimento.distribuibile} name="distribuibile">Distribuibile</SlideToggle>
+			<SlideToggle checked={data.alimento.distribuibile} name="distribuibile"
+				>Distribuibile</SlideToggle
+			>
 		</div>
 		<label class="mt-4 label">
 			<span>Note</span>
 			<textarea class="input textarea p-2" name="note" value={data.alimento.note} />
 		</label>
 		<div class="mt-4 flex justify-between">
-			<div >
+			<div>
 				<button type="submit" class="btn variant-filled-primary"
 					><iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
 				</button>
@@ -111,9 +96,27 @@
 					class="form"
 					method="POST"
 					action="/alimenti/{data.alimento.id}?/elimina"
-					on:submit|preventDefault={(e) => {
+					use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 						modalStore.clear();
-						modalStore.trigger(confirmDelete(e.currentTarget));
+
+						const doCancelPromise = new Promise((resolve) =>
+							modalStore.trigger({
+								type: 'confirm',
+								title: 'Elimina',
+								body: `Sicuro di voler eliminare l'alimento?`,
+								buttonTextConfirm: 'Elimina',
+								buttonTextCancel: 'Annulla',
+								response: (r) => resolve(!r)
+							})
+						);
+
+						if (await doCancelPromise) {
+							cancel();
+						}
+
+						return async ({ result, update }) => {
+							await applyAction(result);
+						};
 					}}
 				>
 					<button type="submit" class="btn variant-filled-error">

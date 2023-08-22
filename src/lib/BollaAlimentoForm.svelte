@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import type { Alimento, BollaAlimento } from '@prisma/client';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import { modalStore } from '@skeletonlabs/skeleton';
@@ -18,7 +19,16 @@
 			>Mostra alimenti non distribuibili</SlideToggle
 		>
 	</div>
-	<form action="/bolle/{bollaAlimento.bollaId}?/updateAlimento" method="post">
+	<form
+		action="/bolle/{bollaAlimento.bollaId}?/updateAlimento"
+		method="post"
+		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
+			return async ({ update }) => {
+				await update();
+				modalStore.close()
+			};
+		}}
+	>
 		<input type="hidden" name="bollaAlimentoId" value={bollaAlimento.id} />
 		<div class="grid grid-cols-2 gap-4 my-2">
 			<label class="label">
@@ -70,12 +80,14 @@
 			/>
 		</label>
 		<div class="flex justify-end gap-2">
-			<button type="button" on:click={() => modalStore.close()} class="btn variant-ghost-surface mt-4">
+			<button
+				type="button"
+				on:click={() => modalStore.close()}
+				class="btn variant-ghost-surface mt-4"
+			>
 				Annulla
 			</button>
-			<button type="submit" class="btn variant-filled-warning mt-4">
-				Modifica
-			</button>
+			<button type="submit" class="btn variant-filled-warning mt-4"> Modifica </button>
 		</div>
 	</form>
 </div>

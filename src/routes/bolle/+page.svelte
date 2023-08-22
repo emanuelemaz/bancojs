@@ -1,9 +1,13 @@
 <script lang="ts">
 	import Bolla from '$lib/Bolla.svelte';
-	import moment from 'moment-timezone';
 	import type { PageData } from './$types';
-	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 	export let data: PageData;
+
+	onMount(() => {
+		invalidateAll();
+	})
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;

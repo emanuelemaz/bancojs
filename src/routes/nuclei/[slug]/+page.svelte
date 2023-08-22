@@ -9,45 +9,23 @@
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
 	import moment from 'moment-timezone';
-	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
+	import { applyAction, enhance } from '$app/forms';
 	export let data: PageData;
+
+	onMount(() => {
+		invalidateAll();
+	});
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
 	function maxBambini() {
-		bambini.value > componenti.value ? bambini.valueAsNumber = componenti.valueAsNumber : bambini.value = bambini.value
+		bambini.value > componenti.value
+			? (bambini.valueAsNumber = componenti.valueAsNumber)
+			: (bambini.value = bambini.value);
 		bambini.max = componenti.value;
 	}
-
-	const confirmDelete = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Elimina',
-			body: `Sicuro di voler eliminare il nucleo ${data.nucleo.nome} ${data.nucleo.cognome} (#${data.nucleo.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
-			buttonTextConfirm: 'Elimina',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
-
-	const confirmUpdate = (form: HTMLFormElement): ModalSettings => {
-		return {
-			type: 'confirm',
-			title: 'Modifica',
-			body: `Sicuro di voler applicare le modifiche?`,
-			buttonTextConfirm: 'Modifica',
-			buttonTextCancel: 'Annulla',
-			response: (r: boolean) => {
-				if (r) {
-					form.submit();
-				}
-			}
-		};
-	};
 
 	const qrPopup: PopupSettings = {
 		event: 'click',
@@ -76,10 +54,28 @@
 	<form
 		class="form"
 		method="POST"
-		action="/nuclei/{data.nucleo.id}?/modifica"
-		on:submit|preventDefault={(e) => {
+		action="?/modifica"
+		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 			modalStore.clear();
-			modalStore.trigger(confirmUpdate(e.currentTarget));
+
+			const doCancelPromise = new Promise((resolve) =>
+				modalStore.trigger({
+					type: 'confirm',
+					title: 'Modifica',
+					body: `Sicuro di voler applicare le modifiche?`,
+					buttonTextConfirm: 'Modifica',
+					buttonTextCancel: 'Annulla',
+					response: (r) => resolve(!r)
+				})
+			);
+
+			if (await doCancelPromise) {
+				cancel();
+			}
+
+			return async ({ result }) => {
+				await applyAction(result);
+			};
 		}}
 	>
 		<input type="hidden" name="id" value={data.nucleo.id} />
@@ -185,10 +181,28 @@
 				<form
 					class="form"
 					method="POST"
-					action="/nuclei/{data.nucleo.id}?/elimina"
-					on:submit|preventDefault={(e) => {
+					action="?/elimina"
+					use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 						modalStore.clear();
-						modalStore.trigger(confirmDelete(e.currentTarget));
+
+						const doCancelPromise = new Promise((resolve) =>
+							modalStore.trigger({
+								type: 'confirm',
+								title: 'Elimina',
+								body: `Sicuro di voler eliminare il nucleo ${data.nucleo.nome} ${data.nucleo.cognome} (#${data.nucleo.id})? Tutte le bolle relative al nucleo verranno eliminate.`,
+								buttonTextConfirm: 'Elimina',
+								buttonTextCancel: 'Annulla',
+								response: (r) => resolve(!r)
+							})
+						);
+
+						if (await doCancelPromise) {
+							cancel();
+						}
+
+						return async ({ result, update }) => {
+							await applyAction(result);
+						};
 					}}
 				>
 					<button type="submit" class="btn variant-filled-error"
