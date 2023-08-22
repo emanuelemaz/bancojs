@@ -49,14 +49,14 @@ export async function GET({ url, params }) {
                 if (displayNotes) {
                     tblBody.push(
                         [
-                            cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), bolla.alimenti[i].note ? cCell(bolla.alimenti[i].note as string) : cCell(""),
-                            cCell(bolla.alimenti[i + 1].alimento.nome), cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita), bolla.alimenti[i + 1].note ? cCell(bolla.alimenti[i + 1].note as string) : cCell("")]
+                            { text: bolla.alimenti[i].alimento.nome, link: BASE_URL + "/alimenti/" + bolla.alimenti[i].alimentoId, alignment: 'center' }, cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), bolla.alimenti[i].note ? cCell(bolla.alimenti[i].note as string) : cCell(""),
+                            { text: bolla.alimenti[i + 1].alimento.nome, link: BASE_URL + "/alimenti/" + bolla.alimenti[i + 1].alimentoId, alignment: 'center' }, cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita), bolla.alimenti[i + 1].note ? cCell(bolla.alimenti[i + 1].note as string) : cCell("")]
                     )
                 } else {
                     tblBody.push(
                         [
-                            cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita),
-                            cCell(bolla.alimenti[i + 1].alimento.nome), cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita)]
+                            { text: bolla.alimenti[i].alimento.nome, link: BASE_URL + "/alimenti/" + bolla.alimenti[i].alimentoId, alignment: 'center' }, cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita),
+                            { text: bolla.alimenti[i + 1].alimento.nome, link: BASE_URL + "/alimenti/" + bolla.alimenti[i + 1].alimentoId, alignment: 'center' }, cCell(bolla.alimenti[i + 1].quantita.toString() + " " + bolla.alimenti[i + 1].alimento.unita)]
                     )
                 }
             }
@@ -64,11 +64,11 @@ export async function GET({ url, params }) {
             if (i % 2 == 0) {
                 if (displayNotes) {
                     tblBody.push(
-                        [cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), bolla.alimenti[i].note ? cCell(bolla.alimenti[i].note as string) : cCell(""), cCell("///"), cCell("///"), cCell("///")]
+                        [{ text: bolla.alimenti[i].alimento.nome, link: BASE_URL + "/alimenti/" + bolla.alimenti[i].alimentoId, alignment: 'center' }, cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), bolla.alimenti[i].note ? cCell(bolla.alimenti[i].note as string) : cCell(""), cCell("///"), cCell("///"), cCell("///")]
                     )
                 } else {
                     tblBody.push(
-                        [cCell(bolla.alimenti[i].alimento.nome), cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), cCell("///"), cCell("///")]
+                        [{ text: bolla.alimenti[i].alimento.nome, link: BASE_URL + "/alimenti/" + bolla.alimenti[i].alimentoId, alignment: 'center' }, cCell(bolla.alimenti[i].quantita.toString() + " " + bolla.alimenti[i].alimento.unita), cCell("///"), cCell("///")]
                     )
 
                 }

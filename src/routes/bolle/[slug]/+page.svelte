@@ -234,6 +234,7 @@
 									timeout: 2500
 								});
 							}
+							alimentoInput.focus();
 						};
 					}}
 				>
@@ -342,7 +343,6 @@
 														background: 'variant-filled-success',
 														timeout: 2500
 													});
-													alimentoInput.focus();
 												} else {
 													toastStore.trigger({
 														message: "Non è stato possibile eliminare l'alimento.",
@@ -350,6 +350,7 @@
 														timeout: 2500
 													});
 												}
+												alimentoInput.focus();
 											};
 										}}
 									>
