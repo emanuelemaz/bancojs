@@ -75,12 +75,14 @@
 			}
 
 			return async ({ result }) => {
-				await applyAction(result);
-				toastStore.trigger({
-					message: 'Modifiche applicate con successo.',
-					background: 'variant-filled-success',
-					timeout: 2500
-				});
+				if (result.type === 'success') {
+					await applyAction(result);
+					toastStore.trigger({
+						message: 'Modifiche applicate con successo.',
+						background: 'variant-filled-success',
+						timeout: 2500
+					});
+				}
 			};
 		}}
 	>
@@ -207,13 +209,14 @@
 						}
 
 						return async ({ result }) => {
-							await applyAction(result);
-
-							toastStore.trigger({
-								message: 'Nucleo eliminato con successo.',
-								background: 'variant-filled-success',
-								timeout: 2500
-							});
+							if (result.type === 'success' || result.type === 'redirect') {
+								await applyAction(result);
+								toastStore.trigger({
+									message: 'Nucleo eliminato con successo.',
+									background: 'variant-filled-success',
+									timeout: 2500
+								});
+							}
 						};
 					}}
 				>

@@ -23,12 +23,14 @@
 		action="?/aggiungi"
 		use:enhance={() => {
 			return async ({ result }) => {
-				await applyAction(result);
-				toastStore.trigger({
-					message: 'Nucleo creato con successo.',
-					background: 'variant-filled-success',
-					timeout: 2500
-				});
+				if (result.type === 'success' || result.type === 'redirect') {
+					await applyAction(result);
+					toastStore.trigger({
+						message: 'Nucleo creato con successo.',
+						background: 'variant-filled-success',
+						timeout: 2500
+					});
+				}
 			};
 		}}
 	>

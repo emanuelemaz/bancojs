@@ -18,6 +18,8 @@
 	import { storePopup } from '@skeletonlabs/skeleton';
 	import { autoModeWatcher } from '@skeletonlabs/skeleton';
 	import 'iconify-icon';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
@@ -27,13 +29,23 @@
 		});
 	}
 
+	function keyBinds(event: KeyboardEvent) {
+		let currentRoute = $page.url.pathname
+		if (currentRoute.includes("/alimenti/") && !currentRoute.includes("nuovo") && currentRoute !== "/alimenti") {
+			if (event.shiftKey && event.key.toLowerCase() === "n") {
+				event.preventDefault()
+				goto("/alimenti/nuovo")
+			}
+		}
+	}
+
 	$: positionClasses = $drawerStore.open ? 'translate-x-[50%]' : '';
 </script>
 
+<svelte:window on:keydown={(e) => keyBinds(e)} />
 <svelte:head
 	>{@html `<script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
 </svelte:head>
-
 <Modal buttonPositive="variant-filled-warning" />
 <Toast />
 <Drawer>

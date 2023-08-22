@@ -21,6 +21,7 @@
 		action="?/aggiungi"
 		use:enhance={() => {
 			return async ({ result }) => {
+				if (result.type === 'success' || result.type === 'redirect')
 				await applyAction(result);
 				toastStore.trigger({
 					message: 'Bolla creata con successo.',

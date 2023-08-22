@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -70,6 +70,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiornare la bolla.")
+            return fail(400)
         }
     },
     elimina: async ({ params }) => {
@@ -82,6 +83,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile eliminare il nucleo.")
+            return fail(400)
         }
         throw redirect(302, "/bolle")
     },
@@ -104,7 +106,8 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiungere l'alimento.")
-        } throw redirect(302, `/bolle/${params.slug}`);
+            return fail(400)
+        }
     },
     updateAlimento: async ({ request, params }) => {
         const newData = await request.formData()
@@ -126,6 +129,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile aggiornare l'alimento.")
+            return fail(400)
         }
     },
     eliminaAlimento: async ({ request, params }) => {
@@ -140,6 +144,7 @@ export const actions: Actions = {
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile eliminare l'alimento.")
+            return fail(400)
         }
     }
 }

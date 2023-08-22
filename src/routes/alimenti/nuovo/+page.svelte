@@ -13,12 +13,14 @@
 		action="?/aggiungi"
 		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 			return async ({ result, update }) => {
-				await applyAction(result);
-				toastStore.trigger({
-					message: 'Alimento aggiunto con successo.',
-					background: 'variant-filled-success',
-					timeout: 2500
-				});
+				if (result.type === 'success' || result.type === 'redirect') {
+					await applyAction(result);
+					toastStore.trigger({
+						message: 'Alimento aggiunto con successo.',
+						background: 'variant-filled-success',
+						timeout: 2500
+					});
+				}
 			};
 		}}
 	>

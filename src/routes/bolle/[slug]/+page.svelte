@@ -11,14 +11,20 @@
 	import { onMount } from 'svelte';
 	import BollaAlimentoForm from '$lib/BollaAlimentoForm.svelte';
 	import { applyAction, enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
 	export let data: PageData;
 
+	let alimentoInput: HTMLSelectElement;
 	onMount(() => {
 		invalidateAll();
 		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
 			'YYYY-MM-DDTHH:mm:ss'
 		);
+		alimentoInput.focus();
+	});
+
+	afterNavigate(() => {
+		alimentoInput.focus();
 	});
 
 	let showNoDist: boolean = false;
@@ -73,12 +79,20 @@
 			}
 
 			return async ({ result }) => {
-				await applyAction(result);
-				toastStore.trigger({
-					message: 'Bolla modificata con successo.',
-					background: 'variant-filled-success',
-					timeout: 2500
-				});
+				if (result.type === 'success') {
+					await applyAction(result);
+					toastStore.trigger({
+						message: 'Bolla modificata con successo.',
+						background: 'variant-filled-success',
+						timeout: 2500
+					});
+				} else {
+					toastStore.trigger({
+						message: 'Non è stato possibile modificare la bolla.',
+						background: 'variant-filled-error',
+						timeout: 2500
+					});
+				}
 			};
 		}}
 	>
@@ -165,13 +179,21 @@
 						if (await doCancelPromise) {
 							cancel();
 						}
-						return async ({ result, update }) => {
-							await applyAction(result);
-							toastStore.trigger({
-								message: 'Bolla eliminata con successo.',
-								background: 'variant-filled-success',
-								timeout: 2500
-							});
+						return async ({ result }) => {
+							if (result.type === 'success' || result.type === 'redirect') {
+								await applyAction(result);
+								toastStore.trigger({
+									message: 'Bolla eliminata con successo.',
+									background: 'variant-filled-success',
+									timeout: 2500
+								});
+							} else {
+								toastStore.trigger({
+									message: 'Non è stato possibile eliminare la bolla.',
+									background: 'variant-filled-error',
+									timeout: 2500
+								});
+							}
 						};
 					}}
 				>
@@ -195,20 +217,30 @@
 					action="?/aggiungiAlimento"
 					method="POST"
 					use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
-						return async ({ result, update }) => {
-							await applyAction(result);
-							toastStore.trigger({
-								message: 'Alimento aggiunto con successo.',
-								background: 'variant-filled-success',
-								timeout: 2500
-							});
+						return async ({ update, result }) => {
+							if (result.type === 'success') {
+								await update();
+								toastStore.trigger({
+									message: 'Alimento aggiunto con successo.',
+									background: 'variant-filled-success',
+									timeout: 2500
+								});
+								formElement.reset();
+							} else {
+								toastStore.trigger({
+									message:
+										"Non è stato possibile aggiungere l'alimento (probabilmente esiste già).",
+									background: 'variant-filled-error',
+									timeout: 2500
+								});
+							}
 						};
 					}}
 				>
 					<div class="grid grid-cols-2 gap-4 my-2">
 						<label class="label">
 							<span>Alimento</span>
-							<select name="alimentoId" class="select" required>
+							<select name="alimentoId" class="select" required bind:this={alimentoInput}>
 								{#each data.allAlimenti as alimento}
 									{#if alimento.distribuibile || showNoDist}
 										<option value={alimento.id}>
@@ -302,13 +334,22 @@
 												cancel();
 											}
 
-											return async ({ update }) => {
-												await update();
-												toastStore.trigger({
-													message: 'Alimento eliminato con successo.',
-													background: 'variant-filled-success',
-													timeout: 2500
-												});
+											return async ({ update, result }) => {
+												if (result.type === 'success') {
+													await update();
+													toastStore.trigger({
+														message: 'Alimento eliminato con successo.',
+														background: 'variant-filled-success',
+														timeout: 2500
+													});
+													alimentoInput.focus();
+												} else {
+													toastStore.trigger({
+														message: "Non è stato possibile eliminare l'alimento.",
+														background: 'variant-filled-error',
+														timeout: 2500
+													});
+												}
 											};
 										}}
 									>

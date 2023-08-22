@@ -16,7 +16,7 @@ model Bolla {
   nucleo    Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
   data      DateTime
   note      String?
-  alimenti  BollaAlimento[]
+  alimenti  BollaAlimento[] 
   nucleoId  String          @db.ObjectId
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
@@ -32,6 +32,8 @@ model BollaAlimento {
   note       String?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+
+  @@unique([bollaId, alimentoId])
 }
 
 model Nucleo {

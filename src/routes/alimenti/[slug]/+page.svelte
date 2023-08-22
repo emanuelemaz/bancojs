@@ -26,6 +26,7 @@
 	};
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="container mx-auto p-8 space-y-8">
 	<div class="flex w-full justify-between">
 		<div>
@@ -66,12 +67,14 @@
 			}
 
 			return async ({ result }) => {
-				await applyAction(result);
-				toastStore.trigger({
-					message: 'Alimento modificato con successo.',
-					background: 'variant-filled-success',
-					timeout: 2500
-				});
+				if (result.type === 'success') {
+					await applyAction(result);
+					toastStore.trigger({
+						message: 'Alimento modificato con successo.',
+						background: 'variant-filled-success',
+						timeout: 2500
+					});
+				}
 			};
 		}}
 	>
@@ -107,6 +110,9 @@
 					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
+			<a class="m-0 btn variant-filled-primary" href="/alimenti/nuovo"
+				><iconify-icon icon="mdi:add" class="text-xl" />Aggiungi nuovo (SHIFT+N)</a
+			>
 			<div>
 				<form
 					class="form"
@@ -131,12 +137,14 @@
 						}
 
 						return async ({ result, update }) => {
-							await applyAction(result);
-							toastStore.trigger({
-								message: 'Alimento eliminato con successo.',
-								background: 'variant-filled-success',
-								timeout: 2500
-							});
+							if (result.type === 'success' || result.type === 'redirect') {
+								await applyAction(result);
+								toastStore.trigger({
+									message: 'Alimento eliminato con successo.',
+									background: 'variant-filled-success',
+									timeout: 2500
+								});
+							}
 						};
 					}}
 				>

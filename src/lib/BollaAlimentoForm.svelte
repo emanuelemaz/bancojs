@@ -23,14 +23,16 @@
 		action="/bolle/{bollaAlimento.bollaId}?/updateAlimento"
 		method="post"
 		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
-			return async ({ update }) => {
-				await update();
+			return async ({ update, result }) => {
 				modalStore.close();
-				toastStore.trigger({
-					message: 'Alimento modificato con successo.',
-					background: 'variant-filled-success',
-					timeout: 2500
-				});
+				if (result.type !== 'error' && result.type !== 'failure') {
+					await update();
+					toastStore.trigger({
+						message: 'Alimento modificato con successo.',
+						background: 'variant-filled-success',
+						timeout: 2500
+					});
+				}
 			};
 		}}
 	>
