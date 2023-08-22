@@ -4,7 +4,8 @@
 		type ModalSettings,
 		type PopupSettings,
 		popup,
-		SlideToggle
+		SlideToggle,
+		toastStore
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import Bolla from '$lib/Bolla.svelte';
@@ -75,6 +76,11 @@
 
 			return async ({ result }) => {
 				await applyAction(result);
+				toastStore.trigger({
+					message: 'Modifiche applicate con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
 			};
 		}}
 	>
@@ -200,8 +206,14 @@
 							cancel();
 						}
 
-						return async ({ result, update }) => {
+						return async ({ result }) => {
 							await applyAction(result);
+
+							toastStore.trigger({
+								message: 'Nucleo eliminato con successo.',
+								background: 'variant-filled-success',
+								timeout: 2500
+							});
 						};
 					}}
 				>

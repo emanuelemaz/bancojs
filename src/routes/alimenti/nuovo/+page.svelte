@@ -1,14 +1,27 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
-	import { SlideToggle } from "@skeletonlabs/skeleton";
-	import moment from "moment-timezone";
+	import { applyAction, enhance } from '$app/forms';
+	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 
 	let servSlide: boolean = true;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nuovo alimento</h1>
-	<form class="form" method="POST" action="/alimenti/nuovo?/aggiungi">
+	<form
+		class="form"
+		method="POST"
+		action="?/aggiungi"
+		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
+			return async ({ result, update }) => {
+				await applyAction(result);
+				toastStore.trigger({
+					message: 'Alimento aggiunto con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
+			};
+		}}
+	>
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">
 				<span>Nome</span>

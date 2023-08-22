@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 	import moment from 'moment-timezone';
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
@@ -20,12 +20,15 @@
 	<form
 		class="form"
 		method="POST"
-		action="/nuclei/nuovo?/aggiungi"
+		action="?/aggiungi"
 		use:enhance={() => {
 			return async ({ result }) => {
-				if (result.type === 'success') {
-					goto('/nuclei');
-				}
+				await applyAction(result);
+				toastStore.trigger({
+					message: 'Nucleo creato con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
 			};
 		}}
 	>

@@ -2,12 +2,21 @@ import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
 
-import moment from 'moment';
+import QRCode from 'qrcode';
+import moment from 'moment-timezone';
+import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params }) => {
-    const alimenti = await prisma.alimento.findUniqueOrThrow({ where: { id: params.slug } })
-
-    return { alimento: alimenti };
+    const alimento = await prisma.alimento.findUniqueOrThrow({ where: { id: params.slug } })
+    
+    const qrID = (await QRCode.toString(`${BASE_URL}/alimenti/${alimento.id}`, {
+        type: 'svg', color: {
+            dark: '#FFFF',
+            light: '#0000'
+        }, margin: 0
+    }))
+    
+    return { alimento: alimento, qrID: qrID };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

@@ -1,5 +1,7 @@
+import type { Nucleo } from '@prisma/client';
 import prisma from '../../../../prisma/prisma';
 import type { Actions } from './$types';
+import { redirect } from '@sveltejs/kit';
 
 export const actions: Actions = {
     aggiungi: async ({ request }) => {
@@ -16,8 +18,9 @@ export const actions: Actions = {
         const note = newData.get("note") as string | null;
         let servibile = newData.has("servibile") ? true : false;
 
+        var newNucleo: Nucleo | null = null;
         try {
-            await prisma.nucleo.create({
+            newNucleo = await prisma.nucleo.create({
                 data: {
                     nome: nome,
                     cognome: cognome,
@@ -30,11 +33,13 @@ export const actions: Actions = {
                     servibile: servibile,
                     note: note
                 }
-            });
+            }) || null;
         } catch (error) {
             console.error(error);
             console.error("Non è stato possibile creare il nucleo.")
         }
-
+        if (newNucleo) {
+            throw redirect(302, newNucleo.id)
+        }
     },
 }

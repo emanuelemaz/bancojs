@@ -6,6 +6,7 @@ import moment from 'moment-timezone'
 import QRCode from 'qrcode';
 import { get } from 'svelte/store';
 import tz from '$lib/stores';
+import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params }) => {
     const bolla = await prisma.bolla.findUniqueOrThrow({
@@ -35,13 +36,12 @@ export const load = (async ({ params }) => {
         }
     });
 
-    const qrID = (await QRCode.toString(`bolle/${bolla.id}`, {
+    const qrID = (await QRCode.toString(`${BASE_URL}/bolle/${bolla.id}`, {
         type: 'svg', color: {
             dark: '#FFFF',
             light: '#0000'
         }, margin: 0
     }))
-
 
     return { bolla: bolla, nuclei: nuclei, alimenti: bolla.alimenti, allAlimenti: alimenti, qrID: qrID };
 }) satisfies PageServerLoad;

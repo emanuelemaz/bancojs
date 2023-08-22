@@ -4,11 +4,11 @@
 		type PopupSettings,
 		popup,
 		SlideToggle,
+		toastStore
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
-	import type { BollaAlimento } from '@prisma/client';
 	import BollaAlimentoForm from '$lib/BollaAlimentoForm.svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
@@ -74,6 +74,11 @@
 
 			return async ({ result }) => {
 				await applyAction(result);
+				toastStore.trigger({
+					message: 'Bolla modificata con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
 			};
 		}}
 	>
@@ -160,9 +165,13 @@
 						if (await doCancelPromise) {
 							cancel();
 						}
-
 						return async ({ result, update }) => {
 							await applyAction(result);
+							toastStore.trigger({
+								message: 'Bolla eliminata con successo.',
+								background: 'variant-filled-success',
+								timeout: 2500
+							});
 						};
 					}}
 				>
@@ -182,7 +191,20 @@
 				>
 			</div>
 			<div class="my-4">
-				<form action="?/aggiungiAlimento" method="POST" use:enhance>
+				<form
+					action="?/aggiungiAlimento"
+					method="POST"
+					use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
+						return async ({ result, update }) => {
+							await applyAction(result);
+							toastStore.trigger({
+								message: 'Alimento aggiunto con successo.',
+								background: 'variant-filled-success',
+								timeout: 2500
+							});
+						};
+					}}
+				>
 					<div class="grid grid-cols-2 gap-4 my-2">
 						<label class="label">
 							<span>Alimento</span>
@@ -265,7 +287,12 @@
 											}
 
 											return async ({ update }) => {
-												await update()
+												await update();
+												toastStore.trigger({
+													message: 'Alimento eliminato con successo.',
+													background: 'variant-filled-success',
+													timeout: 2500
+												});
 											};
 										}}
 									>

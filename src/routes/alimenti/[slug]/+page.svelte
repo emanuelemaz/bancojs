@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { modalStore, type ModalSettings, SlideToggle } from '@skeletonlabs/skeleton';
+	import {
+		modalStore,
+		type ModalSettings,
+		SlideToggle,
+		toastStore,
+		type PopupSettings,
+		popup
+	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
@@ -11,26 +18,30 @@
 			data.alimento.scadenza
 		).format('YYYY-MM-DD');
 	});
+
+	const qrPopup: PopupSettings = {
+		event: 'click',
+		target: 'qrPopup',
+		placement: 'bottom'
+	};
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
-	<h1 class="h1 mb-0">
-		Alimento: {data.alimento.nome}
-		<span class="font-mono">#{data.alimento.id}</span>
-	</h1>
-	<div class="!mt-0">
-		<i
-			>Creato in data {new Date(
-				parseInt(data.alimento.id.slice(0, 8), 16) * 1000
-			).toLocaleDateString('it-IT', {
-				day: '2-digit',
-				month: '2-digit',
-				year: 'numeric',
-				hour: '2-digit',
-				minute: '2-digit',
-				second: '2-digit'
-			})}</i
-		>
+	<div class="flex w-full justify-between">
+		<div>
+			<h1 class="h1">
+				Alimento <span
+					class="font-mono btn variant-filled p-2 text-xl align-middle"
+					use:popup={qrPopup}>#{data.alimento.id}</span
+				>
+			</h1>
+			<div>
+				<i>Creato in data {moment(data.alimento.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
+			</div>
+		</div>
+		<div class="card qr p-6" data-popup="qrPopup">
+			{@html data.qrID}
+		</div>
 	</div>
 	<form
 		class="form"
@@ -56,6 +67,11 @@
 
 			return async ({ result }) => {
 				await applyAction(result);
+				toastStore.trigger({
+					message: 'Alimento modificato con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
 			};
 		}}
 	>
@@ -95,7 +111,7 @@
 				<form
 					class="form"
 					method="POST"
-					action="/alimenti/{data.alimento.id}?/elimina"
+					action="?/elimina"
 					use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 						modalStore.clear();
 
@@ -116,6 +132,11 @@
 
 						return async ({ result, update }) => {
 							await applyAction(result);
+							toastStore.trigger({
+								message: 'Alimento eliminato con successo.',
+								background: 'variant-filled-success',
+								timeout: 2500
+							});
 						};
 					}}
 				>
@@ -133,5 +154,8 @@
 		.btn {
 			display: none;
 		}
+	}
+	.qr {
+		width: 16rem;
 	}
 </style>

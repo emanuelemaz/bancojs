@@ -4,6 +4,8 @@
 	export let data: PageData;
 
 	import moment from 'moment-timezone';
+	import { applyAction, enhance } from '$app/forms';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
@@ -13,7 +15,21 @@
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nuova bolla</h1>
-	<form class="form" method="POST" action="/bolle/nuovo?/aggiungi">
+	<form
+		class="form"
+		method="POST"
+		action="?/aggiungi"
+		use:enhance={() => {
+			return async ({ result }) => {
+				await applyAction(result);
+				toastStore.trigger({
+					message: 'Bolla creata con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
+			};
+		}}
+	>
 		<div class="grid grid-cols-2 gap-4 my-4">
 			<label class="label">
 				<span>Beneficiario</span>

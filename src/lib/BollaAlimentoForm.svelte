@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { Alimento, BollaAlimento } from '@prisma/client';
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import moment from 'moment';
 
@@ -25,7 +25,12 @@
 		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 			return async ({ update }) => {
 				await update();
-				modalStore.close()
+				modalStore.close();
+				toastStore.trigger({
+					message: 'Alimento modificato con successo.',
+					background: 'variant-filled-success',
+					timeout: 2500
+				});
 			};
 		}}
 	>
