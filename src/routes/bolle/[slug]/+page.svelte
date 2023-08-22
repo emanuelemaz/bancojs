@@ -264,7 +264,23 @@
 									<p>Quantità</p>
 									<p class="text-xl">{alimentoBolla.quantita} {alimentoBolla.alimento.unita}</p>
 								</div>
-								<div class="grid grid-cols-2 gap-2">
+								<div class="flex gap-2 justify-end">
+									<button
+										type="button"
+										class="btn btn-icon variant-filled-primary"
+										on:click|preventDefault={() => {
+											modalStore.clear();
+											modalStore.trigger({
+												type: 'component',
+												component: {
+													ref: BollaAlimentoForm,
+													props: { allAlimenti: data.allAlimenti, bollaAlimento: alimentoBolla }
+												}
+											});
+										}}
+									>
+										<iconify-icon icon="mdi:edit" class="text-xl" />
+									</button>
 									<form
 										action="?/eliminaAlimento"
 										method="POST"
@@ -298,27 +314,11 @@
 									>
 										<div>
 											<input type="hidden" value={alimentoBolla.id} name="alimentoId" />
-											<button type="submit" class="btn variant-filled-error w-full">
-												<iconify-icon icon="mdi:trash" class="text-xl" /> Elimina
+											<button type="submit" class="btn btn-icon variant-filled-error">
+												<iconify-icon icon="mdi:trash" class="text-xl" />
 											</button>
 										</div>
 									</form>
-									<button
-										type="button"
-										class="btn variant-filled-primary w-full"
-										on:click|preventDefault={() => {
-											modalStore.clear();
-											modalStore.trigger({
-												type: 'component',
-												component: {
-													ref: BollaAlimentoForm,
-													props: { allAlimenti: data.allAlimenti, bollaAlimento: alimentoBolla }
-												}
-											});
-										}}
-									>
-										<iconify-icon icon="mdi:edit" class="text-xl" /> Modifica
-									</button>
 								</div>
 								{#if alimentoBolla.note}
 									<div class="col-span-3">
