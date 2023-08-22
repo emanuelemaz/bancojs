@@ -9,12 +9,13 @@
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
-	let servSlide: boolean;
 
 	onMount(() => {
 		invalidateAll();
+		resetAllInputs();
+		servSlide = new URLSearchParams(window.location.search).has('servibile');
 	});
-	
+
 	function resetAllInputs() {
 		var inputs = <HTMLCollectionOf<HTMLInputElement>>(
 			document.getElementsByClassName('search-input')
@@ -24,6 +25,9 @@
 		}
 		servSlide = false;
 	}
+
+	let servSlide: boolean;
+	$: servSlide;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">

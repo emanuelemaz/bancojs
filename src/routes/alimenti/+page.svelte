@@ -3,13 +3,16 @@
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
 
 	onMount(() => {
+		invalidateAll();
 		resetAllInputs();
+		servSlide = new URLSearchParams(window.location.search).has('distribuibile');
 	});
 
 	function resetAllInputs() {
@@ -19,7 +22,7 @@
 		for (let i of inputs) {
 			i.value = '';
 		}
-		servSlide = new URLSearchParams(window.location.search).has('distribuibile');
+		servSlide = false;
 	}
 
 	let servSlide: boolean;
