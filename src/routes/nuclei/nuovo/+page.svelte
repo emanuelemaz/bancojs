@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { applyAction, enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
-	import moment from 'moment-timezone';
 
 	let componenti: HTMLInputElement, bambini: HTMLInputElement;
 
@@ -55,7 +52,7 @@
 					bind:this={componenti}
 					class="input p-2"
 					type="number"
-					min="0"
+					min="1"
 					step="1"
 					name="componenti"
 					on:change={() => maxBambini()}

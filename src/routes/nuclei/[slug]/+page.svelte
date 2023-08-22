@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {
 		modalStore,
-		type ModalSettings,
 		type PopupSettings,
 		popup,
 		SlideToggle,
@@ -115,7 +114,7 @@
 					bind:this={componenti}
 					class="input p-2"
 					type="number"
-					min="0"
+					min="1"
 					step="1"
 					name="componenti"
 					on:change={() => maxBambini()}

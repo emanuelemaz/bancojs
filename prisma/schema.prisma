@@ -41,7 +41,7 @@ model Nucleo {
   nome       String
   cognome    String
   isee       Float?
-  componenti Int
+  componenti Int 
   bambini    Int
   cellulare  String?
   indirizzo  String?
