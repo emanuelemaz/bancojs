@@ -14,5 +14,6 @@ export const load = (async ({ url }) => {
         }
     })
 
+
     return { alimenti: alimenti, tot: alimentiTot, unita: unitaList };
 }) satisfies PageServerLoad;

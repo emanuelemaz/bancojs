@@ -104,7 +104,7 @@ export async function filterAlimento(url: URL) {
         let unita = url.searchParams.get("unita") as string;
         let dataInizio = moment(url.searchParams.get("dataInizio") as string).set({ 'hours': 0, 'minutes': 0, 'seconds': 0 });
         let dataFine = moment(url.searchParams.get("dataFine") as string).set({ 'hours': 23, 'minutes': 59, 'seconds': 59 });
-        let distribuibile = !url.searchParams.has("distribuibile") ? true : false;
+        let distribuibile = !url.searchParams.has("distribuibile");
 
         if (nome) {
             alimenti = alimenti.filter(alimento => alimento.nome.toLowerCase().includes(nome))

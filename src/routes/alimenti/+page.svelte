@@ -2,12 +2,15 @@
 	import Alimento from '$lib/Alimento.svelte';
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
-	import moment from 'moment-timezone';
-	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 	export let data: PageData;
 
 	let searchForm: HTMLFormElement;
 	let searchBtn: HTMLButtonElement;
+
+	onMount(() => {
+		resetAllInputs();
+	});
 
 	function resetAllInputs() {
 		var inputs = <HTMLCollectionOf<HTMLInputElement>>(
@@ -16,7 +19,7 @@
 		for (let i of inputs) {
 			i.value = '';
 		}
-		servSlide = false;
+		servSlide = new URLSearchParams(window.location.search).has('distribuibile');
 	}
 
 	let servSlide: boolean;
