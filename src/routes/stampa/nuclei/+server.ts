@@ -59,7 +59,7 @@ export async function GET({ url }) {
             },
             {
                 table: {
-                    widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', '*'],
+                    widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', '*'],
                     headerRows: tblBody.length > 1 ? 1 : 0,
                     body: tblBody.length > 1 ? tblBody : [
                         [{ text: 'Non sono presenti nuclei', colSpan: 8, alignment: 'center', bold: true }, {}, {}, {}, {}, {}, {}, {}],
