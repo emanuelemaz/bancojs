@@ -19,7 +19,7 @@ export async function GET({ url }) {
         if (x == 0) {
             return '';
         }
-        return `(${x}b.)`;
+        return `(${x})`;
     }
 
     let tblBody: Object[][] = [[cCell('Nome', true), cCell('Cognome', true), cCell('ISEE', true), cCell('Pers. (b.)', true), cCell('Cellulare', true), cCell('Indirizzo', true), cCell('Comune', true), cCell('Note', true)]];
