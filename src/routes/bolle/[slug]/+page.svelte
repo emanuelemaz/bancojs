@@ -99,7 +99,7 @@
 		<h2 class="h2">Beneficiario</h2>
 		<input type="hidden" name="id" value={data.bolla.id} />
 		<div class="my-4">
-			<SlideToggle name="servSlide" bind:checked={showNoServ}
+			<SlideToggle name="" bind:checked={showNoServ}
 				>Mostra beneficiari non servibili</SlideToggle
 			>
 		</div>

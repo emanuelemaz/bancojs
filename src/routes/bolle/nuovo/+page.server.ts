@@ -8,16 +8,21 @@ import { get } from 'svelte/store';
 import tz from '$lib/stores';
 
 export const load = (async ({ url }) => {
-    let fromNucleo = url.searchParams.get("nucleoId")
+    let fromNucleoId = url.searchParams.get("nucleoId") as string
+    let fromNucleoServibile: boolean = true;
+    let fromNucleo = await prisma.nucleo.findUniqueOrThrow({where: {id: fromNucleoId}})
+    
+    if (!fromNucleo.servibile) {
+        fromNucleoServibile = false;
+    }
 
     let nuclei = (await prisma.nucleo.findMany({
         orderBy: {
             nome: 'asc'
         },
-    })).filter(nucleo => nucleo.servibile === true);
+    }));
 
-
-    return { nuclei: nuclei, fromNucleo: fromNucleo }
+    return { nuclei: nuclei, fromNucleo: fromNucleo, fromNucleoServibile: fromNucleoServibile }
 })
 
 export const actions: Actions = {

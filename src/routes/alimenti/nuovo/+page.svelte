@@ -3,6 +3,7 @@
 	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 
 	let servSlide: boolean = true;
+	$: servSlide
 </script>
 
 <div class="container mx-auto p-8 space-y-8">

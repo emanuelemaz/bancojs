@@ -5,24 +5,29 @@
 
 	import moment from 'moment-timezone';
 	import { applyAction, enhance } from '$app/forms';
-	import { toastStore } from '@skeletonlabs/skeleton';
+	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 
 	onMount(() => {
 		(<HTMLInputElement>document.getElementById('dataInput')).value =
 			moment().format('YYYY-MM-DDTHH:mm:ss');
 	});
+
+	let showNoServ: boolean = !data.fromNucleoServibile;
+	$: showNoServ;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
 	<h1 class="h1">Nuova bolla</h1>
+	<SlideToggle name="servSlide" bind:checked={showNoServ}
+		>Mostra beneficiari non servibili</SlideToggle
+	>
 	<form
 		class="form"
 		method="POST"
 		action="?/aggiungi"
 		use:enhance={() => {
 			return async ({ result }) => {
-				if (result.type === 'success' || result.type === 'redirect')
-				await applyAction(result);
+				if (result.type === 'success' || result.type === 'redirect') await applyAction(result);
 				toastStore.trigger({
 					message: 'Bolla creata con successo.',
 					background: 'variant-filled-success',
@@ -36,14 +41,22 @@
 				<span>Beneficiario</span>
 				<select name="nucleoId" class="select" required>
 					{#each data.nuclei as nucleo}
-						{#if nucleo.id == data.fromNucleo}
-							<option value={nucleo.id} selected
-								>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
-							>
-						{:else}
-							<option value={nucleo.id}
-								>{nucleo.nome} {nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b)</option
-							>
+						{#if nucleo.servibile || showNoServ}
+							{#if nucleo.id == data.fromNucleo.id}
+								<option value={nucleo.id} selected
+									>{nucleo.nome}
+									{nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile
+										? '❌ Non servibile ❌'
+										: ''}</option
+								>
+							{:else}
+								<option value={nucleo.id}
+									>{nucleo.nome}
+									{nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile
+										? '❌ Non servibile ❌'
+										: ''}</option
+								>
+							{/if}
 						{/if}
 					{/each}
 				</select>
