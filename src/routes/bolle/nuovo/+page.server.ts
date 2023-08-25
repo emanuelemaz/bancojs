@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import prisma from '../../../../prisma/prisma';
 import type { Actions, PageServerLoad } from './$types';
-import type { Bolla } from '@prisma/client';
+import type { Bolla, Nucleo } from '@prisma/client';
 
 import moment from 'moment-timezone'
 import { get } from 'svelte/store';
@@ -9,11 +9,10 @@ import tz from '$lib/stores';
 
 export const load = (async ({ url }) => {
     let fromNucleoId = url.searchParams.get("nucleoId") as string
-    let fromNucleoServibile: boolean = true;
-    let fromNucleo = await prisma.nucleo.findUniqueOrThrow({where: {id: fromNucleoId}})
-    
-    if (!fromNucleo.servibile) {
-        fromNucleoServibile = false;
+    let fromNucleo : Nucleo | null = null;
+
+    if (url.searchParams.has('nucleoId')) {
+        fromNucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: fromNucleoId } })
     }
 
     let nuclei = (await prisma.nucleo.findMany({
@@ -22,7 +21,7 @@ export const load = (async ({ url }) => {
         },
     }));
 
-    return { nuclei: nuclei, fromNucleo: fromNucleo, fromNucleoServibile: fromNucleoServibile }
+    return { nuclei: nuclei, fromNucleo: fromNucleo }
 })
 
 export const actions: Actions = {

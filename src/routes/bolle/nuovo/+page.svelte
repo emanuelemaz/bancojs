@@ -12,7 +12,7 @@
 			moment().format('YYYY-MM-DDTHH:mm:ss');
 	});
 
-	let showNoServ: boolean = !data.fromNucleoServibile;
+	let showNoServ: boolean = data.fromNucleo ? !data.fromNucleo.servibile : false;
 	$: showNoServ;
 </script>
 
@@ -42,7 +42,7 @@
 				<select name="nucleoId" class="select" required>
 					{#each data.nuclei as nucleo}
 						{#if nucleo.servibile || showNoServ}
-							{#if nucleo.id == data.fromNucleo.id}
+							{#if nucleo.id === data.fromNucleo?.id}
 								<option value={nucleo.id} selected
 									>{nucleo.nome}
 									{nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile
