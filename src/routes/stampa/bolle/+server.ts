@@ -15,16 +15,16 @@ export async function GET({ url }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Componenti', true), cCell('Alimenti', true), cCell('Data', true), cCell('Note', true)]];
+    let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Pers. (b.)', true), cCell('Alimenti', true), cCell('Data', true), cCell('Note', true)]];
 
     function bambini(x: number) {
         if (x == 0) {
             return '';
         }
         if (x == 1) {
-            return `(${x} bambino)`;
+            return `(${x}b)`;
         }
-        return `(${x} bambini)`;
+        return `(${x}b)`;
     }
 
     for (let b of bolle) {
