@@ -29,7 +29,7 @@ export async function GET({ url }) {
 
     for (let b of bolle) {
         tblBody.push(
-            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `/bolle/${b.id}`}, b.note ? cCell(b.note) : '']
+            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `/bolle/${b.id}`}, b.note ? b.note : '']
         )
     }
 
