@@ -1,6 +1,12 @@
 <script lang="ts">
 	import Alimento from '$lib/Alimento.svelte';
-	import { SlideToggle } from '@skeletonlabs/skeleton';
+	import {
+		ListBox,
+		ListBoxItem,
+		SlideToggle,
+		type PopupSettings,
+		popup
+	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
@@ -25,7 +31,15 @@
 		servSlide = false;
 	}
 
+	let pdfPopup: PopupSettings = {
+		event: 'click',
+		target: 'pdfPopup',
+		placement: 'bottom'
+	};
+
 	let servSlide: boolean;
+	let pdfOptions: string[] = [];
+
 	$: servSlide;
 </script>
 
@@ -73,15 +87,36 @@
 				>
 			</div>
 		</div>
-		<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>
-			<iconify-icon icon="mdi:send" class="text-xl" />Invia
-		</button>
-		<a class="btn variant-filled-warning" href="/alimenti" on:click={() => resetAllInputs()}>
-			<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
-		>
-		<button type="submit" class="btn variant-filled-tertiary" formaction="/stampa/alimenti"
-			><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
-		>
+		<div class="flex gap-1">
+			<button type="submit" class="btn variant-filled-secondary" bind:this={searchBtn}>
+				<iconify-icon icon="mdi:send" class="text-xl" />Invia
+			</button>
+			<a class="btn variant-filled-warning" href="/alimenti" on:click={() => resetAllInputs()}>
+				<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
+			>
+			<form action="/stampa/alimenti" method="get" class="inline">
+				<div class="btn-group variant-filled-tertiary">
+					<button type="submit" class="btn variant-filled-tertiary hover:variant-filled-tertiary justify-between">
+						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF
+					</button>
+					<button type="button" class="btn variant-filled-tertiary hover:variant-filled-tertiary w-0" use:popup={pdfPopup}>↓</button>
+				</div>
+				<div class="card" data-popup="pdfPopup">
+					<ListBox multiple>
+						<ListBoxItem name="_nome" value="1" bind:group={pdfOptions}>Nome alimento</ListBoxItem>
+						<ListBoxItem name="_unita" value="2" bind:group={pdfOptions}>Unità</ListBoxItem>
+						<ListBoxItem name="_disponibile" value="3" bind:group={pdfOptions}
+							>Quantità disponibile</ListBoxItem
+						>
+						<ListBoxItem name="_scadenza" value="4" bind:group={pdfOptions}>Scadenza</ListBoxItem>
+						<ListBoxItem name="_distribuibile" value="5" bind:group={pdfOptions}
+							>Distribuibile</ListBoxItem
+						>
+						<ListBoxItem name="_note" value="6" bind:group={pdfOptions}>Note</ListBoxItem>
+					</ListBox>
+				</div>
+			</form>
+		</div>
 	</form>
 
 	{#each data.alimenti as row}

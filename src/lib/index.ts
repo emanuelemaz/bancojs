@@ -99,7 +99,7 @@ export async function filterCarichi(url: URL) {
         include: {
             alimenti: true,
             _count: {
-                select: {alimenti: true}
+                select: { alimenti: true }
             }
         },
     })
@@ -159,4 +159,13 @@ export async function filterAlimento(url: URL) {
     }
 
     return alimenti
+}
+
+export function pdfTableField(url: URL, param_name: string, header_name: string, displayField: any, colType: '*' | 'auto' | Function) {
+    return {
+        use: url.searchParams.has(param_name),
+        header: header_name,
+        content: displayField,
+        col: colType
+    }
 }

@@ -4,7 +4,9 @@
 		SlideToggle,
 		toastStore,
 		type PopupSettings,
-		popup
+		popup,
+		ListBox,
+		ListBoxItem
 	} from '@skeletonlabs/skeleton';
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
@@ -26,6 +28,13 @@
 		target: 'qrPopup',
 		placement: 'bottom'
 	};
+
+	let pdfPopup: PopupSettings = {
+		event: 'click',
+		target: 'pdfPopup',
+		placement: 'bottom'
+	};
+	let pdfOptions: string[] = [];
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -116,9 +125,35 @@
 				>
 			</div>
 			<form action="/alimenti/{data.alimento.id}/pdf" method="get" class="inline">
-				<button type="submit" class="btn variant-filled-tertiary"
-					><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
-				>
+				<div class="btn-group variant-filled-tertiary">
+					<button
+						type="submit"
+						class="btn variant-filled-tertiary hover:variant-filled-tertiary justify-between"
+					>
+						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF
+					</button>
+					<button
+						type="button"
+						class="btn variant-filled-tertiary hover:variant-filled-tertiary w-0"
+						use:popup={pdfPopup}>↓</button
+					>
+				</div>
+				<div class="card" data-popup="pdfPopup">
+					<ListBox multiple>
+						<ListBoxItem name="_bolle" value="1" bind:group={pdfOptions}>Bolle emesse</ListBoxItem>
+						<ListBoxItem name="_carichi" value="2" bind:group={pdfOptions}
+							>Carichi registrati</ListBoxItem
+						>
+						<ListBoxItem name="_bolleNote" value="3" bind:group={pdfOptions}>Note bolle</ListBoxItem
+						>
+						<ListBoxItem name="_carichiNote" value="4" bind:group={pdfOptions}
+							>Note carichi</ListBoxItem
+						>
+						<ListBoxItem name="_noteAlimento" value="5" bind:group={pdfOptions}
+							>Note alimento</ListBoxItem
+						>
+					</ListBox>
+				</div>
 			</form>
 			<div>
 				<form
@@ -162,17 +197,36 @@
 			</div>
 		</div>
 	</form>
-	<div class="container mx-auto space-y-8">
-		<h2 class="h2">In magazzino: <strong>{data.qt}</strong> {data.alimento.unita}</h2>
-		<h3 class="h3">Carichi</h3>
-		{#each data.carichiAlimento as ca}
-			<CaricoAlimento caricoAlimento={ca} carico={ca.carico} alimento={ca.alimento} />
-		{/each}
-		<h3 class="h3">Bolle</h3>
-		{#each data.bolleAlimento as ba}
-			<BollaAlimento bollaAlimento={ba} bolla={ba.bolla} alimento={ba.alimento} />
-		{/each}
-	</div>
+	{#if data.carichiAlimento.length || data.bolleAlimento.length}
+		<div class="container mx-auto space-y-8">
+			{#if data.carichiAlimento.length && data.bolleAlimento.length}
+			<h2 class="h2">
+				In magazzino:
+				<strong>{data.qt}</strong>
+				{data.alimento.unita}
+			</h2>
+			{:else}
+			<div>
+				<h2 class="h2">
+					In magazzino: non calcolabile
+				</h2>
+				<p>Non sono presenti bolle e carichi.</p>
+			</div>
+				{/if}
+			{#if data.carichiAlimento.length}
+				<h3 class="h3 pb-4">Carichi</h3>
+				{#each data.carichiAlimento as ca}
+					<CaricoAlimento caricoAlimento={ca} carico={ca.carico} alimento={ca.alimento} />
+				{/each}
+			{/if}
+			{#if data.bolleAlimento.length}
+				<h3 class="h3 pb-4">Bolle</h3>
+				{#each data.bolleAlimento as ba}
+					<BollaAlimento bollaAlimento={ba} bolla={ba.bolla} alimento={ba.alimento} />
+				{/each}
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style>

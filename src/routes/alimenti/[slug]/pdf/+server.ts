@@ -16,32 +16,15 @@ export async function GET({ url, params }) {
     const alimento = await prisma.alimento.findUniqueOrThrow({
         where: {
             id: params.slug
-        }
-    })
-
-    const carichi = await prisma.caricoAlimento.findMany({
-        where: {
-            alimentoId: alimento.id
-        },
-        include: {
-            carico: {
-                select: {
-                    data: true,
-                    note: true
+        }, include: {
+            carichi: {
+                include: {
+                    carico: true
                 }
-            }
-        }
-    })
-
-    const bolle = await prisma.bollaAlimento.findMany({
-        where: {
-            alimentoId: alimento.id
-        },
-        include: {
-            bolla: {
-                select: {
-                    data: true,
-                    note: true
+            },
+            bolle: {
+                include: {
+                    bolla: true
                 }
             }
         }
@@ -58,51 +41,64 @@ export async function GET({ url, params }) {
     }
     const pdfPrinter = new PdfPrinter(fonts)
 
-    let carichiDoc = [];
+    let tblBody: Object[][] = [];
+    if (url.searchParams.has("_carichi") && alimento.carichi.length) {
+        let carichiDoc = [];
 
-    for (let carico of carichi) {
-        carichiDoc.push([{
-            table: {
-                widths: ['auto', '*'],
-                body: carico.note ? [
-                    ["ID", { text: carico.id, link: BASE_URL + "/carichi/" + carico.id, font: 'Courier' }],
-                    ["Quantità", `${carico.quantita} ${alimento.unita}`], ,
-                    ["Data", moment(carico.carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
-                    ["Note", { text: carico.note }]
-                ] : [
-                    ["ID", { text: carico.id, link: BASE_URL + "/carichi/" + carico.id, font: 'Courier' }],
-                    ["Quantità", `${carico.quantita} ${alimento.unita}`],
-                    ["Data", moment(carico.carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")]
-                ]
+        for (let carico of alimento.carichi) {
+            let note = [];
+            if (carico.note && url.searchParams.has("_noteAlimento")) {
+                note.push(["Note (alimento)", carico.note],)
             }
-        }, { text: "\n", fontSize: 4 }])
+            if (carico.carico.note && url.searchParams.has("_carichiNote")) {
+                note.push(["Note (carico)", carico.carico.note])
+            }
+            carichiDoc.push([{
+                table: {
+                    widths: ['auto', '*'],
+                    body: [
+                        ["ID", { text: carico.id, link: BASE_URL + "/carichi/" + carico.id, font: 'Courier' }],
+                        ["Quantità", `${carico.quantita} ${alimento.unita}`],
+                        ["Data", moment(carico.carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
+                        ...note
+                    ],
+                }
+            }, { text: "\n", fontSize: 4 }])
+        }
+
+        tblBody.push([{ text: 'Carichi registrati', bold: true, margin: [0, 0, 0, 1] }, carichiDoc])
     }
+    if (url.searchParams.has("_bolle")  && alimento.bolle.length) {
+        let bolleDoc = [];
 
-    let bolleDoc = [];
-
-    for (let bolla of bolle) {
-        bolleDoc.push([{
-            table: {
-                widths: ['auto', '*'],
-                body: bolla.note ? [
-                    ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                    ["Quantità", `${bolla.quantita} ${alimento.unita}`],
-                    ["Data", moment(bolla.bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
-                    ["Note", bolla.note]
-                ] : [
-                    ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                    ["Quantità", `${bolla.quantita} ${alimento.unita}`],
-                    ["Data", moment(bolla.bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")]
-                ]
+        for (let bolla of alimento.bolle) {
+            let note: Object[][] = [];
+            if (bolla.note && url.searchParams.has("_noteAlimento")) {
+                note.push(["Note (alimento)", bolla.note])
             }
-        }, { text: "\n", fontSize: 4 }])
+            if (bolla.bolla.note && url.searchParams.has("_bolleNote")) {
+                note.push(["Note (bolla)", bolla.bolla.note])
+            }
+            bolleDoc.push([{
+                table: {
+                    widths: ['auto', '*'],
+                    body: [
+                        ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
+                        ["Quantità", `${bolla.quantita} ${alimento.unita}`],
+                        ["Data", moment(bolla.bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
+                        ...note
+                    ]
+                }
+            }, { text: "\n", fontSize: 4 }])
+        }
+        tblBody.push([{ text: 'Bolle emesse', bold: true, margin: [0, 2, 0, 1] }, bolleDoc])
     }
 
     let quantitaDisponibile = 0;
-    for (let c of carichi) {
+    for (let c of alimento.carichi) {
         quantitaDisponibile += c.quantita
     }
-    for (let b of bolle) {
+    for (let b of alimento.bolle) {
         quantitaDisponibile -= b.quantita
     }
 
@@ -133,8 +129,7 @@ export async function GET({ url, params }) {
                 }
             },
             { text: ['In magazzino: ', { text: `${quantitaDisponibile} ${alimento.unita}`, bold: true }], alignment: 'center', margin: [0, 4, 0, 0] },
-            (carichiDoc.length) ? [{ text: 'Carichi registrati', bold: true, margin: [0, 0, 0, 1] }, carichiDoc] : { text: "" },
-            (bolleDoc.length) ? [{ text: 'Bolle emesse', bold: true, margin: [0, 2, 0, 1] }, bolleDoc] : { text: "" }
+            tblBody.length ? tblBody : ""
         ],
         header: function (currentPage: number, pageCount: number) {
             return {
