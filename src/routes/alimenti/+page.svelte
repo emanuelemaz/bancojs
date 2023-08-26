@@ -94,28 +94,34 @@
 			<a class="btn variant-filled-warning" href="/alimenti" on:click={() => resetAllInputs()}>
 				<iconify-icon icon="mdi:cancel" class="text-xl" />Reset</a
 			>
-			<form action="/stampa/alimenti" method="get" class="inline">
-				<div class="btn-group variant-filled-tertiary">
-					<button type="submit" class="btn variant-filled-tertiary hover:variant-filled-tertiary justify-between">
-						<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF
-					</button>
-					<button type="button" class="btn variant-filled-tertiary hover:variant-filled-tertiary w-0" use:popup={pdfPopup}>↓</button>
-				</div>
-				<div class="card" data-popup="pdfPopup">
-					<ListBox multiple>
-						<ListBoxItem name="_nome" value="1" bind:group={pdfOptions}>Nome alimento</ListBoxItem>
-						<ListBoxItem name="_unita" value="2" bind:group={pdfOptions}>Unità</ListBoxItem>
-						<ListBoxItem name="_disponibile" value="3" bind:group={pdfOptions}
-							>Quantità disponibile</ListBoxItem
-						>
-						<ListBoxItem name="_scadenza" value="4" bind:group={pdfOptions}>Scadenza</ListBoxItem>
-						<ListBoxItem name="_distribuibile" value="5" bind:group={pdfOptions}
-							>Distribuibile</ListBoxItem
-						>
-						<ListBoxItem name="_note" value="6" bind:group={pdfOptions}>Note</ListBoxItem>
-					</ListBox>
-				</div>
-			</form>
+			<div class="btn-group variant-filled-tertiary">
+				<button
+					type="submit"
+					formaction="/stampa/alimenti"
+					class="btn variant-filled-tertiary hover:variant-filled-tertiary justify-between"
+				>
+					<iconify-icon icon="mdi:invoice" class="text-xl" /> PDF
+				</button>
+				<button
+					type="button"
+					class="btn variant-filled-tertiary hover:variant-filled-tertiary w-0"
+					use:popup={pdfPopup}>↓</button
+				>
+			</div>
+			<div class="card" data-popup="pdfPopup">
+				<ListBox multiple>
+					<ListBoxItem name="_nome" value="1" bind:group={pdfOptions}>Nome alimento</ListBoxItem>
+					<ListBoxItem name="_unita" value="2" bind:group={pdfOptions}>Unità</ListBoxItem>
+					<ListBoxItem name="_disponibile" value="3" bind:group={pdfOptions}
+						>Quantità disponibile</ListBoxItem
+					>
+					<ListBoxItem name="_scadenza" value="4" bind:group={pdfOptions}>Scadenza</ListBoxItem>
+					<ListBoxItem name="_distribuibile" value="5" bind:group={pdfOptions}
+						>Distribuibile</ListBoxItem
+					>
+					<ListBoxItem name="_note" value="6" bind:group={pdfOptions}>Note</ListBoxItem>
+				</ListBox>
+			</div>
 		</div>
 	</form>
 
