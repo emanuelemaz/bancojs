@@ -67,7 +67,7 @@ export async function GET({ url, params }) {
                     body: [
                         [{ text: [{ text: "SCHEDA ANAGRAFICA\n", fontSize: 14, bold: true, alignment: 'center' }, {text: "Stampata il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n"}, { text: "ID del nucleo: " }, { text: "#" + nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 4] }, { svg: qrID }]
                     ]
-                }, layout: "noBorders", margin: [0, 4]
+                }, layout: "noBorders", margin: [0, 0, 0, 4]
             },
             {
                 table: {
@@ -99,7 +99,7 @@ export async function GET({ url, params }) {
                 margin: [15, 15, 15, 0]
             }
         },
-        defaultStyle: { font: 'Arial' }, pageSize: 'A5', pageOrientation: 'portrait', pageMargins: [15, 85, 15, 15],
+        defaultStyle: { font: 'Arial' }, pageSize: 'A5', pageOrientation: 'portrait', pageMargins: [15, 90, 15, 15],
         info: {
             title: 'Scheda anagrafica',
             author: 'Associazione XXX',
