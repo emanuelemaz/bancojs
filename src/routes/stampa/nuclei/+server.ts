@@ -5,6 +5,7 @@ import fs from 'fs'
 import { filterNucleo } from '$lib';
 import { get } from 'svelte/store';
 import tz from '$lib/stores';
+import { BASE_URL } from '$env/static/private';
 
 export async function GET({ url }) {
     let nuclei = await filterNucleo(url);
@@ -27,8 +28,8 @@ export async function GET({ url }) {
     for (let n of nuclei) {
         tblBody.push(
             [
-                {text: (n.nome), link: `/nuclei/${n.id}`, alignment: 'center'},
-                {text: (n.cognome), link: `/nuclei/${n.id}`, alignment: 'center'},
+                {text: (n.nome), link: `${BASE_URL}/nuclei/${n.id}`, alignment: 'center'},
+                {text: (n.cognome), link: `${BASE_URL}/nuclei/${n.id}`, alignment: 'center'},
                 n.isee || n.isee == 0 ? cCell(Intl.NumberFormat('it-IT', { currency: 'EUR', style: 'currency' }).format(n.isee)) : cCell("///"),
                 cCell(`${n.componenti} ${bambini(n.bambini)}`),
                 n.cellulare ? cCell(n.cellulare) : cCell("///"),

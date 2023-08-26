@@ -5,6 +5,7 @@ import fs from 'fs'
 import { filterAlimento } from '$lib';
 import { get } from 'svelte/store';
 import tz from '$lib/stores';
+import { BASE_URL } from '$env/static/private';
 
 export async function GET({ url }) {
     let alimenti = await filterAlimento(url)
@@ -36,7 +37,7 @@ export async function GET({ url }) {
 
     for (let al of alimenti) {
         tblBody.push(
-            [{text: al.nome, alignment: 'center', link: `/alimenti/${al.id}`}, cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
+            [{text: al.nome, alignment: 'center', link: `${BASE_URL}/alimenti/${al.id}`}, cCell(al.unita), al.distribuibile ? cCell('sì') : cCell('no', true), scadenza(al.scadenza), al.note ? cCell(al.note) : '']
         )
     }
 

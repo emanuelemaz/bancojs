@@ -5,6 +5,7 @@ import fs from 'fs'
 import { filterBolla } from '$lib';
 import { get } from 'svelte/store';
 import tz from '$lib/stores';
+import { BASE_URL } from '$env/static/private';
 
 export async function GET({ url }) {
     let bolle = await filterBolla(url)
@@ -29,7 +30,7 @@ export async function GET({ url }) {
 
     for (let b of bolle) {
         tblBody.push(
-            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `/bolle/${b.id}`}, b.note ? b.note : '']
+            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `${BASE_URL}/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `${BASE_URL}/bolle/${b.id}`}, b.note ? b.note : '']
         )
     }
 
