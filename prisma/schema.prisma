@@ -16,51 +16,75 @@ model Bolla {
   nucleo    Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
   data      DateTime
   note      String?
-  alimenti  BollaAlimento[] 
+  alimenti  BollaAlimento[]
   nucleoId  String          @db.ObjectId
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
 }
 
 model BollaAlimento {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  alimento   Alimento  @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
-  bolla      Bolla     @relation(fields: [bollaId], references: [id], onDelete: Cascade)
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
+  bolla      Bolla    @relation(fields: [bollaId], references: [id], onDelete: Cascade)
   quantita   Float
-  alimentoId String    @db.ObjectId
-  bollaId    String    @db.ObjectId
+  alimentoId String   @db.ObjectId
+  bollaId    String   @db.ObjectId
   note       String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@unique([bollaId, alimentoId])
 }
 
 model Nucleo {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   nome       String
   cognome    String
   isee       Float?
-  componenti Int 
+  componenti Int
   bambini    Int
   cellulare  String?
   indirizzo  String?
   citta      String?
-  servibile  Boolean   @default(true)
+  servibile  Boolean  @default(true)
   note       String?
   bolle      Bolla[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Alimento {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
   nome          String
-  unita         String          @default("pz")
+  unita         String           @default("pz")
   scadenza      DateTime?
-  distribuibile Boolean         @default(true)
+  distribuibile Boolean          @default(true)
   note          String?
   bolle         BollaAlimento[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  carichi       CaricoAlimento[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model CaricoAlimento {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
+  carico     Carico   @relation(fields: [caricoId], references: [id], onDelete: Cascade)
+  quantita   Float
+  alimentoId String   @db.ObjectId
+  caricoId   String   @db.ObjectId
+  note       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([caricoId, alimentoId])
+}
+
+model Carico {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  data      DateTime
+  note      String?
+  alimenti  CaricoAlimento[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }

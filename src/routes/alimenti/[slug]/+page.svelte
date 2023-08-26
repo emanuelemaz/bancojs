@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {
 		modalStore,
-		type ModalSettings,
 		SlideToggle,
 		toastStore,
 		type PopupSettings,
@@ -11,6 +10,9 @@
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
 	import { applyAction, enhance } from '$app/forms';
+	import TransazioneAlimento from '$lib/BollaAlimento.svelte';
+	import BollaAlimento from '$lib/BollaAlimento.svelte';
+	import CaricoAlimento from '$lib/CaricoAlimento.svelte';
 	export let data: PageData;
 
 	onMount(() => {
@@ -43,6 +45,9 @@
 		<div class="card qr p-6" data-popup="qrPopup">
 			{@html data.qrID}
 		</div>
+		<a class="m-0 btn variant-filled-primary h-12" href="/alimenti/nuovo"
+			><iconify-icon icon="mdi:add" class="text-xl" />Aggiungi nuovo (SHIFT+N)</a
+		>
 	</div>
 	<form
 		class="form"
@@ -110,9 +115,11 @@
 					><iconify-icon icon="mdi:arrow-back" class="text-xl" />Indietro</button
 				>
 			</div>
-			<a class="m-0 btn variant-filled-primary" href="/alimenti/nuovo"
-				><iconify-icon icon="mdi:add" class="text-xl" />Aggiungi nuovo (SHIFT+N)</a
-			>
+			<form action="/alimenti/{data.alimento.id}/pdf" method="get" class="inline">
+				<button type="submit" class="btn variant-filled-tertiary"
+					><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
+				>
+			</form>
 			<div>
 				<form
 					class="form"
@@ -155,6 +162,17 @@
 			</div>
 		</div>
 	</form>
+	<div class="container mx-auto space-y-8">
+		<h2 class="h2">In magazzino: <strong>{data.qt}</strong> {data.alimento.unita}</h2>
+		<h3 class="h3">Carichi</h3>
+		{#each data.carichiAlimento as ca}
+			<CaricoAlimento caricoAlimento={ca} carico={ca.carico} alimento={ca.alimento} />
+		{/each}
+		<h3 class="h3">Bolle</h3>
+		{#each data.bolleAlimento as ba}
+			<BollaAlimento bollaAlimento={ba} bolla={ba.bolla} alimento={ba.alimento} />
+		{/each}
+	</div>
 </div>
 
 <style>

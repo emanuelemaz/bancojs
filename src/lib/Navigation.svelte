@@ -16,5 +16,6 @@
 		<li><a on:click={drawerClose} href="/nuclei" class="{classesActive("/nuclei")}">Nuclei</a></li>
 		<li><a on:click={drawerClose} href="/bolle" class="{classesActive("/bolle")}">Bolle</a></li>
 		<li><a on:click={drawerClose} href="/alimenti" class="{classesActive("/alimenti")}">Alimenti</a></li>
+		<li><a on:click={drawerClose} href="/carichi" class="{classesActive("/carichi")}">Carichi</a></li>
 	</ul>
 </nav>

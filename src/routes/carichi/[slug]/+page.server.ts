@@ -9,9 +9,8 @@ import tz from '$lib/stores';
 import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params }) => {
-    const bolla = await prisma.bolla.findUniqueOrThrow({
+    const carico = await prisma.carico.findUniqueOrThrow({
         where: { id: params.slug }, include: {
-            nucleo: true,
             alimenti: {
                 orderBy: {
                     alimento: {
@@ -36,14 +35,14 @@ export const load = (async ({ params }) => {
         }
     });
 
-    const qrID = (await QRCode.toString(`${BASE_URL}/bolle/${bolla.id}`, {
+    const qrID = (await QRCode.toString(`${BASE_URL}/carichi/${carico.id}`, {
         type: 'svg', color: {
             dark: '#FFFF',
             light: '#0000'
         }, margin: 0
     }))
 
-    return { bolla: bolla, nuclei: nuclei, alimenti: bolla.alimenti, allAlimenti: alimenti, qrID: qrID };
+    return { carico: carico, nuclei: nuclei, alimenti: carico.alimenti, allAlimenti: alimenti, qrID: qrID };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -54,35 +53,33 @@ export const actions: Actions = {
         const offset = get(tz);
         const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
-        const nucleoId = newData.get("nucleoId") as string;
 
         try {
-            await prisma.bolla.update({
+            await prisma.carico.update({
                 where: {
                     id: id
                 },
                 data: {
                     data: data,
-                    note: note,
-                    nucleoId: nucleoId
+                    note: note
                 }
             });
         } catch (error) {
             console.error(error);
-            console.error("Non è stato possibile aggiornare la bolla.")
+            console.error("Non è stato possibile aggiornare il carico.")
             return fail(400)
         }
     },
     elimina: async ({ params }) => {
         try {
-            await prisma.bolla.delete({
+            await prisma.carico.delete({
                 where: {
                     id: params.slug
                 }
             })
         } catch (error) {
             console.error(error);
-            console.error("Non è stato possibile eliminare la bolla.")
+            console.error("Non è stato possibile eliminare il carico.")
             return fail(400)
         }
         throw redirect(302, "/bolle")
@@ -95,9 +92,9 @@ export const actions: Actions = {
         const note = newData.get("note") as string
 
         try {
-            await prisma.bollaAlimento.create({
+            await prisma.caricoAlimento.create({
                 data: {
-                    bollaId: params.slug,
+                    caricoId: params.slug,
                     alimentoId: alimentoId,
                     quantita: quantita,
                     note: note
@@ -112,14 +109,14 @@ export const actions: Actions = {
     updateAlimento: async ({ request, params }) => {
         const newData = await request.formData()
 
-        const bollaAlimentoId = newData.get("bollaAlimentoId") as string;
+        const caricoAlimentoId = newData.get("caricoAlimentoId") as string;
         const alimentoId = newData.get("alimentoId") as string
         const quantita = parseFloat(newData.get("quantita") as string)
         const note = newData.get("note") as string
 
         try {
-            await prisma.bollaAlimento.update({
-                where: { id: bollaAlimentoId },
+            await prisma.caricoAlimento.update({
+                where: { id: caricoAlimentoId },
                 data: {
                     alimentoId: alimentoId,
                     quantita: quantita,
@@ -132,11 +129,11 @@ export const actions: Actions = {
             return fail(400)
         }
     },
-    eliminaAlimento: async ({ request, params }) => {
+    eliminaAlimento: async ({ request }) => {
         const alimentoId = (await request.formData()).get("alimentoId") as string
 
         try {
-            await prisma.bollaAlimento.delete({
+            await prisma.caricoAlimento.delete({
                 where: {
                     id: alimentoId
                 }

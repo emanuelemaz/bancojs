@@ -1,13 +1,13 @@
 import PdfPrinter from 'pdfmake';
 import moment from 'moment-timezone';
 import fs from 'fs'
-import { filterBolla } from '$lib';
+import { filterBolla, filterCarichi } from '$lib';
 import { get } from 'svelte/store';
 import tz from '$lib/stores';
 import { BASE_URL } from '$env/static/private';
 
 export async function GET({ url }) {
-    let bolle = await filterBolla(url)
+    let carichi = await filterCarichi(url)
 
     const offset = get(tz)
 
@@ -15,21 +15,11 @@ export async function GET({ url }) {
         return isBold ? { text: text, bold: true, alignment: 'center' } : { text: text, bold: false, alignment: 'center' }
     }
 
-    let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Pers. (b.)', true), cCell('Alimenti', true), cCell('Data', true), cCell('Note', true)]];
+    let tblBody: Object[][] = [[cCell('Data', true),cCell('Alimenti', true), cCell('Note', true)]];
 
-    function bambini(x: number) {
-        if (x == 0) {
-            return '';
-        }
-        if (x == 1) {
-            return `(${x}b)`;
-        }
-        return `(${x}b)`;
-    }
-
-    for (let b of bolle) {
+    for (let c of carichi) {
         tblBody.push(
-            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `${BASE_URL}/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `${BASE_URL}/bolle/${b.id}`}, b.note ? b.note : '']
+            [{ text: moment(c.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `${BASE_URL}/carichi/${c.id}` }, cCell(c._count.alimenti.toString()), c.note ? c.note : '']
         )
     }
 
@@ -48,16 +38,16 @@ export async function GET({ url }) {
         content: [
             {
                 text: [
-                    { text: "LISTA DELLE BOLLE\n", fontSize: 18, bold: true, alignment: 'center' },
+                    { text: "LISTA DEI CARICHI\n", fontSize: 18, bold: true, alignment: 'center' },
                     { text: "Aggiornata al " + moment().utcOffset(offset).format("DD/MM/YYYY [ore] HH:mm"), alignment: 'center', fontSize: 16 }
                 ], margin: [0, 0, 0, 4]
             },
             {
                 table: {
-                    widths: ['*', 'auto', 'auto', 'auto', '*'],
+                    widths: ['auto','auto', '*'],
                     headerRows: tblBody.length > 1 ? 1 : 0,
                     body: tblBody.length > 1 ? tblBody : [
-                        [{ text: 'Non sono presenti bolle', colSpan: 4, alignment: 'center', bold: true }, {}, {}, {}],
+                        [{ text: 'Non sono presenti carichi', colSpan: 3, alignment: 'center', bold: true }, {}, {}],
                     ]
                 }
             }
@@ -76,9 +66,9 @@ export async function GET({ url }) {
         },
         defaultStyle: { font: 'Arial' }, pageSize: 'A4', pageOrientation: 'portrait', pageMargins: [30, 120, 30, 30],
         info: {
-            title: 'Lista delle bolle',
+            title: 'Lista dei carichi',
             author: 'Associazione XXX',
-            subject: 'Bolle di distribuzione'
+            subject: 'Inventario'
         },
     }
 

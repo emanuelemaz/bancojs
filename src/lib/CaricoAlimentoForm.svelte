@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import type { Alimento, BollaAlimento } from '@prisma/client';
+	import type { Alimento, CaricoAlimento } from '@prisma/client';
 	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import moment from 'moment';
 
-	export let bollaAlimento: BollaAlimento;
+	export let caricoAlimento: CaricoAlimento;
 	export let allAlimenti: Alimento[];
 
 	let showNoDist: boolean = false;
@@ -20,7 +20,7 @@
 		>
 	</div>
 	<form
-		action="/bolle/{bollaAlimento.bollaId}?/updateAlimento"
+		action="/carichi/{caricoAlimento.caricoId}?/updateAlimento"
 		method="post"
 		use:enhance={async ({ formElement, formData, action, cancel, submitter }) => {
 			return async ({ update, result }) => {
@@ -36,11 +36,11 @@
 			};
 		}}
 	>
-		<input type="hidden" name="bollaAlimentoId" value={bollaAlimento.id} />
+		<input type="hidden" name="caricoAlimentoId" value={caricoAlimento.id} />
 		<div class="grid grid-cols-2 gap-4 my-2">
 			<label class="label">
 				<span>Alimento</span>
-				<select name="alimentoId" class="select" value={bollaAlimento.alimentoId} required>
+				<select name="alimentoId" class="select" value={caricoAlimento.alimentoId} required>
 					{#each allAlimenti as alimento}
 						{#if alimento.distribuibile || showNoDist}
 							<option value={alimento.id}>
@@ -70,7 +70,7 @@
 					name="quantita"
 					min="0"
 					step="0.001"
-					value={bollaAlimento.quantita}
+					value={caricoAlimento.quantita}
 					required
 				/>
 			</label>
@@ -81,7 +81,7 @@
 				class="input p-2"
 				type="text"
 				name="note"
-				value={bollaAlimento.note}
+				value={caricoAlimento.note}
 			/>
 		</label>
 		<div class="flex justify-end gap-2">

@@ -91,6 +91,38 @@ export async function filterBolla(url: URL) {
     return bolle
 }
 
+export async function filterCarichi(url: URL) {
+    let carichi = await prisma.carico.findMany({
+        orderBy: {
+            data: 'desc'
+        },
+        include: {
+            alimenti: true,
+            _count: {
+                select: {alimenti: true}
+            }
+        },
+    })
+    if (carichi) {
+        let id = url.searchParams.get("alimentoId") as string;
+        let dataInizio = moment(url.searchParams.get("dataInizio") as string).set({ 'hours': 0, 'minutes': 0, 'seconds': 0 });
+        let dataFine = moment(url.searchParams.get("dataFine") as string).set({ 'hours': 23, 'minutes': 59, 'seconds': 59 });
+
+        if (url.searchParams.get("alimentoId")) {
+            carichi = carichi.filter((carico) => carico.alimenti.find(al => al.alimentoId === id))
+        }
+        if (url.searchParams.get("dataInizio")) {
+            carichi = carichi.filter((carico) => carico.data >= dataInizio.toDate())
+        }
+        if (url.searchParams.get("dataFine")) {
+            carichi = carichi.filter((carico) => carico.data <= dataFine.toDate())
+        }
+
+    }
+
+    return carichi
+}
+
 export async function filterAlimento(url: URL) {
     let alimenti = await prisma.alimento.findMany({
         orderBy: [

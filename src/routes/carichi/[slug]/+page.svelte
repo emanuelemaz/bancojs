@@ -9,17 +9,17 @@
 	import type { PageData } from './$types';
 	import moment from 'moment-timezone';
 	import { onMount } from 'svelte';
-	import BollaAlimentoForm from '$lib/BollaAlimentoForm.svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import { afterNavigate, invalidateAll } from '$app/navigation';
+	import CaricoAlimentoForm from '$lib/CaricoAlimentoForm.svelte';
 	export let data: PageData;
 
 	let alimentoInput: HTMLSelectElement;
 	onMount(() => {
 		invalidateAll();
-		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(data.bolla.data).format(
-			'YYYY-MM-DDTHH:mm:ss'
-		);
+		(<HTMLInputElement>document.getElementById('dataInput')).value = moment(
+			data.carico.data
+		).format('YYYY-MM-DDTHH:mm:ss');
 		alimentoInput.focus();
 	});
 
@@ -43,13 +43,13 @@
 	<div class="flex w-full justify-between">
 		<div>
 			<h1 class="h1">
-				Bolla <span
+				Carico <span
 					class="font-mono btn variant-filled p-2 text-xl align-middle"
-					use:popup={qrPopup}>#{data.bolla.id}</span
+					use:popup={qrPopup}>#{data.carico.id}</span
 				>
 			</h1>
 			<div>
-				<i>Creata in data {moment(data.bolla.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
+				<i>Creata in data {moment(data.carico.createdAt).format('DD/MM/YYYY, HH:mm:ss')}</i>
 			</div>
 			<div class="card qr p-6" data-popup="qrPopup">
 				{@html data.qrID}
@@ -82,13 +82,13 @@
 				if (result.type === 'success') {
 					await applyAction(result);
 					toastStore.trigger({
-						message: 'Bolla modificata con successo.',
+						message: 'Carico modificato con successo.',
 						background: 'variant-filled-success',
 						timeout: 2500
 					});
 				} else {
 					toastStore.trigger({
-						message: 'Non è stato possibile modificare la bolla.',
+						message: 'Non è stato possibile modificare il carico.',
 						background: 'variant-filled-error',
 						timeout: 2500
 					});
@@ -96,43 +96,14 @@
 			};
 		}}
 	>
-		<h2 class="h2">Dati della bolla</h2>
-		<div class="my-4">
-			<SlideToggle name="" bind:checked={showNoServ}
-				>Mostra beneficiari non servibili</SlideToggle
-			>
-		</div>
-		<div class="grid grid-cols-2 gap-4 my-4">
-			<label class="label">
-				<span>Beneficiario</span>
-				<select name="nucleoId" class="select" value={data.bolla.nucleoId}>
-					{#each data.nuclei as nucleo}
-						{#if nucleo.servibile || showNoServ}
-							<option value={nucleo.id}
-								>{nucleo.nome}
-								{nucleo.cognome} ({nucleo.componenti}p, {nucleo.bambini}b) {!nucleo.servibile
-									? '❌ Non servibile ❌'
-									: ''}</option
-							>
-						{/if}
-					{/each}
-				</select>
-			</label>
-			<label class="label">
-				<span>Data</span>
-				<input
-					class="input p-2"
-					type="datetime-local"
-					step="1"
-					name="data"
-					id="dataInput"
-					required
-				/>
-			</label>
-		</div>
+		<h2 class="h2">Dati del carico</h2>
+		<label class="label">
+			<span>Data</span>
+			<input class="input p-2" type="datetime-local" step="1" name="data" id="dataInput" required />
+		</label>
 		<label class="mt-4 label">
 			<span>Note</span>
-			<textarea class="input textarea p-2" name="note" value={data.bolla.note} />
+			<textarea class="input textarea p-2" name="note" value={data.carico.note} />
 		</label>
 		<div class="flex justify-between my-4">
 			<div>
@@ -144,12 +115,12 @@
 				>
 			</div>
 			<div>
-				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
+				<form action="/carichi/{data.carico.id}/pdf" method="get" class="inline">
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF</button
 					>
 				</form>
-				<form action="/bolle/{data.bolla.id}/pdf" method="get" class="inline">
+				<form action="/carichi/{data.carico.id}/pdf" method="get" class="inline">
 					<input type="hidden" name="note" />
 					<button type="submit" class="btn variant-filled-tertiary"
 						><iconify-icon icon="mdi:invoice" class="text-xl" /> PDF (con note)</button
@@ -168,7 +139,9 @@
 							modalStore.trigger({
 								type: 'confirm',
 								title: 'Elimina',
-								body: `Sicuro di voler eliminare la bolla #${data.bolla.id} del nucleo <strong>${data.bolla.nucleo.nome} ${data.bolla.nucleo.cognome}</strong> (#${data.bolla.nucleo.id})?`,
+								body: `Sicuro di voler eliminare il carico #${data.carico.id} del ${moment(
+									data.carico.data
+								).format('YYYY-MM-DDTHH:mm:ss')}?`,
 								buttonTextConfirm: 'Elimina',
 								buttonTextCancel: 'Annulla',
 								response: (r) => resolve(!r)
@@ -182,13 +155,13 @@
 							if (result.type === 'success' || result.type === 'redirect') {
 								await applyAction(result);
 								toastStore.trigger({
-									message: 'Bolla eliminata con successo.',
+									message: 'Carico eliminato con successo.',
 									background: 'variant-filled-success',
 									timeout: 2500
 								});
 							} else {
 								toastStore.trigger({
-									message: 'Non è stato possibile eliminare la bolla.',
+									message: 'Non è stato possibile eliminare il carico.',
 									background: 'variant-filled-error',
 									timeout: 2500
 								});
@@ -284,17 +257,17 @@
 				</form>
 			</div>
 			<div class="grid grid-cols-2 gap-4 my-4">
-				{#each data.alimenti as alimentoBolla}
+				{#each data.alimenti as caricoAlimento}
 					<div class="block card p-4 flex justify-between">
 						<div class="flex justify-between w-full">
 							<div class="grid grid-cols-3 gap-4 w-full items-start">
 								<div class="h-min">
 									<p>Alimento</p>
-									<p class="text-xl">{alimentoBolla.alimento.nome}</p>
+									<p class="text-xl">{caricoAlimento.alimento.nome}</p>
 								</div>
 								<div class="h-min">
 									<p>Quantità</p>
-									<p class="text-xl">{alimentoBolla.quantita} {alimentoBolla.alimento.unita}</p>
+									<p class="text-xl">{caricoAlimento.quantita} {caricoAlimento.alimento.unita}</p>
 								</div>
 								<div class="flex gap-2 justify-end">
 									<button
@@ -305,8 +278,8 @@
 											modalStore.trigger({
 												type: 'component',
 												component: {
-													ref: BollaAlimentoForm,
-													props: { allAlimenti: data.allAlimenti, bollaAlimento: alimentoBolla }
+													ref: CaricoAlimentoForm,
+													props: { allAlimenti: data.allAlimenti, caricoAlimento: caricoAlimento }
 												}
 											});
 										}}
@@ -323,7 +296,7 @@
 												modalStore.trigger({
 													type: 'confirm',
 													title: 'Elimina',
-													body: `Sicuro di voler eliminare l'alimento dalla bolla?`,
+													body: `Sicuro di voler eliminare l'alimento del carico?`,
 													buttonTextConfirm: 'Elimina',
 													buttonTextCancel: 'Annulla',
 													response: (r) => resolve(!r)
@@ -354,17 +327,17 @@
 										}}
 									>
 										<div>
-											<input type="hidden" value={alimentoBolla.id} name="alimentoId" />
+											<input type="hidden" value={caricoAlimento.id} name="alimentoId" />
 											<button type="submit" class="btn btn-icon variant-filled-error">
 												<iconify-icon icon="mdi:trash" class="text-xl" />
 											</button>
 										</div>
 									</form>
 								</div>
-								{#if alimentoBolla.note}
+								{#if caricoAlimento.note}
 									<div class="col-span-3">
 										<p>Note</p>
-										<p class="text-xl">{alimentoBolla.note}</p>
+										<p class="text-xl">{caricoAlimento.note}</p>
 									</div>
 								{/if}
 							</div>
