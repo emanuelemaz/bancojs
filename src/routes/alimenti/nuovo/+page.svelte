@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { SlideToggle, toastStore } from '@skeletonlabs/skeleton';
+	import { onMount } from 'svelte';
+
+	let nomeInput: HTMLInputElement;
+	onMount(() => {
+		nomeInput.focus();
+	});
 
 	let servSlide: boolean = true;
-	$: servSlide
+	$: servSlide;
 </script>
 
 <div class="container mx-auto p-8 space-y-8">
@@ -28,7 +34,7 @@
 		<div class="grid grid-cols-3 gap-4 my-4">
 			<label class="label">
 				<span>Nome</span>
-				<input class="input p-2" type="text" name="nome" required />
+				<input class="input p-2" type="text" name="nome" required bind:this={nomeInput} />
 			</label>
 			<label class="label">
 				<span>Unità</span>

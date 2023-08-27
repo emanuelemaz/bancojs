@@ -7,28 +7,28 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
 model Bolla {
-  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int             @id @default(autoincrement())
   nucleo    Nucleo          @relation(fields: [nucleoId], references: [id], onDelete: Cascade)
   data      DateTime
   note      String?
   alimenti  BollaAlimento[]
-  nucleoId  String          @db.ObjectId
+  nucleoId  Int          
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
 }
 
 model BollaAlimento {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         Int      @id @default(autoincrement())
   alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
   bolla      Bolla    @relation(fields: [bollaId], references: [id], onDelete: Cascade)
   quantita   Float
-  alimentoId String   @db.ObjectId
-  bollaId    String   @db.ObjectId
+  alimentoId Int
+  bollaId    Int
   note       String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -37,7 +37,7 @@ model BollaAlimento {
 }
 
 model Nucleo {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         Int      @id @default(autoincrement())
   nome       String
   cognome    String
   isee       Float?
@@ -54,7 +54,7 @@ model Nucleo {
 }
 
 model Alimento {
-  id            String           @id @default(auto()) @map("_id") @db.ObjectId
+  id            Int              @id @default(autoincrement())
   nome          String
   unita         String           @default("pz")
   scadenza      DateTime?
@@ -67,12 +67,12 @@ model Alimento {
 }
 
 model CaricoAlimento {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         Int      @id @default(autoincrement())
   alimento   Alimento @relation(fields: [alimentoId], references: [id], onDelete: Cascade)
   carico     Carico   @relation(fields: [caricoId], references: [id], onDelete: Cascade)
   quantita   Float
-  alimentoId String   @db.ObjectId
-  caricoId   String   @db.ObjectId
+  alimentoId Int
+  caricoId   Int
   note       String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -81,7 +81,7 @@ model CaricoAlimento {
 }
 
 model Carico {
-  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int              @id @default(autoincrement())
   data      DateTime
   note      String?
   alimenti  CaricoAlimento[]

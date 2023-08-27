@@ -15,7 +15,7 @@ export async function GET({ url, params }) {
 
     const alimento = await prisma.alimento.findUniqueOrThrow({
         where: {
-            id: params.slug
+            id: +params.slug
         }, include: {
             carichi: {
                 include: {
@@ -112,7 +112,7 @@ export async function GET({ url, params }) {
                 table: {
                     widths: ['*', 'auto'],
                     body: [
-                        [{ text: [{ text: "SCHEDA DELL'ALIMENTO\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "Stampata il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n" }], alignment: 'center', margin: [0, 0, 0, 4] }, { svg: qrID }]
+                        [{ text: [{ text: "SCHEDA DELL'ALIMENTO\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "Stampata il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n" }, { text: "ID: "}, { text: `#${alimento.id}`, link: BASE_URL + "/alimenti/" + alimento.id, font: 'Courier' } ], alignment: 'center', margin: [0, 0, 0, 4] }, { svg: qrID }]
                     ]
                 }, layout: "noBorders", margin: [0, 0, 0, 4]
             },

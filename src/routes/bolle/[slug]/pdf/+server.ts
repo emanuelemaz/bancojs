@@ -16,7 +16,7 @@ export async function GET({ url, params }) {
 
     const bolla = await prisma.bolla.findFirstOrThrow({
         where: {
-            id: params.slug
+            id: +params.slug
         },
         include: {
             alimenti: {
@@ -100,7 +100,7 @@ export async function GET({ url, params }) {
             {
                 text: [{ text: "Nucleo: " },
                 { text: `${nucleo.nome} ${nucleo.cognome} (` },
-                { text: nucleo.id, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ")" }],
+                { text: `#${nucleo.id}`, link: BASE_URL + "/nuclei/" + nucleo.id, font: 'Courier' }, { text: ")" }],
                 alignment: 'center', margin: [0, 2, 0, 0]
             },
             {
@@ -108,7 +108,7 @@ export async function GET({ url, params }) {
                 {
                     text: moment(bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss") + " ("
                 },
-                { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' },
+                { text: `#${bolla.id}`, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' },
                 { text: ")" }
                 ], alignment: 'center', margin: [0, 0, 0, 4]
             },

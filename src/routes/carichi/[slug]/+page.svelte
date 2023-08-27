@@ -141,7 +141,7 @@
 								title: 'Elimina',
 								body: `Sicuro di voler eliminare il carico #${data.carico.id} del ${moment(
 									data.carico.data
-								).format('YYYY-MM-DDTHH:mm:ss')}?`,
+								).format('YYYY-MM-DD, HH:mm:ss')}?`,
 								buttonTextConfirm: 'Elimina',
 								buttonTextCancel: 'Annulla',
 								response: (r) => resolve(!r)

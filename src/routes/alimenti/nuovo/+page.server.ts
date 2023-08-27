@@ -29,7 +29,7 @@ export const actions: Actions = {
             console.error("Non è stato possibile creare l'alimento.")
         } 
         if (newAlimento) {
-            throw redirect(302, newAlimento.id)
+            throw redirect(302, `${newAlimento.id}`)
         }
     },
 }

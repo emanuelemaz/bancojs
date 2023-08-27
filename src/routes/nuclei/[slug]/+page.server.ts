@@ -6,7 +6,7 @@ import QRCode from 'qrcode'
 import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params, url }) => {
-    const nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: params.slug }, include: { bolle: { orderBy: { data: 'desc' } } } })
+    const nucleo = await prisma.nucleo.findUniqueOrThrow({ where: { id: +params.slug }, include: { bolle: { orderBy: { data: 'desc' } } } })
 
     const qrID = (await QRCode.toString(`${BASE_URL}/nuclei/${nucleo.id}`, {
         type: 'svg', color: {
@@ -23,7 +23,7 @@ export const actions: Actions = {
         const newData = await request.formData()
 
 
-        let id = newData.get("id") as string;
+        let id = +(newData.get("id") as string);
         const nome = newData.get("nome") as string;
         const cognome = newData.get("cognome") as string;
         const isee = parseFloat(newData.get("isee") as string);
@@ -62,7 +62,7 @@ export const actions: Actions = {
         try {
             await prisma.nucleo.delete({
                 where: {
-                    id: params.slug
+                    id: +params.slug
                 }
             })
         } catch (error) {

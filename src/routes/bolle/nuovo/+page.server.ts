@@ -8,7 +8,7 @@ import { get } from 'svelte/store';
 import tz from '$lib/stores';
 
 export const load = (async ({ url }) => {
-    let fromNucleoId = url.searchParams.get("nucleoId") as string
+    let fromNucleoId = +(url.searchParams.get("nucleoId") as string)
     let fromNucleo : Nucleo | null = null;
 
     if (url.searchParams.has('nucleoId')) {
@@ -31,7 +31,7 @@ export const actions: Actions = {
         const offset = get(tz)
         const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
-        const nucleoId = newData.get("nucleoId") as string;
+        const nucleoId = +(newData.get("nucleoId") as string);
 
         var newBolla: Bolla | null = null;
         try {
@@ -47,7 +47,7 @@ export const actions: Actions = {
             console.error("Non è stato possibile creare la bolla.")
         }
         if (newBolla) {
-            throw redirect(302, newBolla.id)
+            throw redirect(302, `${newBolla.id}`)
         }
     }
 }

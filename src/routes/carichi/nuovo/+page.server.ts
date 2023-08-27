@@ -28,7 +28,7 @@ export const actions: Actions = {
             console.error("Non è stato possibile creare il carico.")
         }
         if (newCarico) {
-            throw redirect(302, newCarico.id)
+            throw redirect(302, `${newCarico.id}`)
         }
     }
 }

@@ -9,7 +9,7 @@ import type { BollaAlimento, CaricoAlimento } from '@prisma/client';
 
 export const load = (async ({ params }) => {
     const alimento = await prisma.alimento.findUniqueOrThrow({
-        where: { id: params.slug },
+        where: { id: +params.slug },
     })
 
     const bolleAlimento = await prisma.bollaAlimento.findMany({
@@ -64,7 +64,7 @@ export const actions: Actions = {
     modifica: async ({ request, params }) => {
         const newData = await request.formData()
 
-        const id = params.slug;
+        const id = +params.slug;
         const nome = newData.get("nome") as string;
         const unita = newData.get("unita") as string;
         const scadenza = moment(newData.get("scadenza") as string).toDate();
@@ -93,7 +93,7 @@ export const actions: Actions = {
         try {
             await prisma.alimento.delete({
                 where: {
-                    id: params.slug
+                    id: +params.slug
                 }
             })
         } catch (error) {

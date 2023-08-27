@@ -10,7 +10,7 @@ import { BASE_URL } from '$env/static/private';
 
 export const load = (async ({ params }) => {
     const carico = await prisma.carico.findUniqueOrThrow({
-        where: { id: params.slug }, include: {
+        where: { id: +params.slug }, include: {
             alimenti: {
                 orderBy: {
                     alimento: {
@@ -49,7 +49,7 @@ export const actions: Actions = {
     modifica: async ({ request, params }) => {
         const newData = await request.formData()
 
-        let id = params.slug;
+        let id = +params.slug;
         const offset = get(tz);
         const data = moment(newData.get("data") as string).utcOffset(offset, true).toDate();
         const note = newData.get("note") as string | null;
@@ -74,7 +74,7 @@ export const actions: Actions = {
         try {
             await prisma.carico.delete({
                 where: {
-                    id: params.slug
+                    id: +params.slug
                 }
             })
         } catch (error) {
@@ -87,14 +87,14 @@ export const actions: Actions = {
     aggiungiAlimento: async ({ request, params }) => {
         const newData = await request.formData()
 
-        const alimentoId = newData.get("alimentoId") as string
+        const alimentoId = +(newData.get("alimentoId") as string)
         const quantita = parseFloat(newData.get("quantita") as string)
         const note = newData.get("note") as string
 
         try {
             await prisma.caricoAlimento.create({
                 data: {
-                    caricoId: params.slug,
+                    caricoId: +params.slug,
                     alimentoId: alimentoId,
                     quantita: quantita,
                     note: note
@@ -109,8 +109,8 @@ export const actions: Actions = {
     updateAlimento: async ({ request, params }) => {
         const newData = await request.formData()
 
-        const caricoAlimentoId = newData.get("caricoAlimentoId") as string;
-        const alimentoId = newData.get("alimentoId") as string
+        const caricoAlimentoId = +(newData.get("caricoAlimentoId") as string);
+        const alimentoId = +(newData.get("alimentoId") as string)
         const quantita = parseFloat(newData.get("quantita") as string)
         const note = newData.get("note") as string
 
@@ -130,7 +130,7 @@ export const actions: Actions = {
         }
     },
     eliminaAlimento: async ({ request }) => {
-        const alimentoId = (await request.formData()).get("alimentoId") as string
+        const alimentoId = +((await request.formData()).get("alimentoId") as string)
 
         try {
             await prisma.caricoAlimento.delete({

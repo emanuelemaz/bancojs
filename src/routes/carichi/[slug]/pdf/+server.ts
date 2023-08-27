@@ -16,7 +16,7 @@ export async function GET({ url, params }) {
 
     const carico = await prisma.carico.findFirstOrThrow({
         where: {
-            id: params.slug
+            id: +params.slug
         },
         include: {
             alimenti: {
@@ -97,7 +97,7 @@ export async function GET({ url, params }) {
                 {
                     text: moment(carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss") + " ("
                 },
-                { text: carico.id, link: BASE_URL + "/carichi/" + carico.id, font: 'Courier' },
+                { text: `#${carico.id}`, link: BASE_URL + "/carichi/" + carico.id, font: 'Courier' },
                 { text: ")" }
                 ], alignment: 'center', margin: [0, 0, 0, 4]
             },

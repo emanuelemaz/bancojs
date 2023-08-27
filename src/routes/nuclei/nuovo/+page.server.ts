@@ -39,7 +39,7 @@ export const actions: Actions = {
             console.error("Non è stato possibile creare il nucleo.")
         }
         if (newNucleo) {
-            throw redirect(302, newNucleo.id)
+            throw redirect(302, `${newNucleo.id}`)
         }
     },
 }
