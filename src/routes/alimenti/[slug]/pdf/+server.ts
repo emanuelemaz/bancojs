@@ -34,7 +34,7 @@ export async function GET({ url, params }) {
         Arial: {
             normal: 'pdf/static/ARIALN.TTF',
             bold: 'pdf/static/ARIALNB.TTF',
-            italics: 'pdf/STATIC/ARIALNI.TTF'
+            italics: 'pdf/static/ARIALNI.TTF'
         },
         Courier: {
             normal: 'pdf/static/cour.ttf'
