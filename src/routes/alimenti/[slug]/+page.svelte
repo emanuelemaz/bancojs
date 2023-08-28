@@ -197,10 +197,9 @@
 			</div>
 		</div>
 	</form>
-	{#if data.carichiAlimento.length || data.bolleAlimento.length}
-		<div class="container mx-auto space-y-8">
-			{#if data.carichiAlimento.length && data.bolleAlimento.length}
-			<h2 class="h2">
+	<div class="container mx-auto space-y-8">
+		{#if data.carichiAlimento.length && data.bolleAlimento.length}
+		<h2 class="h2">
 				In magazzino:
 				<strong>{data.qt}</strong>
 				{data.alimento.unita}
@@ -212,7 +211,7 @@
 				</h2>
 				<p>Non sono presenti bolle e carichi.</p>
 			</div>
-				{/if}
+			{/if}
 			{#if data.carichiAlimento.length}
 				<h3 class="h3 pb-4">Carichi</h3>
 				{#each data.carichiAlimento as ca}
@@ -226,7 +225,6 @@
 				{/each}
 			{/if}
 		</div>
-	{/if}
 </div>
 
 <style>
