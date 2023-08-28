@@ -58,7 +58,7 @@ export async function GET({ url, params }) {
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        ["ID", { text: caricoA.carico.id, link: BASE_URL + "/carichi/" + caricoA.id, font: 'Courier' }],
+                        ["ID", { text: caricoA.carico.id, link: BASE_URL + "/carichi/" + caricoA.carico.id, font: 'Courier' }],
                         ["Quantità", `${caricoA.quantita} ${alimento.unita}`],
                         ["Data", moment(caricoA.carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
                         ...note
@@ -84,7 +84,7 @@ export async function GET({ url, params }) {
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        ["ID", { text: bollaA.bolla.id, link: BASE_URL + "/bolle/" + bollaA.id, font: 'Courier' }],
+                        ["ID", { text: bollaA.bolla.id, link: BASE_URL + "/bolle/" + bollaA.bolla.id, font: 'Courier' }],
                         ["Quantità", `${bollaA.quantita} ${alimento.unita}`],
                         ["Data", moment(bollaA.bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
                         ...note
