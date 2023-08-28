@@ -34,6 +34,7 @@ export async function GET({ url, params }) {
         Arial: {
             normal: 'pdf/static/ARIALN.TTF',
             bold: 'pdf/static/ARIALNB.TTF',
+            italics: 'pdf/STATIC/ARIALNI.TTF'
         },
         Courier: {
             normal: 'pdf/static/cour.ttf'
@@ -68,7 +69,7 @@ export async function GET({ url, params }) {
 
         tblBody.push([{ text: 'Carichi registrati', bold: true, margin: [0, 0, 0, 1] }, carichiDoc])
     }
-    if (url.searchParams.has("_bolle")  && alimento.bolle.length) {
+    if (url.searchParams.has("_bolle") && alimento.bolle.length) {
         let bolleDoc = [];
 
         for (let bolla of alimento.bolle) {
@@ -112,7 +113,7 @@ export async function GET({ url, params }) {
                 table: {
                     widths: ['*', 'auto'],
                     body: [
-                        [{ text: [{ text: "SCHEDA DELL'ALIMENTO\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "Stampata il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n" }, { text: "ID: "}, { text: `#${alimento.id}`, link: BASE_URL + "/alimenti/" + alimento.id, font: 'Courier' } ], alignment: 'center', margin: [0, 0, 0, 4] }, { svg: qrID }]
+                        [{ text: [{ text: "SCHEDA DELL'ALIMENTO\n", fontSize: 14, bold: true, alignment: 'center' }, { text: "Stampata il " + moment().utcOffset(offset).format("DD/MM/YYYY, HH:mm") + "\n" }, { text: "ID: " }, { text: `#${alimento.id}`, link: BASE_URL + "/alimenti/" + alimento.id, font: 'Courier' }], alignment: 'center', margin: [0, 0, 0, 4] }, { svg: qrID }]
                     ]
                 }, layout: "noBorders", margin: [0, 0, 0, 4]
             },
@@ -128,7 +129,7 @@ export async function GET({ url, params }) {
                     ]
                 }
             },
-            alimento.carichi.length && alimento.bolle.length ? { text: ['In magazzino: ', { text: `${quantitaDisponibile} ${alimento.unita}`, bold: true }], alignment: 'center', margin: [0, 4, 0, 0] } : {},
+            alimento.carichi.length && alimento.bolle.length ? { text: ['In magazzino: ', { text: `${quantitaDisponibile} ${alimento.unita}`, bold: true }], alignment: 'center', margin: [0, 4, 0, 0] } : { text: "Quantità in magazzino non calcolabile", italics: true, alignment: 'center', margin: [0, 4, 0, 0] },
             tblBody.length ? tblBody : ""
         ],
         header: function (currentPage: number, pageCount: number) {
