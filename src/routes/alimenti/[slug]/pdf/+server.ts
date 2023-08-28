@@ -128,7 +128,7 @@ export async function GET({ url, params }) {
                     ]
                 }
             },
-            { text: ['In magazzino: ', { text: `${quantitaDisponibile} ${alimento.unita}`, bold: true }], alignment: 'center', margin: [0, 4, 0, 0] },
+            alimento.carichi.length && alimento.bolle.length ? { text: ['In magazzino: ', { text: `${quantitaDisponibile} ${alimento.unita}`, bold: true }], alignment: 'center', margin: [0, 4, 0, 0] } : {},
             tblBody.length ? tblBody : ""
         ],
         header: function (currentPage: number, pageCount: number) {
