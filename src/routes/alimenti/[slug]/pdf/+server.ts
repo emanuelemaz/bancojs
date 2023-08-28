@@ -46,21 +46,21 @@ export async function GET({ url, params }) {
     if (url.searchParams.has("_carichi") && alimento.carichi.length) {
         let carichiDoc = [];
 
-        for (let carico of alimento.carichi) {
+        for (let caricoA of alimento.carichi) {
             let note = [];
-            if (carico.note && url.searchParams.has("_noteAlimento")) {
-                note.push(["Note (alimento)", carico.note],)
+            if (caricoA.note && url.searchParams.has("_noteAlimento")) {
+                note.push(["Note (alimento)", caricoA.note],)
             }
-            if (carico.carico.note && url.searchParams.has("_carichiNote")) {
-                note.push(["Note (carico)", carico.carico.note])
+            if (caricoA.carico.note && url.searchParams.has("_carichiNote")) {
+                note.push(["Note (carico)", caricoA.carico.note])
             }
             carichiDoc.push([{
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        ["ID", { text: carico.id, link: BASE_URL + "/carichi/" + carico.id, font: 'Courier' }],
-                        ["Quantità", `${carico.quantita} ${alimento.unita}`],
-                        ["Data", moment(carico.carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
+                        ["ID", { text: caricoA.carico.id, link: BASE_URL + "/carichi/" + caricoA.id, font: 'Courier' }],
+                        ["Quantità", `${caricoA.quantita} ${alimento.unita}`],
+                        ["Data", moment(caricoA.carico.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
                         ...note
                     ],
                 }
@@ -72,21 +72,21 @@ export async function GET({ url, params }) {
     if (url.searchParams.has("_bolle") && alimento.bolle.length) {
         let bolleDoc = [];
 
-        for (let bolla of alimento.bolle) {
+        for (let bollaA of alimento.bolle) {
             let note: Object[][] = [];
-            if (bolla.note && url.searchParams.has("_noteAlimento")) {
-                note.push(["Note (alimento)", bolla.note])
+            if (bollaA.note && url.searchParams.has("_noteAlimento")) {
+                note.push(["Note (alimento)", bollaA.note])
             }
-            if (bolla.bolla.note && url.searchParams.has("_bolleNote")) {
-                note.push(["Note (bolla)", bolla.bolla.note])
+            if (bollaA.bolla.note && url.searchParams.has("_bolleNote")) {
+                note.push(["Note (bolla)", bollaA.bolla.note])
             }
             bolleDoc.push([{
                 table: {
                     widths: ['auto', '*'],
                     body: [
-                        ["ID", { text: bolla.id, link: BASE_URL + "/bolle/" + bolla.id, font: 'Courier' }],
-                        ["Quantità", `${bolla.quantita} ${alimento.unita}`],
-                        ["Data", moment(bolla.bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
+                        ["ID", { text: bollaA.bolla.id, link: BASE_URL + "/bolle/" + bollaA.id, font: 'Courier' }],
+                        ["Quantità", `${bollaA.quantita} ${alimento.unita}`],
+                        ["Data", moment(bollaA.bolla.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss")],
                         ...note
                     ]
                 }
