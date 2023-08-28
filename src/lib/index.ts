@@ -77,7 +77,7 @@ export async function filterBolla(url: URL) {
         let dataFine = moment(url.searchParams.get("dataFine") as string).set({ 'hours': 23, 'minutes': 59, 'seconds': 59 });
 
         if (url.searchParams.get("nucleoId")) {
-            bolle = bolle.filter((bolla) => bolla.nucleoId === id)
+            bolle = bolle.filter((bolla) => bolla.nucleoId === +id)
         }
         if (url.searchParams.get("dataInizio")) {
             bolle = bolle.filter((bolla) => bolla.data >= dataInizio.toDate())
@@ -109,7 +109,7 @@ export async function filterCarichi(url: URL) {
         let dataFine = moment(url.searchParams.get("dataFine") as string).set({ 'hours': 23, 'minutes': 59, 'seconds': 59 });
 
         if (url.searchParams.get("alimentoId")) {
-            carichi = carichi.filter((carico) => carico.alimenti.find(al => al.alimentoId === id))
+            carichi = carichi.filter((carico) => carico.alimenti.find(al => al.alimentoId === +id))
         }
         if (url.searchParams.get("dataInizio")) {
             carichi = carichi.filter((carico) => carico.data >= dataInizio.toDate())
