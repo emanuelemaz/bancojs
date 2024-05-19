@@ -5,7 +5,6 @@
 		AppBar,
 		Drawer,
 		drawerStore,
-		LightSwitch,
 		Modal,
 		Toast
 	} from '@skeletonlabs/skeleton';
@@ -76,9 +75,6 @@
 					</span>
 				</button>
 			</div>
-		</svelte:fragment>
-		<svelte:fragment slot="trail">
-			<LightSwitch class="self-right" />
 		</svelte:fragment>
 	</AppBar>
 	<body data-theme="gold-nouveau">
