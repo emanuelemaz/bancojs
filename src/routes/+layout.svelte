@@ -57,7 +57,8 @@
 	<svelte:fragment slot="sidebarLeft">
 		<Navigation />
 	</svelte:fragment>
-	<AppBar
+	<div class="lg:hidden">
+			<AppBar
 		gridColumns="grid-cols-3"
 		slotDefault="place-self-center"
 		slotTrail="place-content-end"
@@ -77,6 +78,8 @@
 			</div>
 		</svelte:fragment>
 	</AppBar>
+</div>
+
 	<body data-theme="gold-nouveau">
 		<div class="container p-10 mx-auto">
 			<slot />
