@@ -198,7 +198,7 @@
 		</div>
 	</form>
 	<div class="container mx-auto space-y-8">
-		{#if data.carichiAlimento.length && data.bolleAlimento.length}
+		{#if data.carichiAlimento.length}
 		<h2 class="h2">
 				In magazzino:
 				<strong>{data.qt}</strong>
