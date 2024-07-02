@@ -12,6 +12,8 @@ Prima di avviare il server andranno inserite, nel file `.env`, tre variabili d'a
 - `DATABASE_URL`: stringa di connessione al database PostgreSQL.
 - `NODE_VERSION` (solo per hosting): variabile che serve per il deploy dell'applicazione su siti di hosting come Render. Si può usare Node.js versione `20.5.0`.
 
+Una volta impostata la stringa di connessione al database, si deve creare il database con le tabelle utilizzando il comando `npm run initDb`
+
 ### Personalizzazione
 
 Per cambiare intestazione inserire un'intestazione vettoriale personalizzata al posto di `pdf/static/intestazione.svg`. Per modificare dimensioni, o per usare un'immagine vettoriale andrà modificato direttamente il codice dei file `+server.ts` nelle sotto-directory di `stampa` e nelle directory `pdf` dei nuclei, delle bolle, degli alimenti e dei carichi.
