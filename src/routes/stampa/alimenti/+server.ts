@@ -49,8 +49,8 @@ export async function GET({ url }) {
             const bollaAlimenti = await prisma.bollaAlimento.findMany({
                 where: { alimentoId: al.id }
             })
-            if (!caricoAlimenti.length || !bollaAlimenti.length) {
-                return cCell('n.c.') //NON CALCOLABILE: BOLLE O CARICHI MANCANTI
+            if (!caricoAlimenti.length) {
+                return cCell('n.c.') //NON CALCOLABILE: CARICHI MANCANTI
             }
             for (let cA of caricoAlimenti) { quantitaDisponibile += cA.quantita }
             for (let bA of bollaAlimenti) { quantitaDisponibile -= bA.quantita }
