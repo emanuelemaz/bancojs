@@ -17,19 +17,9 @@ export async function GET({ url }) {
 
     let tblBody: Object[][] = [[cCell('Beneficiario', true), cCell('Pers. (b.)', true), cCell('Alimenti', true), cCell('Data', true), cCell('Note', true)]];
 
-    function bambini(x: number) {
-        if (x == 0) {
-            return '';
-        }
-        if (x == 1) {
-            return `(${x}b)`;
-        }
-        return `(${x}b)`;
-    }
-
     for (let b of bolle) {
         tblBody.push(
-            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `${BASE_URL}/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} ${bambini(b.nucleo.bambini)}`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `${BASE_URL}/bolle/${b.id}`}, b.note ? b.note : '']
+            [{text: `${b.nucleo.nome} ${b.nucleo.cognome}`, alignment: 'center', link: `${BASE_URL}/nuclei/${b.nucleoId}`}, cCell(`${b.nucleo.componenti} (${b.nucleo.bambini})`), cCell(b._count.alimenti.toString()), {text: moment(b.data).utcOffset(offset).format("DD/MM/YYYY, HH:mm:ss"), alignment: 'center', link: `${BASE_URL}/bolle/${b.id}`}, b.note ? b.note : '']
         )
     }
 
